@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  <title>Bringing ElasticSearch to it&#39;s knees &middot; </title>
+
+  <meta name="description" content="" />
+
+  
+
+<meta itemprop="name" content="Bringing ElasticSearch to it&#39;s knees">
+<meta itemprop="description" content="Bringing ElasticSearch to it&rsquo;s knees ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.
+At Bede Gaming we&rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana). We&rsquo;re also looking to use it more front line roles within the Bede Gaming platform.
+Our current statistics look something like this:
+ 15 days of indexes online 120 days of previous indexes offline Approx 40GB of event data per day Approx 600GB of events online (last 15 days) Approx 4.">
+<meta itemprop="datePublished" content="2014-10-22T17:23:27+00:00" />
+<meta itemprop="dateModified" content="2014-10-22T17:23:27+00:00" />
+<meta itemprop="wordCount" content="506">
+
+
+
+<meta itemprop="keywords" content="elasticsearch," />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bringing ElasticSearch to it&#39;s knees"/>
+<meta name="twitter:description" content="Bringing ElasticSearch to it&rsquo;s knees ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.
+At Bede Gaming we&rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana). We&rsquo;re also looking to use it more front line roles within the Bede Gaming platform.
+Our current statistics look something like this:
+ 15 days of indexes online 120 days of previous indexes offline Approx 40GB of event data per day Approx 600GB of events online (last 15 days) Approx 4."/>
+
+
+<meta property="og:title" content="Bringing ElasticSearch to it&#39;s knees" />
+<meta property="og:description" content="Bringing ElasticSearch to it&rsquo;s knees ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.
+At Bede Gaming we&rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana). We&rsquo;re also looking to use it more front line roles within the Bede Gaming platform.
+Our current statistics look something like this:
+ 15 days of indexes online 120 days of previous indexes offline Approx 40GB of event data per day Approx 600GB of events online (last 15 days) Approx 4." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/" />
+<meta property="article:published_time" content="2014-10-22T17:23:27+00:00" />
+<meta property="article:modified_time" content="2014-10-22T17:23:27+00:00" />
+
+
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/print.css"
+        media="print">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/poole.css">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/hyde.css">
+
+  
+
+
+  <link type="text/css" rel="stylesheet" href="http://robrankin.github.io/css/blog.css">
+
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+        crossorigin="anonymous" />
+
+  <link rel="apple-touch-icon-precomposed"
+        sizes="144x144"
+        href="http://robrankin.github.io/apple-touch-icon-144-precomposed.png">
+
+  <link rel="shortcut icon" href="http://robrankin.github.io/favicon.png">
+
+  
+  </head>
+<body>
+  <aside class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      
+        
+        <div class="author-image">
+          <img src="http://robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
+        </div>
+        
+      
+
+      <h1></h1>
+
+      
+      <p class="lead">Robs Musings</p>
+      
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="http://robrankin.github.io/">Home</a>
+        </li>
+        <li>
+          <a href="http://robrankin.github.io/posts/">Posts</a>
+        </li><li>
+          <a href="http://robrankin.github.io/about/">About</a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="social-icons">
+      
+      <a href="https://www.linkedin.com/in/rob-rankin-7312234/" rel="me" title="Linkedin" target="_blank">
+        <i class="fab fa-linkedin" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://github.com/robrankin/" rel="me" title="GitHub" target="_blank">
+        <i class="fab fa-github" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://twitter.com/mahhyzero/" rel="me" title="Twitter" target="_blank">
+        <i class="fab fa-twitter" aria-hidden="true"></i>
+      </a>
+      
+    </section>
+  </div>
+</aside>
+
+
+  <main class="content container">
+  <div class="post">
+  <h1>Bringing ElasticSearch to it&#39;s knees</h1>
+
+  <div class="post-date">
+    <time datetime="2014-10-22T17:23:27Z">Oct 22, 2014</time> &middot; 3 min read
+  </div>
+
+  <h2 id="bringing-elasticsearch-to-its-knees">Bringing ElasticSearch to it&rsquo;s knees</h2>
+<p>ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.</p>
+<p>At Bede Gaming we&rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana).  We&rsquo;re also looking to use it more front line roles within the Bede Gaming platform.</p>
+<p>Our current statistics look something like this:</p>
+<ul>
+<li>15 days of indexes online</li>
+<li>120 days of previous indexes offline</li>
+<li>Approx 40GB of event data per day</li>
+<li>Approx 600GB of events online (last 15 days)</li>
+<li>Approx 4.8TB of event data offline (previous 120 days)</li>
+<li>800 million  - 1 billion events online (last 15 days)</li>
+<li>Approx 60million events per day</li>
+</ul>
+<p>Our ES cluster lives in the Microsoft Azure cloud, made up of:</p>
+<ul>
+<li>5x &ldquo;Large&rdquo; instances, each with 4x 1TB data disks, ES &ldquo;data nodes&rdquo;</li>
+<li>3x &ldquo;Large&rdquo; instances running a combination of Redis and Logstash.</li>
+<li>1x &ldquo;Medium&rdquo; instance, dedicated ES master node.</li>
+</ul>
+<p>The dedicated ES master node is a bit of legacy configuration, and should probably be deprecated in the near future.</p>
+<p>In the past year or so we&rsquo;ve been using ES, there&rsquo;s been a number of small issues here and there, but really only one massive problem we&rsquo;ve encountered.  As it turns out, we caused the problem ourselves!</p>
+<p>On the evening of July 29th we suddenly saw the performance of the cluster plummet.  Both for indexing and searching.  The entire system pretty much just ground to a halt, not long after the end of the working day.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">[2014-07-29 017:18:45,027][INFO ][monitor.jvm ] [node-a] [gc][old][9168][117] duration [8.9s], collections [1]/[10.2s], total [8.9s]/[3.4m], memory [1.1gb]-&gt;[987.1mb]/[1.4gb], all_pools {[young] [122.2mb]-&gt;[6mb]/[266.2mb]}{[survivor] [33.2mb]-&gt;[0b]/[33.2mb]}{[old] [1gb]-&gt;[981mb]/[1.1gb]}
+</code></pre></div><p>The ES log files started recording messages such as the above.  There wasn&rsquo;t a lot of information out there about this, other than it indicated some sort of memory pressure on the ES JVM, causing it perform large garbage collection runs.  For whatever reason these GC runs were exceptionally heavy and pretty much stopped the cluster in it&rsquo;s tracks.</p>
+<p>After much investigation, it was tracked down to a change to one of our applications that meant the application in question was attempting to log entire code objects out to ES. Unfortunately these log events contained highly randomized field names, such as:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">app.socket.server.clients.gaUP_8EPU-US6C6CAAAQ.request.websocket.receiver.fragmentedBufferPool.buffer.parent.1474
+</code></pre></div><p>As you can tell, it&rsquo;s a websocket node.js object, and because of the way it was flattened into a field name for ES, pretty much every single event sent to ES introduced at least one or two more of these fields, as they were all uniquely named.</p>
+<p>The end result of this was that the ES field mappings ballooned out of control.  We saw the field mappings go from about 2-3kb to well over 15mb.</p>
+<p>Since the data being logged wasn&rsquo;t critical it was fairly trivial to simply delete it all and the associated field mapping, and just block the offending application from logging to ES for the night.  The next day the code change was reverted and all was well.</p>
+<p>So just in case you suddenly see your ES performance vanish, check your field mappings!</p>
+
+</div>
+
+
+  </main>
+
+  <footer>
+  <div>
+    &copy; Rob Rankin 2020
+
+    &middot; <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>
+
+    
+  </div>
+</footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"
+          integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0="
+          crossorigin="anonymous"></script>
+
+  <script src="http://robrankin.github.io/js/blog.js"></script>
+
+  
+</body>
+</html>

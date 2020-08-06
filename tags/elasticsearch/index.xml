@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>elasticsearch on </title>
+    <link>http://robrankin.github.io/tags/elasticsearch/</link>
+    <description>Recent content in elasticsearch on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
+    
+	<atom:link href="http://robrankin.github.io/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
+      <link>http://robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
+      <description>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&amp;rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
+Obviously it&amp;rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.</description>
+    </item>
+    
+    <item>
+      <title>Bringing ElasticSearch to it&#39;s knees</title>
+      <link>http://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</link>
+      <pubDate>Wed, 22 Oct 2014 17:23:27 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</guid>
+      <description>Bringing ElasticSearch to it&amp;rsquo;s knees ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.
+At Bede Gaming we&amp;rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana). We&amp;rsquo;re also looking to use it more front line roles within the Bede Gaming platform.
+Our current statistics look something like this:
+ 15 days of indexes online 120 days of previous indexes offline Approx 40GB of event data per day Approx 600GB of events online (last 15 days) Approx 4.</description>
+    </item>
+    
+  </channel>
+</rss>

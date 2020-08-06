@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes &middot; </title>
+
+  <meta name="description" content="" />
+
+  
+
+<meta itemprop="name" content="Kibaba Authentication using OAuth2 Proxy in Kubernetes">
+<meta itemprop="description" content="Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
+Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.">
+<meta itemprop="datePublished" content="2020-08-06T12:34:50+01:00" />
+<meta itemprop="dateModified" content="2020-08-06T12:34:50+01:00" />
+<meta itemprop="wordCount" content="1070">
+
+
+
+<meta itemprop="keywords" content="kubernetes,kibana,authentication,mfa,elasticsearch,oauth2_proxy," />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kibaba Authentication using OAuth2 Proxy in Kubernetes"/>
+<meta name="twitter:description" content="Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
+Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work."/>
+
+
+<meta property="og:title" content="Kibaba Authentication using OAuth2 Proxy in Kubernetes" />
+<meta property="og:description" content="Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
+Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://robrankin.github.io/posts/kibaba-oauth-kubernetes/" />
+<meta property="article:published_time" content="2020-08-06T12:34:50+01:00" />
+<meta property="article:modified_time" content="2020-08-06T12:34:50+01:00" />
+
+
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/print.css"
+        media="print">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/poole.css">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/hyde.css">
+
+  
+
+
+  <link type="text/css" rel="stylesheet" href="http://robrankin.github.io/css/blog.css">
+
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+        crossorigin="anonymous" />
+
+  <link rel="apple-touch-icon-precomposed"
+        sizes="144x144"
+        href="http://robrankin.github.io/apple-touch-icon-144-precomposed.png">
+
+  <link rel="shortcut icon" href="http://robrankin.github.io/favicon.png">
+
+  
+  </head>
+<body>
+  <aside class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      
+        
+        <div class="author-image">
+          <img src="http://robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
+        </div>
+        
+      
+
+      <h1></h1>
+
+      
+      <p class="lead">Robs Musings</p>
+      
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="http://robrankin.github.io/">Home</a>
+        </li>
+        <li>
+          <a href="http://robrankin.github.io/posts/">Posts</a>
+        </li><li>
+          <a href="http://robrankin.github.io/about/">About</a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="social-icons">
+      
+      <a href="https://www.linkedin.com/in/rob-rankin-7312234/" rel="me" title="Linkedin" target="_blank">
+        <i class="fab fa-linkedin" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://github.com/robrankin/" rel="me" title="GitHub" target="_blank">
+        <i class="fab fa-github" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://twitter.com/mahhyzero/" rel="me" title="Twitter" target="_blank">
+        <i class="fab fa-twitter" aria-hidden="true"></i>
+      </a>
+      
+    </section>
+  </div>
+</aside>
+
+
+  <main class="content container">
+  <div class="post">
+  <h1>Kibaba Authentication using OAuth2 Proxy in Kubernetes</h1>
+
+  <div class="post-date">
+    <time datetime="2020-08-06T12:34:50&#43;0100">Aug 6, 2020</time> &middot; 6 min read
+  </div>
+
+  <p>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication.  This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.</p>
+<p>After a little bit of research I found this article, from February 2017:</p>
+<p><a href="https://www.elastic.co/blog/user-impersonation-with-x-pack-integrating-third-party-auth-with-kibana">User Impersonation with X-Pack: Integrating Third Party Auth with Kibana</a></p>
+<p>Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.</p>
+<p>The main trouble with the article is the specific setup used, illustrated by the image:</p>
+<p><img src="http://robrankin.github.io/images/oauth_kibana_1.png" alt=""></p>
+<p>Problems:</p>
+<ol>
+<li><code>oauth2_proxy</code> terminating the browser connection (and possibly TLS)</li>
+<li><code>oauth2_proxy</code> running in reverse proxy mode</li>
+</ol>
+<p>This is more what I was looking for:</p>
+<p><img src="http://robrankin.github.io/images/Kibana_Oauth2_Kubernetes.jpg" alt=""></p>
+<p>For this deployment, Kibana and OAuth2 Proxy would be deployed on Kubernetes, and would be made available behind the standard k8s ingress controller, <a href="https://github.com/kubernetes/ingress-nginx">Ingress Nginx</a>.</p>
+<p>Therefore the browser connection would be terminated on the Ingress Nginx controller.  As a side note, this takes advantage of <code>cert-manager</code> to automatically provision and manage TLS certificates, very handy.</p>
+<p>I also didn&rsquo;t really want to run <code>oauth2_proxy</code> in full reverse proxy mode, as that&rsquo;s the job of the ingress controller.  Don&rsquo;t need more proxies involved here.</p>
+<p>Luckily, nginx has just the feature for this, the <a href="http://nginx.org/en/docs/http/ngx_http_auth_request_module.html">ngx_http_auth_request</a> module.  As per the documentation:</p>
+<blockquote>
+<p>The ngx_http_auth_request_module module (1.5.4+) implements client authorization based on the result of a subrequest. If the subrequest returns a 2xx response code, the access is allowed. If it returns 401 or 403, the access is denied with the corresponding error code. Any other response code returned by the subrequest is considered an error.</p>
+</blockquote>
+<p>So, in theory as long as a header called <code>es-security-runas-user</code> can be passed to Kibana, with a value of a valid username, and be authrorized to do so by using HTTP Basic auth as a user with rights to impersonate another use, we&rsquo;re good to go.</p>
+<p>The short form is:</p>
+<ul>
+<li>A &ldquo;Service Account&rdquo; is required in Kibana, with a Role that allows it to impersonate users.</li>
+<li>User accounts in Kibana for your users, with whatever roles they require.</li>
+<li>All requests from the ingress controller to Kibana must have 2 headers:
+<ul>
+<li>Basic Auth header for the &ldquo;Service Account&rdquo;</li>
+<li>An <code>es-security-runas-user</code> with a valid username created in Kibana.</li>
+</ul>
+</li>
+</ul>
+<p>So let&rsquo;s get down to it then, here&rsquo;s the specific configurations required to make this work!</p>
+<p>These are a mix between Helm chart values, and some &ldquo;raw-ish&rdquo; Kube configs (deployed using the <code>raw</code> Helm chart).</p>
+<p>OAuth2 Proxy Helm values.yaml</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">image:
+  repository: &#34;quay.io/pusher/oauth2_proxy&#34;
+  tag: &#34;v6.0.0&#34;
+  pullPolicy: &#34;IfNotPresent&#34;
+
+extraArgs:
+  provider: &#39;azure&#39;
+  email-domain: &#39;&lt;your email domain here&gt;&#39;
+  azure-tenant: &#39;&lt;your tenant id here&gt;&#39;
+  client-id: &#39;&lt;your client id here&gt;&#39;
+  client-secret: &#39;&lt;your client secret here&gt;&#39;
+
+  redirect-url: https://kibana.example.com/oauth2/callback
+
+  cookie-secret: &#39;&lt;cookie secret&gt;&#39;
+  cookie-domain: &lt;cookie domain&gt;
+  cookie-samesite: none
+
+  set-xauthrequest: true
+
+  session-store-type: redis
+  redis-connection-url: &#39;redis://redis-master:6379/0&#39;
+
+  request-logging: true
+  auth-logging: true
+  standard-logging: true
+  silence-ping-logging: true
+</code></pre></div><p>Notes:</p>
+<blockquote>
+<ul>
+<li>Ensure your callback URL does NOT have a trailing slash <code>/</code>.  This caused me some problems.</li>
+<li>To create an app in Azure for OAuth2 Proxy to use, please follow their documentation here: <a href="https://oauth2-proxy.github.io/oauth2-proxy/auth-configuration#azure-auth-provider">Azure Auth provider</a></li>
+<li>You&rsquo;ll notice the Redis connection config.  Please read <a href="https://oauth2-proxy.github.io/oauth2-proxy/configuration#configuring-for-use-with-the-nginx-auth_request-directive">this</a> section of the docs carefully, particularly if you&rsquo;re using Azure authentication.</li>
+</ul>
+</blockquote>
+<p>The key is really the <code>set-xauthrequest</code> config.  As per the documentation:</p>
+<blockquote>
+<p>set X-Auth-Request-User, X-Auth-Request-Email and X-Auth-Request-Preferred-Username response headers (useful in Nginx auth_request mode)</p>
+</blockquote>
+<p>So when this is enabled, OAuth2 Proxy will return those 3 headers to the nginx subrequest, making their values available to nginx, rather than just returning an HTTP 2xx without them.</p>
+<p>Is this specific case, we&rsquo;re after the <code>X-Auth-Request-Email</code> which is returned from Azure AD with the users email address, assuming successful authentication.</p>
+<p>We then need to get that header value (<a href="mailto:some.users@example.com">some.users@example.com</a>) into the <code>es-security-runas-user</code> and pass that to the upstream Kibana instance.</p>
+<p>Nginx Ingress Resources</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: kibana-ingress
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-Email
+      nginx.ingress.kubernetes.io/auth-url: &#34;https://$host/oauth2/auth&#34;
+      nginx.ingress.kubernetes.io/auth-signin: &#34;https://$host/oauth2/start?rd=$escaped_request_uri&#34;
+
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header &#39;es-security-runas-user&#39; $authHeader0;
+        proxy_set_header Authorization &#34;Basic &lt;your basic auth string&gt;&#34;;
+  spec:
+    rules:
+    - host: kibana.example.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: kibana
+            servicePort: 5601
+
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: kibana-oauth2-ingress
+    annotations:
+      kubernetes.io/ingress.class: nginx
+  spec:
+    rules:
+    - host: kibana.example.com
+      http:
+        paths:
+        - path: /oauth2
+          backend:
+            serviceName: oauth2-proxy
+            servicePort: 80
+</code></pre></div><p>You&rsquo;ll notice there&rsquo;s actually 2 ingresses defined here, for the same hostname, but different paths.  I&rsquo;m not sure this is required, but it appears to be based on my testing.  If you attempt to use a single host, with separate paths for Kibana and OAuth2 Proxy it simply doesnt work.</p>
+<p>In the Nginx Ingress configs, the important pieces are as follows.</p>
+<h1 id="part-one">Part One</h1>
+<blockquote>
+<p>nginx.ingress.kubernetes.io/auth-url: &ldquo;https://$host/oauth2/auth&rdquo;
+nginx.ingress.kubernetes.io/auth-signin: &ldquo;https://$host/oauth2/start?rd=$escaped_request_uri&rdquo;</p>
+</blockquote>
+<p>The <code>auth-url</code> and <code>auth-signin</code> annotations activate the <code>ngx_http_auth_request_module</code>, so that every request through this location ( <code>/</code> ) must be authenticated by the external source specified.  This source is <code>$host/oauth2</code>, which is the same hostname as kibana, but on the <code>oauth2</code> path, so its the second of the ingress resources specified above.</p>
+<h1 id="part-two">Part Two</h1>
+<blockquote>
+<p>nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-Email</p>
+</blockquote>
+<p>The <code>auth-response-headers</code> annotation simply passes the <code>X-Auth-Request-Email</code> header that we received from Oauth2 Proxy onto the upstream, Kibana, assuming successful authentication.</p>
+<p>Relevant documentation for the annotation:</p>
+<blockquote>
+<p>nginx.ingress.kubernetes.io/auth-response-headers: &lt;Response_Header_1, &hellip;, Response_Header_n&gt; to specify headers to pass to backend once authentication request completes.</p>
+</blockquote>
+<p>This by itself doesn&rsquo;t help much, as Kibana has no idea to do anything with that specific header, but the trick is that the ingress controller does this by setting an nginx var to the value of that header as returned by Oauth2 Proxy, and then setting the same header to be passed upstream using <code>proxy_set_header</code>.</p>
+<p>Relevant nginx config snippet:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">auth_request_set $authHeader0 $upstream_http_x_auth_request_email;
+proxy_set_header &#39;X-Auth-Request-Email&#39; $authHeader0;
+</code></pre></div><h1 id="part-three">Part Three</h1>
+<blockquote>
+<p>proxy_set_header &lsquo;es-security-runas-user&rsquo; $authHeader0;
+proxy_set_header Authorization &ldquo;Basic <!-- raw HTML omitted -->&rdquo;;</p>
+</blockquote>
+<p>The important piece for Kibana authentication comes next, by re-using the nginx var <code>$authHeader0</code>, creating and setting the <code>es-security-runas-user</code> header using that var, and passing that upstream using <code>proxy_set_header</code>.</p>
+<p>As long as Kibana receives the <code>es-security-runas-user</code> and the basic auth header <code>Authorization: Basic &lt;your basic auth string&gt;</code>, it will attempt to &ldquo;login&rdquo; using the value of the <code>es-security-runas-user</code> header.</p>
+<p>In this case we&rsquo;re using emails as the username, but if your auth source provides a different value that OAuth2 Proxy can return to nginx, the same approach could be used.</p>
+<p>Since this isintegrated with the Azure AD authentication flow, it can also take advantage of other authentication requirements, such as requiring MFA, or even Azure AD&rsquo;s Conditional Access system.  These sorts of features are available on most other auth providers I&rsquo;ve seen as well of course.</p>
+
+</div>
+
+
+  </main>
+
+  <footer>
+  <div>
+    &copy; Rob Rankin 2020
+
+    &middot; <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>
+
+    
+  </div>
+</footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"
+          integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0="
+          crossorigin="anonymous"></script>
+
+  <script src="http://robrankin.github.io/js/blog.js"></script>
+
+  
+</body>
+</html>

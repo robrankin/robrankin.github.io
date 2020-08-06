@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on </title>
+    <link>http://robrankin.github.io/tags/</link>
+    <description>Recent content in Tags on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
+    
+	<atom:link href="http://robrankin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>authentication</title>
+      <link>http://robrankin.github.io/tags/authentication/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/authentication/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>elasticsearch</title>
+      <link>http://robrankin.github.io/tags/elasticsearch/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kibana</title>
+      <link>http://robrankin.github.io/tags/kibana/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/kibana/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>http://robrankin.github.io/tags/kubernetes/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mfa</title>
+      <link>http://robrankin.github.io/tags/mfa/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/mfa/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>oauth2_proxy</title>
+      <link>http://robrankin.github.io/tags/oauth2_proxy/</link>
+      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/oauth2_proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automation</title>
+      <link>http://robrankin.github.io/tags/automation/</link>
+      <pubDate>Mon, 22 Sep 2014 09:53:41 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/automation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>azure</title>
+      <link>http://robrankin.github.io/tags/azure/</link>
+      <pubDate>Mon, 22 Sep 2014 09:53:41 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/azure/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>puppet</title>
+      <link>http://robrankin.github.io/tags/puppet/</link>
+      <pubDate>Mon, 22 Sep 2014 09:53:41 +0100</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/puppet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hiera</title>
+      <link>http://robrankin.github.io/tags/hiera/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/hiera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iteration</title>
+      <link>http://robrankin.github.io/tags/iteration/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/iteration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nginx</title>
+      <link>http://robrankin.github.io/tags/nginx/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/nginx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>profiles</title>
+      <link>http://robrankin.github.io/tags/profiles/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/profiles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>proxy</title>
+      <link>http://robrankin.github.io/tags/proxy/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/proxy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pupet</title>
+      <link>http://robrankin.github.io/tags/pupet/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/pupet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>roles</title>
+      <link>http://robrankin.github.io/tags/roles/</link>
+      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      
+      <guid>http://robrankin.github.io/tags/roles/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

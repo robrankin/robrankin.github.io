@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  <title>Integrating Puppet with Azure &middot; </title>
+
+  <meta name="description" content="" />
+
+  
+
+<meta itemprop="name" content="Integrating Puppet with Azure">
+<meta itemprop="description" content="Goal Explore how we can integrate Puppet with Azure IaaS (Virtual Machines). Result should be a method to create new VM&rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest
+Links Microsoft and PuppetLabs Azure integration: http://puppetlabs.com/solutions/microsoft
+Azure Customization Tasks http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/
+Puppet Facter http://puppetlabs.com/facter
+Requirements When we create a new VM, we want that VM to automatically connect to our PuppetMaster, apply the appropriate manifest. In order to accomplish this there are 3 main points to consider:">
+<meta itemprop="datePublished" content="2014-09-22T09:53:41+01:00" />
+<meta itemprop="dateModified" content="2014-09-22T09:53:41+01:00" />
+<meta itemprop="wordCount" content="1496">
+
+
+
+<meta itemprop="keywords" content="azure,puppet,automation," />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Integrating Puppet with Azure"/>
+<meta name="twitter:description" content="Goal Explore how we can integrate Puppet with Azure IaaS (Virtual Machines). Result should be a method to create new VM&rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest
+Links Microsoft and PuppetLabs Azure integration: http://puppetlabs.com/solutions/microsoft
+Azure Customization Tasks http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/
+Puppet Facter http://puppetlabs.com/facter
+Requirements When we create a new VM, we want that VM to automatically connect to our PuppetMaster, apply the appropriate manifest. In order to accomplish this there are 3 main points to consider:"/>
+
+
+<meta property="og:title" content="Integrating Puppet with Azure" />
+<meta property="og:description" content="Goal Explore how we can integrate Puppet with Azure IaaS (Virtual Machines). Result should be a method to create new VM&rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest
+Links Microsoft and PuppetLabs Azure integration: http://puppetlabs.com/solutions/microsoft
+Azure Customization Tasks http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/
+Puppet Facter http://puppetlabs.com/facter
+Requirements When we create a new VM, we want that VM to automatically connect to our PuppetMaster, apply the appropriate manifest. In order to accomplish this there are 3 main points to consider:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/" />
+<meta property="article:published_time" content="2014-09-22T09:53:41+01:00" />
+<meta property="article:modified_time" content="2014-09-22T09:53:41+01:00" />
+
+
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/print.css"
+        media="print">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/poole.css">
+
+  <link type="text/css"
+        rel="stylesheet"
+        href="http://robrankin.github.io/css/hyde.css">
+
+  
+
+
+  <link type="text/css" rel="stylesheet" href="http://robrankin.github.io/css/blog.css">
+
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+        crossorigin="anonymous" />
+
+  <link rel="apple-touch-icon-precomposed"
+        sizes="144x144"
+        href="http://robrankin.github.io/apple-touch-icon-144-precomposed.png">
+
+  <link rel="shortcut icon" href="http://robrankin.github.io/favicon.png">
+
+  
+  </head>
+<body>
+  <aside class="sidebar">
+  <div class="container">
+    <div class="sidebar-about">
+      
+        
+        <div class="author-image">
+          <img src="http://robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
+        </div>
+        
+      
+
+      <h1></h1>
+
+      
+      <p class="lead">Robs Musings</p>
+      
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li>
+          <a href="http://robrankin.github.io/">Home</a>
+        </li>
+        <li>
+          <a href="http://robrankin.github.io/posts/">Posts</a>
+        </li><li>
+          <a href="http://robrankin.github.io/about/">About</a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="social-icons">
+      
+      <a href="https://www.linkedin.com/in/rob-rankin-7312234/" rel="me" title="Linkedin" target="_blank">
+        <i class="fab fa-linkedin" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://github.com/robrankin/" rel="me" title="GitHub" target="_blank">
+        <i class="fab fa-github" aria-hidden="true"></i>
+      </a>
+      
+      <a href="https://twitter.com/mahhyzero/" rel="me" title="Twitter" target="_blank">
+        <i class="fab fa-twitter" aria-hidden="true"></i>
+      </a>
+      
+    </section>
+  </div>
+</aside>
+
+
+  <main class="content container">
+  <div class="post">
+  <h1>Integrating Puppet with Azure</h1>
+
+  <div class="post-date">
+    <time datetime="2014-09-22T09:53:41&#43;0100">Sep 22, 2014</time> &middot; 8 min read
+  </div>
+
+  <h2 id="goal">Goal</h2>
+<p>Explore how we can integrate Puppet with Azure IaaS (Virtual Machines).  Result should be a method to create new VM&rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest</p>
+<h2 id="links">Links</h2>
+<h3 id="microsoft-and-puppetlabs-azure-integration">Microsoft and PuppetLabs Azure integration:</h3>
+<p><a href="http://puppetlabs.com/solutions/microsoft">http://puppetlabs.com/solutions/microsoft</a></p>
+<h3 id="azure-customization-tasks">Azure Customization Tasks</h3>
+<p><a href="http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/">http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/</a></p>
+<h3 id="puppet-facter">Puppet Facter</h3>
+<p><a href="http://puppetlabs.com/facter">http://puppetlabs.com/facter</a></p>
+<h2 id="requirements">Requirements</h2>
+<p>When we create a new VM, we want that VM to automatically connect to our PuppetMaster, apply the appropriate manifest.  In order to accomplish this there are 3 main points to consider:</p>
+<ul>
+<li>PuppetMaster autosign</li>
+<li>Puppet Agent install</li>
+<li>Node classification of the new VM</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3 id="problem-1-autosign">Problem 1: Autosign</h3>
+<p>This ones an easy one to solve, although consider carefully if you actually want to do this.  By enabling  basic autosigning you are in effect allowing any Puppet Agent to join and then have access to your entire manifest.</p>
+<p>Puppet Docs: <a href="https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html">https://docs.puppetlabs.com/puppet/latest/reference/config_file_autosign.html</a></p>
+<p>Create a a file: <code>$confdir/autosign.conf</code></p>
+<p>Within that file, add a list of allowed certanems or domain names, such as:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">*.myprivatedomain.com
+*.otherprivatedomain.com
+</code></pre></div><p>Note: this is insecure, any host can pretend it has an appropriate hostname.  Please utilize other security measures such as firewall restrictions, or look at Puppets Policy-Based Autosigning.</p>
+<h3 id="problem-2-puppet-agent-install">Problem 2: Puppet Agent install</h3>
+<p>This has become much easier with the integration of Puppet and Azure, with an extended set of PowerShell cmdlets that allow the installation of the Puppet Enterprise Agent on VM creation.</p>
+<p>Previously there were two methods that could address this, that I&rsquo;ve considered:</p>
+<ul>
+<li>Building an image with the agent already installed</li>
+<li>Using some form of hand rolled remote PowerShell</li>
+</ul>
+<p>Neither of those are particularly good in my opinion.</p>
+<p>Using a pre-built image supposes that the base image will be static enough to last a siginficant amount of time, and in the company I currently work for that&rsquo;s simply not true.  Technology here is moving too fast for this, so there&rsquo;d be a reasonable amount of overhead in rebuilding and re-distributing the base image to accomodate changes in our stack.</p>
+<p>Hand rolling your own PS remoting, well, personally I think that way lies madness.  The few times I&rsquo;ve attempted to use remoting it&rsquo;s been an exercise in frustration, so I generally try to avoid it like the plague.</p>
+<p>Now however, the Azure PS cmdlets let you add the Puppet Enterprise Agent to any new (Windows) VM.</p>
+<p>A fairly common set of PS that I use to create a new VM is below.</p>
+<p>Example 1: Basic script</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$subscriptionName = &#39;&lt;sub name&gt;&#39;   
+$storageAccountName = &#39;&lt;storage account name&gt;&#39;    
+Set-AzureSubscription -SubscriptionName $subscriptionName -CurrentStorageAccount $storageAccountName  
+Select-AzureSubscription -SubscriptionName $subscriptionName  
+$imageName = &#39;&lt;azureimage&gt;&#39;
+$subnet = &#39;&lt;subnet&gt;&#39;
+$vnetName = &#39;&lt;vmname&gt;&#39;
+$user = &#39;&lt;username&gt;&#39;
+$pwd = &#39;&lt;password&gt;&#39;
+$serviceName = &#39;&lt;cloudservice&gt;&#39;
+$affinityGroup = &#39;&lt;affinitygroup&gt;&#39;
+$availabilitySet = $serviceName
+$instanceSize = &#39;&lt;size&gt;&#39;
+
+$vm = New-AzureVMConfig -Name $vmname -InstanceSize $instanceSize -ImageName $imageName |
+  Set-AzureAvailabilitySet -AvailabilitySetName $availabilitySet |
+  Add-AzureProvisioningConfig -Windows -Password $pwd -AdminUsername $user |  
+  Set-AzureSubnet -SubnetNames $subnet
+
+  $vm = Set-AzureVMPuppetExtension -VM $vm -PuppetMasterServer &#34;&lt;puppet server hostname&gt;&#34;
+
+New-AzureVM -ServiceName $serviceName -AffinityGroup $affinityGroup -VMs $vms -VNetName $vnetName
+</code></pre></div><p>The basic operation of this is fairly easy to follow.  We&rsquo;re creating a PS object <code>$vm</code> with all the properties to create a VM.</p>
+<p>The important piece for us is the line:</p>
+<p><code>$vm = Set-AzureVMPuppetExtension -VM $vm -PuppetMasterServer &quot;&lt;puppet server hostname&gt;&quot;</code></p>
+<p>This is the PS Puppet cmdlet adding the Puppet Agent properties to the <code>$vm</code> object, and setting the Puppet Master URL to <code>&lt;puppet server hostname&gt;</code>.</p>
+<p>When the VM is created, the Puppet Enterprise Agent will be installed and configured to point to your Puppet Master.  Quite cool.</p>
+<h3 id="problem-3-node-classification">Problem 3: Node classification</h3>
+<p>Finally, node classification.  This is where it all comes together, and magic happens.  We need to be able to decide what exactly the nodes &ldquo;role&rdquo; is.  Is it a web server?  A database server?  A caching server?  Application server?  If we can&rsquo;t determine that we can&rsquo;t configure it correctly.</p>
+<p>In the old/bad days, the approach would have been to use the node name/host name to classifiy.  For example <code>db-server1</code> would be considered a DB server, whereas <code>web-server1</code> would be a web server of some description.  We could then use Puppet node definitions to start classifiying:</p>
+<ul>
+<li><a href="https://docs.puppetlabs.com/puppet/latest/reference/lang_node_definitions.html">https://docs.puppetlabs.com/puppet/latest/reference/lang_node_definitions.html</a></li>
+</ul>
+<p>To be completely honest this method still works in Azure IaaS, as the actual hostnames can be specified, so I can create a VM called <code>web-server1</code>.</p>
+<p>Where this doesn&rsquo;t work is in environments where you may not have any control over the node/host name.  This is common in Azure PaaS (Web/Worker roles) for example (although they also fall outside the scope of this article).</p>
+<p>However, for purposes of this post we&rsquo;re going to approach the problem as if we don&rsquo;t have control over the host name and need to find an alternative classification method.</p>
+<p>There are quite a lot of options here, mostly to do with using an External Node Classifier (ENC):</p>
+<ul>
+<li><a href="https://docs.puppetlabs.com/guides/external_nodes.html">https://docs.puppetlabs.com/guides/external_nodes.html</a></li>
+</ul>
+<p>However, again this isn&rsquo;t the approach that we&rsquo;ve taken, at least not yet.  Currently we&rsquo;re utilizing simple External Facts:</p>
+<ul>
+<li><a href="http://puppetlabs.com/blog/facter-1-7-introduces-external-facts">http://puppetlabs.com/blog/facter-1-7-introduces-external-facts</a></li>
+</ul>
+<p>External Facts, combined with another Azure PowerShell extension, Customization Tasks give us the ability to classify a node at creation time.</p>
+<p>Example 2: Add a Customization Task at VM Creation</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">$vm = New-AzureVMConfig -Name $vmname -InstanceSize $instanceSize -ImageName $imageName |
+  Set-AzureAvailabilitySet -AvailabilitySetName $availabilitySet |
+  Add-AzureProvisioningConfig -Windows -Password $pwd -AdminUsername $user |  
+  Set-AzureSubnet -SubnetNames $subnet
+
+  $vm = Set-AzureVMCustomScriptExtension -VM $vm -FileUri &#39;&lt;http://source/of/script.ps1&#39; -Run &#39;script.ps1&#39; -Argument &#39;-factName service -factValue web&#39;
+
+  $vm = Set-AzureVMPuppetExtension -VM $vm -PuppetMasterServer &#34;&lt;puppet server hostname&gt;&#34;
+</code></pre></div><p>The addition here is the <code>Set-AzureVMCustomScriptExtension</code>:</p>
+<ul>
+<li><a href="http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/">http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/</a></li>
+</ul>
+<p>The Custom Script extension allows you to create and run a PowerShell script at VM creation.  The script can do anything you want it to, however in our case we want it to create some External Facts for the Puppet Agent to digest.</p>
+<p>Example 3: script.ps1</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">param (
+   [string]$factName = $(throw &#34;-factName is required.&#34;),
+   [string]$factValue = $(throw &#34;-factValue is required.&#34;)
+)
+
+$factDir=&#39;C:\ProgramData\PuppetLabs\facter\facts.d&#39;
+$fileName=$factName
+
+New-Item $factDir -type directory -ErrorAction SilentlyContinue
+
+New-Item $factDir\$fileName.txt -type file -value &#34;$factName=$factValue&#34; -ErrorAction SilentlyContinue
+</code></pre></div><p>Pretty basic, and very much not an ideal PS script, but it works for now.  Feel free to suggest improvements.  All it needs to do is create a txt file containing key/value pairs:</p>
+<p>Example 4: External Fact file <code>$factname</code>.txt</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">service=web
+</code></pre></div><p>That&rsquo;s it.  As long as that file exists in the appropriate location ( i.e. <code>C:\ProgramData\PuppetLabs\facter\facts.d</code> ), that key/value pair will be available to Puppet as a fact.  Whenever the Puppet Agent runs, it will make the fact <code>service=web</code> available to the Puppet Master, which will then compile and provide the correct manifest to apply to the node.</p>
+<p>On the Puppet Master side, it makes for what I think is a much cleaner setup.</p>
+<p>In previous models, you&rsquo;d classifiy your nodes based on their hostname.  This would lead to a Puppet manifest that could be pretty extensive, to cover all the naming possibilities.  A very simple example would be this:</p>
+<p>Example: site.pp</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">node /^web-*/ {
+  include web
+}
+node /^db-*/ {
+  include db
+}
+</code></pre></div><p>As you can see, we&rsquo;re catching each node name (or a wildcard matching set of names).  It seems like a reasonably good approach, until you run into some sort of siginficant naming convention change that means you can no longer group all the &ldquo;web&rdquo; nodes using the same pattern match <code>web-*</code>.  The reason doesn&rsquo;t matter, but most probably will happen as your infrastructure grows will be this:</p>
+<p>Example: site.pp</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">node /^web-*/ {
+  include web
+}
+node /^asbc-something-*/ {
+  include web
+}
+
+node /^db-*/ {
+  include db
+}
+node /^1-zxy-*/ {
+  include db
+}
+
+</code></pre></div><p>Now you have two node name classifiers for the same &ldquo;role&rdquo; of server.  This is pretty much the entire reason most modern Puppet patterns recommend not using hostnames as the classifier.</p>
+<p>However, now that we have the ability to create External Facts on node creation, we could use those facts to classifier our nodes.  We can get rid of all the node name classification, and simply use the <code>service=web</code> fact.</p>
+<p>Example: site.pp using External Facts</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">case $service {
+  &#34;web&#34;:				{ include role::web }
+  &#34;db&#34;:				{ include role::db }
+  default:			{ fail(&#34;Role is undefined&#34;) }
+}
+</code></pre></div><p>That&rsquo;s basically it.  We now have a method to create an Azure VM, with the Puppet Enterprise Agent already installed and configured to connect to your PuppetMaster, and finally a method of classifying the newly created node in the same process, which is not dependant upon the nodes hostname.</p>
+<p>This is actually all a bit of a work in process currently.  At my current job, we&rsquo;re slowly moving away from a Puppet infrastructure that&rsquo;s getting a bit long in the tooth and lacking organization.  We&rsquo;re looking to move to a modern Hiera/Roles&amp;Profiles pattern, and probably use the External Fact route for classification.  If anyone has any suggestions/arguements/criticisms, let me know at mahhy at undertow dot ca.</p>
+<p>Obviously this is all aimed at Microsoft Windows VM&rsquo;s, and doesn&rsquo;t address Linux systems.  Given most Linux distros&rsquo; package/repository management capabilities, I don&rsquo;t think it would be as complex as for Windows.  A relatively simple Customization Task, in bash (or your shell of choice) that simply installed the PuppetLabs repo RPM, then installed the Puppet agent would do the trick.  I&rsquo;ll leave that up to you.</p>
+
+</div>
+
+
+  </main>
+
+  <footer>
+  <div>
+    &copy; Rob Rankin 2020
+
+    &middot; <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>
+
+    
+  </div>
+</footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"
+          integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0="
+          crossorigin="anonymous"></script>
+
+  <script src="http://robrankin.github.io/js/blog.js"></script>
+
+  
+</body>
+</html>
