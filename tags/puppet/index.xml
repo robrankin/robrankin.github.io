@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>puppet on </title>
-    <link>robrankin.github.io/tags/puppet/</link>
+    <link>https://robrankin.github.io/tags/puppet/</link>
     <description>Recent content in puppet on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 22 Sep 2014 09:53:41 +0100</lastBuildDate>
     
-	<atom:link href="robrankin.github.io/tags/puppet/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://robrankin.github.io/tags/puppet/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Integrating Puppet with Azure</title>
-      <link>robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</link>
+      <link>https://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</link>
       <pubDate>Mon, 22 Sep 2014 09:53:41 +0100</pubDate>
       
-      <guid>robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</guid>
+      <guid>https://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</guid>
       <description>Goal Explore how we can integrate Puppet with Azure IaaS (Virtual Machines). Result should be a method to create new VM&amp;rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest
 Links Microsoft and PuppetLabs Azure integration: http://puppetlabs.com/solutions/microsoft
 Azure Customization Tasks http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/

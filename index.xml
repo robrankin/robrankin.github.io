@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>robrankin.github.io/</link>
+    <link>https://robrankin.github.io/</link>
     <description>Recent content on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
     
-	<atom:link href="robrankin.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://robrankin.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
-      <link>robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
+      <link>https://robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
       <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
       
-      <guid>robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
+      <guid>https://robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
       <description>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&amp;rsquo;t the case this time.
 After a little bit of research I found this article, from February 2017:
 User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
@@ -25,10 +25,10 @@ Obviously it&amp;rsquo;s starting to get a little long in the tooth, but as long
     
     <item>
       <title>Bringing ElasticSearch to it&#39;s knees</title>
-      <link>robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</link>
+      <link>https://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</link>
       <pubDate>Wed, 22 Oct 2014 17:23:27 +0000</pubDate>
       
-      <guid>robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</guid>
+      <guid>https://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</guid>
       <description>Bringing ElasticSearch to it&amp;rsquo;s knees ElasticSearch is a bloody fantastic, scalable, distributed, Lucense based search system.
 At Bede Gaming we&amp;rsquo;re currently using it primarily for log collection/searching, one of the more common implementations of the ELK stack (ElasticSearch, Logstash, Kibana). We&amp;rsquo;re also looking to use it more front line roles within the Bede Gaming platform.
 Our current statistics look something like this:
@@ -37,10 +37,10 @@ Our current statistics look something like this:
     
     <item>
       <title>Integrating Puppet with Azure</title>
-      <link>robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</link>
+      <link>https://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</link>
       <pubDate>Mon, 22 Sep 2014 09:53:41 +0100</pubDate>
       
-      <guid>robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</guid>
+      <guid>https://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</guid>
       <description>Goal Explore how we can integrate Puppet with Azure IaaS (Virtual Machines). Result should be a method to create new VM&amp;rsquo;s that will automatically be brought into compliance with the appropriate Puppet Manifest
 Links Microsoft and PuppetLabs Azure integration: http://puppetlabs.com/solutions/microsoft
 Azure Customization Tasks http://azure.microsoft.com/blog/2014/04/24/automating-vm-customization-tasks-using-custom-script-extension/
@@ -50,10 +50,10 @@ Requirements When we create a new VM, we want that VM to automatically connect t
     
     <item>
       <title>Modelling an nginx Application Proxy using Puppet and Hiera</title>
-      <link>robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
+      <link>https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
       <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
       
-      <guid>robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</guid>
+      <guid>https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</guid>
       <description>Goal To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.
 Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Scoping Namespacing  Puppet Roles/Profiles  Craig Dunn, Designing Puppet Talk End to End Roles and Profiles Example Puppet Workflow Part 1 Puppet Workflow Part 2  Hiera  Puppet Labs Hiera Docs Passing Variables to Hiera  nginx Module  jfryman nginx Puppet Module  nginx  nginx Project Page  Requirements Within nginx we need to define a set of nginx &amp;ldquo;server&amp;rdquo; contexts with the same set of &amp;ldquo;location&amp;rdquo; contexts in each &amp;ldquo;server&amp;rdquo;.</description>
     </item>

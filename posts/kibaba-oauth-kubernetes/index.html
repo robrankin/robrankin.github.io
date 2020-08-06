@@ -39,7 +39,7 @@ After a little bit of research I found this article, from February 2017:
 User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
 Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="robrankin.github.io/posts/kibaba-oauth-kubernetes/" />
+<meta property="og:url" content="https://robrankin.github.io/posts/kibaba-oauth-kubernetes/" />
 <meta property="article:published_time" content="2020-08-06T12:34:50+01:00" />
 <meta property="article:modified_time" content="2020-08-06T12:34:50+01:00" />
 
@@ -47,21 +47,21 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
 
   <link type="text/css"
         rel="stylesheet"
-        href="robrankin.github.io/css/print.css"
+        href="https://robrankin.github.io/css/print.css"
         media="print">
 
   <link type="text/css"
         rel="stylesheet"
-        href="robrankin.github.io/css/poole.css">
+        href="https://robrankin.github.io/css/poole.css">
 
   <link type="text/css"
         rel="stylesheet"
-        href="robrankin.github.io/css/hyde.css">
+        href="https://robrankin.github.io/css/hyde.css">
 
   
 
 
-  <link type="text/css" rel="stylesheet" href="robrankin.github.io/css/blog.css">
+  <link type="text/css" rel="stylesheet" href="https://robrankin.github.io/css/blog.css">
 
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap">
@@ -73,9 +73,9 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
 
   <link rel="apple-touch-icon-precomposed"
         sizes="144x144"
-        href="robrankin.github.io/apple-touch-icon-144-precomposed.png">
+        href="https://robrankin.github.io/apple-touch-icon-144-precomposed.png">
 
-  <link rel="shortcut icon" href="robrankin.github.io/favicon.png">
+  <link rel="shortcut icon" href="https://robrankin.github.io/favicon.png">
 
   
   </head>
@@ -86,7 +86,7 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
       
         
         <div class="author-image">
-          <img src="robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
+          <img src="https://robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
         </div>
         
       
@@ -101,12 +101,12 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
     <nav>
       <ul class="sidebar-nav">
         <li>
-          <a href="robrankin.github.io">Home</a>
+          <a href="https://robrankin.github.io">Home</a>
         </li>
         <li>
-          <a href="robrankin.github.io/posts/">Posts</a>
+          <a href="https://robrankin.github.io/posts/">Posts</a>
         </li><li>
-          <a href="robrankin.github.io/about/">About</a>
+          <a href="https://robrankin.github.io/about/">About</a>
         </li>
       </ul>
     </nav>
@@ -143,14 +143,14 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
 <p><a href="https://www.elastic.co/blog/user-impersonation-with-x-pack-integrating-third-party-auth-with-kibana">User Impersonation with X-Pack: Integrating Third Party Auth with Kibana</a></p>
 <p>Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.</p>
 <p>The main trouble with the article is the specific setup used, illustrated by the image:</p>
-<p><img src="robrankin.github.io/images/oauth_kibana_1.png" alt=""></p>
+<p><img src="https://robrankin.github.io/images/oauth_kibana_1.png" alt=""></p>
 <p>Problems:</p>
 <ol>
 <li><code>oauth2_proxy</code> terminating the browser connection (and possibly TLS)</li>
 <li><code>oauth2_proxy</code> running in reverse proxy mode</li>
 </ol>
 <p>This is more what I was looking for:</p>
-<p><img src="robrankin.github.io/images/Kibana_Oauth2_Kubernetes.jpg" alt=""></p>
+<p><img src="https://robrankin.github.io/images/Kibana_Oauth2_Kubernetes.jpg" alt=""></p>
 <p>For this deployment, Kibana and OAuth2 Proxy would be deployed on Kubernetes, and would be made available behind the standard k8s ingress controller, <a href="https://github.com/kubernetes/ingress-nginx">Ingress Nginx</a>.</p>
 <p>Therefore the browser connection would be terminated on the Ingress Nginx controller.  As a side note, this takes advantage of <code>cert-manager</code> to automatically provision and manage TLS certificates, very handy.</p>
 <p>I also didn&rsquo;t really want to run <code>oauth2_proxy</code> in full reverse proxy mode, as that&rsquo;s the job of the ingress controller.  Don&rsquo;t need more proxies involved here.</p>
@@ -305,7 +305,7 @@ proxy_set_header Authorization &ldquo;Basic <!-- raw HTML omitted -->&rdquo;;</p
           integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0="
           crossorigin="anonymous"></script>
 
-  <script src="robrankin.github.io/js/blog.js"></script>
+  <script src="https://robrankin.github.io/js/blog.js"></script>
 
   
 </body>
