@@ -3,132 +3,132 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://robrankin.github.io/</loc>
+    <loc>robrankin.github.io/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/authentication/</loc>
+    <loc>robrankin.github.io/tags/authentication/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/categories/</loc>
+    <loc>robrankin.github.io/categories/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/elasticsearch/</loc>
+    <loc>robrankin.github.io/tags/elasticsearch/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/posts/kibaba-oauth-kubernetes/</loc>
+    <loc>robrankin.github.io/posts/kibaba-oauth-kubernetes/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/kibana/</loc>
+    <loc>robrankin.github.io/tags/kibana/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/kubernetes/</loc>
+    <loc>robrankin.github.io/tags/kubernetes/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/mfa/</loc>
+    <loc>robrankin.github.io/tags/mfa/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/oauth2_proxy/</loc>
+    <loc>robrankin.github.io/tags/oauth2_proxy/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/posts/</loc>
+    <loc>robrankin.github.io/posts/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/</loc>
+    <loc>robrankin.github.io/tags/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/categories/tech/</loc>
+    <loc>robrankin.github.io/categories/tech/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</loc>
+    <loc>robrankin.github.io/posts/elasticsearch-gc-and-field-mapping-debugging/</loc>
     <lastmod>2014-10-22T17:23:27+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/automation/</loc>
+    <loc>robrankin.github.io/tags/automation/</loc>
     <lastmod>2014-09-22T09:53:41+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/azure/</loc>
+    <loc>robrankin.github.io/tags/azure/</loc>
     <lastmod>2014-09-22T09:53:41+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</loc>
+    <loc>robrankin.github.io/posts/2014-09-22-integrating-puppet-with-azure/</loc>
     <lastmod>2014-09-22T09:53:41+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/puppet/</loc>
+    <loc>robrankin.github.io/tags/puppet/</loc>
     <lastmod>2014-09-22T09:53:41+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/hiera/</loc>
+    <loc>robrankin.github.io/tags/hiera/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/iteration/</loc>
+    <loc>robrankin.github.io/tags/iteration/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</loc>
+    <loc>robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/nginx/</loc>
+    <loc>robrankin.github.io/tags/nginx/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/profiles/</loc>
+    <loc>robrankin.github.io/tags/profiles/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/proxy/</loc>
+    <loc>robrankin.github.io/tags/proxy/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/pupet/</loc>
+    <loc>robrankin.github.io/tags/pupet/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/tags/roles/</loc>
+    <loc>robrankin.github.io/tags/roles/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://robrankin.github.io/series/</loc>
+    <loc>robrankin.github.io/series/</loc>
   </url>
   
 </urlset>

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>kibana on </title>
-    <link>http://robrankin.github.io/tags/kibana/</link>
+    <link>robrankin.github.io/tags/kibana/</link>
     <description>Recent content in kibana on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
     
-	<atom:link href="http://robrankin.github.io/tags/kibana/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="robrankin.github.io/tags/kibana/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
-      <link>http://robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
+      <link>robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
       <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
       
-      <guid>http://robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
+      <guid>robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
       <description>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&amp;rsquo;t the case this time.
 After a little bit of research I found this article, from February 2017:
 User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
