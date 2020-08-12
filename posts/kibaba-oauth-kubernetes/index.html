@@ -7,10 +7,10 @@
 <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes | </title>
 
 <meta property='og:title' content='Kibaba Authentication using OAuth2 Proxy in Kubernetes - '>
-<meta property='og:description' content='Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+<meta property='og:description' content='NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): https://github.com/elastic/kibana/issues/74828
+ Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
 After a little bit of research I found this article, from February 2017:
-User Impersonation with X-Pack: Integrating Third Party Auth with Kibana
-Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.'>
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana'>
 <meta property='og:url' content='https://robrankin.github.io/posts/kibaba-oauth-kubernetes/'>
 <meta property='og:site_name' content=''>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69b8322cb79d5a0c1fc6786379d86eb8?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='kubernetes'><meta property='article:tag' content='kibana'><meta property='article:tag' content='authentication'><meta property='article:tag' content='mfa'><meta property='article:tag' content='elasticsearch'><meta property='article:tag' content='oauth2_proxy'><meta property='article:published_time' content='2020-08-06T12:34:50&#43;01:00'/><meta property='article:modified_time' content='2020-08-06T12:34:50&#43;01:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@mahhyzero'><meta name='twitter:creator' content='@mahhyzero'>
@@ -115,7 +115,10 @@ Obviously it&rsquo;s starting to get a little long in the tooth, but as long as 
     <h1 class="title">Kibaba Authentication using OAuth2 Proxy in Kubernetes</h1>
     
     <div class="content">
-      <p>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication.  This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.</p>
+      <blockquote>
+<p><strong><em>NOTE:</em></strong>  There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): <a href="https://github.com/elastic/kibana/issues/74828">https://github.com/elastic/kibana/issues/74828</a></p>
+</blockquote>
+<p>Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication.  This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.</p>
 <p>After a little bit of research I found this article, from February 2017:</p>
 <p><a href="https://www.elastic.co/blog/user-impersonation-with-x-pack-integrating-third-party-auth-with-kibana">User Impersonation with X-Pack: Integrating Third Party Auth with Kibana</a></p>
 <p>Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.</p>
