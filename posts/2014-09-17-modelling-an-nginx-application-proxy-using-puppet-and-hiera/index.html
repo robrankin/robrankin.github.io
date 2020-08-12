@@ -1,133 +1,120 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="Hugo 0.74.3" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <title>Modelling an nginx Application Proxy using Puppet and Hiera &middot; </title>
+<title>Modelling an nginx Application Proxy using Puppet and Hiera | </title>
 
-  <meta name="description" content="Modelling an nginx Application Proxy using Puppet and Hiera" />
-
-  
-
-<meta itemprop="name" content="Modelling an nginx Application Proxy using Puppet and Hiera">
-<meta itemprop="description" content="Modelling an nginx Application Proxy using Puppet and Hiera">
-<meta itemprop="datePublished" content="2014-09-17T18:26:08+00:00" />
-<meta itemprop="dateModified" content="2014-09-17T18:26:08+00:00" />
-<meta itemprop="wordCount" content="2941">
+<meta property='og:title' content='Modelling an nginx Application Proxy using Puppet and Hiera - '>
+<meta property='og:description' content='Modelling an nginx Application Proxy using Puppet and Hiera'>
+<meta property='og:url' content='https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/'>
+<meta property='og:site_name' content=''>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69b8322cb79d5a0c1fc6786379d86eb8?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='pupet'><meta property='article:tag' content='hiera'><meta property='article:tag' content='roles'><meta property='article:tag' content='profiles'><meta property='article:tag' content='nginx'><meta property='article:tag' content='proxy'><meta property='article:tag' content='iteration'><meta property='article:published_time' content='2014-09-17T18:26:08Z'/><meta property='article:modified_time' content='2014-09-17T18:26:08Z'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@mahhyzero'><meta name='twitter:creator' content='@mahhyzero'>
 
 
+<link href="https://robrankin.github.io/index.xml" rel="alternate" type="application/rss+xml" title="" />
 
-<meta itemprop="keywords" content="pupet,hiera,roles,profiles,nginx,proxy,iteration," />
-
-
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Modelling an nginx Application Proxy using Puppet and Hiera"/>
-<meta name="twitter:description" content="Modelling an nginx Application Proxy using Puppet and Hiera"/>
-
-
-<meta property="og:title" content="Modelling an nginx Application Proxy using Puppet and Hiera" />
-<meta property="og:description" content="Modelling an nginx Application Proxy using Puppet and Hiera" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/" />
-<meta property="article:published_time" content="2014-09-17T18:26:08+00:00" />
-<meta property="article:modified_time" content="2014-09-17T18:26:08+00:00" />
-
-
-
-  <link type="text/css"
-        rel="stylesheet"
-        href="https://robrankin.github.io/css/print.css"
-        media="print">
-
-  <link type="text/css"
-        rel="stylesheet"
-        href="https://robrankin.github.io/css/poole.css">
-
-  <link type="text/css"
-        rel="stylesheet"
-        href="https://robrankin.github.io/css/hyde.css">
-
-  
-
-
-  <link type="text/css" rel="stylesheet" href="https://robrankin.github.io/css/blog.css">
-
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap">
-
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
-        integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
-        crossorigin="anonymous" />
-
-  <link rel="apple-touch-icon-precomposed"
-        sizes="144x144"
-        href="https://robrankin.github.io/apple-touch-icon-144-precomposed.png">
-
-  <link rel="shortcut icon" href="https://robrankin.github.io/favicon.png">
-
-  
-  </head>
+<link rel="stylesheet" href="/css/style.css"/><link rel='stylesheet' href='https://robrankin.github.io/css/custom.css'><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="canonical" href="https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
 <body>
-  <aside class="sidebar">
+<section class="section">
   <div class="container">
-    <div class="sidebar-about">
-      
-        
-        <div class="author-image">
-          <img src="https://robrankin.github.io/images/avatar.png" class="img-circle img-headshot center" alt="Profile Picture">
-        </div>
-        
+    <nav id="nav-main" class="nav">
+      <div id="nav-name" class="nav-left">
+        <a id="nav-anchor" class="nav-item" href="https://robrankin.github.io">
+          <h1 id="nav-heading" class="title is-4"></h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav id="nav-items" class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/robrankin'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="twitter" href='https://twitter.com/mahhyzero'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="linkedin" href='https://linkedin.com/in/rob-rankin-7312234'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path stroke-width="1.8" d="m5.839218,4.101561c0,1.211972 -0.974141,2.194011 -2.176459,2.194011s-2.176459,-0.982039 -2.176459,-2.194011c0,-1.211094 0.974141,-2.194011 2.176459,-2.194011s2.176459,0.982917 2.176459,2.194011zm0.017552,3.94922l-4.388022,0l0,14.04167l4.388022,0l0,-14.04167zm7.005038,0l-4.359939,0l0,14.04167l4.360816,0l0,-7.370999c0,-4.098413 5.291077,-4.433657 5.291077,0l0,7.370999l4.377491,0l0,-8.89101c0,-6.915523 -7.829986,-6.66365 -9.669445,-3.259423l0,-1.891237z"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:blog@undertow.ca'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
       
 
-      <h1></h1>
+      
+    </nav>
+
+  </div>
+  <script src="/js/navicon-shift.js"></script>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/pupet/">#pupet</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/hiera/">#hiera</a>
+  
+  | <a class="subtitle is-6" href="/tags/roles/">#roles</a>
+  
+  | <a class="subtitle is-6" href="/tags/profiles/">#profiles</a>
+  
+  | <a class="subtitle is-6" href="/tags/nginx/">#nginx</a>
+  
+  | <a class="subtitle is-6" href="/tags/proxy/">#proxy</a>
+  
+  | <a class="subtitle is-6" href="/tags/iteration/">#iteration</a>
+  
+
 
       
     </div>
-
-    <nav>
-      <ul class="sidebar-nav">
-        <li>
-          <a href="https://robrankin.github.io">Home</a>
-        </li>
-        <li>
-          <a href="https://robrankin.github.io/posts/">Posts</a>
-        </li><li>
-          <a href="https://robrankin.github.io/about/">About</a>
-        </li>
-      </ul>
-    </nav>
-
-    <section class="social-icons">
-      
-      <a href="https://www.linkedin.com/in/rob-rankin-7312234/" rel="me" title="Linkedin" target="_blank">
-        <i class="fab fa-linkedin" aria-hidden="true"></i>
-      </a>
-      
-      <a href="https://github.com/robrankin/" rel="me" title="GitHub" target="_blank">
-        <i class="fab fa-github" aria-hidden="true"></i>
-      </a>
-      
-      <a href="https://twitter.com/mahhyzero/" rel="me" title="Twitter" target="_blank">
-        <i class="fab fa-twitter" aria-hidden="true"></i>
-      </a>
-      
-    </section>
-  </div>
-</aside>
-
-
-  <main class="content container">
-  <div class="post">
-  <h1>Modelling an nginx Application Proxy using Puppet and Hiera</h1>
-
-  <div class="post-date">
-    <time datetime="2014-09-17T18:26:08Z">Sep 17, 2014</time> &middot; 14 min read
-  </div>
-
-  <h1 id="goal">Goal</h1>
+    <h2 class="subtitle is-6">September 17, 2014</h2>
+    <h1 class="title">Modelling an nginx Application Proxy using Puppet and Hiera</h1>
+    
+    <div class="content">
+      <h1 id="goal">Goal</h1>
 <p>To model nginx configurations in Hiera, extracting those configurations
 from the Puppet DSL, and create a Puppet Profile to combine that with
 the nginx module.</p>
@@ -171,7 +158,7 @@ in front of a multi-tenant SOA application stack.</p>
 <!-- raw HTML omitted -->
 <h2 id="approach">Approach</h2>
 <p><em>Example 1: Single Server, Two Locations modelled in Hiera (YAML)</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">proxy::sites::vhosts:
+<pre><code>proxy::sites::vhosts:
   SiteA:
     listen_port : 8080
     rewrite_to_https : false
@@ -180,15 +167,15 @@ in front of a multi-tenant SOA application stack.</p>
 proxy::sites::locations:
   root:
     vhost : SiteA
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA&#39;
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA'
   server_status: 
     vhost : SiteA
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
-</code></pre></div><p>In this example we have a single &ldquo;server&rdquo;, called SiteA. SiteA also has
+</code></pre><p>In this example we have a single &ldquo;server&rdquo;, called SiteA. SiteA also has
 2 locations defined, &ldquo;root&rdquo;, and &ldquo;server-status&rdquo;.</p>
 <p>The relationship between the server and location is defined by the
 parameter &ldquo;vhost&rdquo; in the location stanza; by being set to &ldquo;SiteA&rdquo;, the
@@ -210,7 +197,7 @@ make our life a bit simpler.</p>
 <p>This presents a challenge when you want to create more than one server
 (multiple vhosts).</p>
 <p><em>Example 2: Two vhosts, Two locations</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">proxy::sites::vhosts:
+<pre><code>proxy::sites::vhosts:
   SiteA:
     listen_port : 8080
     rewrite_to_https : false
@@ -223,21 +210,21 @@ make our life a bit simpler.</p>
 proxy::sites::locations:
   root:
     vhost : SiteA
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA
   server_status:
     vhost : SiteA
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
-</code></pre></div><p>You now have 2 servers/vhosts. However the location stanzas are only
+</code></pre><p>You now have 2 servers/vhosts. However the location stanzas are only
 related to the first server/vhost (SiteA), as specified by the locations
 vhost paramater.</p>
 <p>In order to create a &ldquo;root&rdquo; and &ldquo;server_status&rdquo; location for SiteB,
 following the same model as above, you would end up with:</p>
 <p><em>Example 3: Two vhosts, Four locations (2 per vhost)</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">proxy::sites::vhosts:
+<pre><code>proxy::sites::vhosts:
   SiteA:
     listen_port : 8080
     rewrite_to_https : false
@@ -250,25 +237,25 @@ following the same model as above, you would end up with:</p>
 proxy::sites::locations:
   SiteA_root:
     vhost : SiteA
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA
   SiteA_server_status:
     vhost : SiteA
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
   SiteB_root:
     vhost : SiteB
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA
   SiteB_server_status:
     vhost : SiteB
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
-</code></pre></div><p>This is obviously suboptimal as you&rsquo;re repeating configuration for both
+</code></pre><p>This is obviously suboptimal as you&rsquo;re repeating configuration for both
 locations now. For each vhost SiteA and SiteB, you need to define 2
 locations.</p>
 <p>You&rsquo;ll also notice that the name of the locations have now changed to
@@ -319,7 +306,7 @@ that quote is that Hiera has access to &ldquo;local variables from the current
 scope&rdquo;. That&rsquo;ll be touched upon further on in this article.</p>
 <p>So, that would look something like Example 4.</p>
 <p><em>Example 4: Two vhosts, 2 dynamically named locations</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">proxy::sites::vhosts:
+<pre><code>proxy::sites::vhosts:
   SiteA:
     listen_port : 8080
     rewrite_to_https : false
@@ -330,17 +317,17 @@ scope&rdquo;. That&rsquo;ll be touched upon further on in this article.</p>
     use_default_location : false
 
 proxy::sites::locations:
-  &#34;%{vhost}_root&#34;:
-    vhost : &#34;%{vhost}&#34;
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA
-  &#34;%{vhost}_server_status&#34;:
-    vhost : &#34;%{vhost}&#34;
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+  &quot;%{vhost}_root&quot;:
+    vhost : &quot;%{vhost}&quot;
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA
+  &quot;%{vhost}_server_status&quot;:
+    vhost : &quot;%{vhost}&quot;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
-</code></pre></div><p>So, without getting into the intricate details, this suggests that the
+</code></pre><p>So, without getting into the intricate details, this suggests that the
 nginx location resources will be named <code>&lt;vhost&gt;_&lt;location&gt;</code>. The goal
 would be to end up with 4 locations, 2 assigned to each vhost.</p>
 <p><em>Example 5: Locations per Vhost</em></p>
@@ -361,15 +348,15 @@ here:</p>
 over a Puppet array, executing for each array member.</p>
 <p>The first example on that blog post is as follows.</p>
 <p><em>Example 6: Iteration in Puppet DSL</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">define arrayDebug {
+<pre><code>define arrayDebug {
  notify { [Item ${name}]() }
 }
 
 class array {
- $array = [ &#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39; ]
+ $array = [ 'item1', 'item2', 'item3' ]
  arrayDebug { $array: }
 }
-</code></pre></div><p>Essentially the <code>arrayDebug</code> resource (define) will iterate over the
+</code></pre><p>Essentially the <code>arrayDebug</code> resource (define) will iterate over the
 array members of the array <code>$array</code>.</p>
 <h2 id="creating-a-puppet-profile">Creating a Puppet Profile</h2>
 <p>So the next step is to write a Puppet &ldquo;Profile&rdquo; for nginx that
@@ -378,37 +365,37 @@ and the nginx module as the underlying component.</p>
 <p>Lets start by creating the basic Hiera config needed for a very simple
 nginx install.</p>
 <p><em>Example 7: Hiera for nginx</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">nginx::default::mail : false
+<pre><code>nginx::default::mail : false
 nginx::default::worker_processes : %{processorcount}
-nginx::default::server_tokens : &#39;off&#39;
-nginx::default::nginx_error_log : &#39;/var/log/nginx/error.log debug&#39;
-nginx::default::http_access_log : &#39;/var/log/nginx/access.log&#39;
-nginx::default::proxy_cache_path : &#39;/var/cache/nginx&#39;
-nginx::default::proxy_cache_levels : &#39;2&#39;
-nginx::default::proxy_cache_keys_zone : &#39;cache:10m&#39;
-nginx::default::proxy_cache_max_size : &#39;2048m&#39;
-</code></pre></div><p>There&rsquo;s nothing exceptional here, this is all nginx boilerplate to set
+nginx::default::server_tokens : 'off'
+nginx::default::nginx_error_log : '/var/log/nginx/error.log debug'
+nginx::default::http_access_log : '/var/log/nginx/access.log'
+nginx::default::proxy_cache_path : '/var/cache/nginx'
+nginx::default::proxy_cache_levels : '2'
+nginx::default::proxy_cache_keys_zone : 'cache:10m'
+nginx::default::proxy_cache_max_size : '2048m'
+</code></pre><p>There&rsquo;s nothing exceptional here, this is all nginx boilerplate to set
 some global defaults for nginx. The interesting bit of this is when we
 start creating the nginx Profile.</p>
 <p><em>Example 8: Base nginx Profile in Puppet DSL</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">class profile::linux::nginx {
+<pre><code>class profile::linux::nginx {
 
-  $mail							= hiera(&#39;nginx::default::mail&#39;)
-  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
-  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
-  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
-  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
-  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
-  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
-  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
-  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
-  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+  $mail							= hiera('nginx::default::mail')
+  $worker_processes				= hiera('nginx::default::worker_processes')
+  $server_tokens				= hiera('nginx::default::server_tokens')
+  $nginx_error_log				= hiera('nginx::default::nginx_error_log')
+  $http_access_log				= hiera('nginx::default::http_access_log')
+  $proxy_cache_path				= hiera('nginx::default::proxy_cache_path')
+  $proxy_cache_levels			= hiera('nginx::default::proxy_cache_levels')
+  $proxy_cache_keys_zone		= hiera('nginx::default::proxy_cache_keys_zone')
+  $proxy_cache_max_size			= hiera('nginx::default::proxy_cache_max_size')
+  $names_hash_bucket_size		= hiera('nginx::default::names_hash_bucket_size')
 
   #################################################
   # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
   #################################################
 
-  class { &#39;::nginx&#39;:
+  class { '::nginx':
     mail						=&gt; $mail,
     worker_processes			=&gt; $worker_processes,
     server_tokens 				=&gt; $server_tokens,
@@ -421,7 +408,7 @@ start creating the nginx Profile.</p>
     names_hash_bucket_size 		=&gt; $names_hash_bucket_size,
   }
 }
-</code></pre></div><p>So this is all pretty simple again. This is a Puppet class called
+</code></pre><p>So this is all pretty simple again. This is a Puppet class called
 <code>profile::linux::nginx</code>, which sets some default variables, and passes
 them to another class called <code>::nginx</code>.</p>
 <p>This class is a &ldquo;Profile&rdquo; simply by dint of it being created within the
@@ -443,30 +430,30 @@ In order to achieve this step we need to retrieve the vhost
 configuration data from Hiera. We&rsquo;ll then use that data to create the
 vhosts.</p>
 <p><em>Example 9: nginx Profile with vhosts being created</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">class profile::linux::nginx {
+<pre><code>class profile::linux::nginx {
 
-  $mail							= hiera(&#39;nginx::default::mail&#39;)
-  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
-  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
-  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
-  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
-  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
-  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
-  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
-  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
-  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+  $mail							= hiera('nginx::default::mail')
+  $worker_processes				= hiera('nginx::default::worker_processes')
+  $server_tokens				= hiera('nginx::default::server_tokens')
+  $nginx_error_log				= hiera('nginx::default::nginx_error_log')
+  $http_access_log				= hiera('nginx::default::http_access_log')
+  $proxy_cache_path				= hiera('nginx::default::proxy_cache_path')
+  $proxy_cache_levels			= hiera('nginx::default::proxy_cache_levels')
+  $proxy_cache_keys_zone		= hiera('nginx::default::proxy_cache_keys_zone')
+  $proxy_cache_max_size			= hiera('nginx::default::proxy_cache_max_size')
+  $names_hash_bucket_size		= hiera('nginx::default::names_hash_bucket_size')
 
   #################################################
   # Get the hash of vhosts from Hiera. Extract the hash keys into a list (array).
   #################################################
 
-  $vhosts						= hiera(&#39;proxy::sites::vhosts&#39;)
+  $vhosts						= hiera('proxy::sites::vhosts')
 
   #################################################
   # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
   #################################################
 
-  class { &#39;::nginx&#39;:
+  class { '::nginx':
     mail						=&gt; $mail,
     worker_processes			=&gt; $worker_processes,
     server_tokens 				=&gt; $server_tokens,
@@ -484,10 +471,10 @@ vhosts.</p>
   # into the nginx::resource::vhost resource defined by the nginx module
   ################################################
 
-  create_resources(&#39;::nginx::resource::vhost&#39;, $vhosts)
+  create_resources('::nginx::resource::vhost', $vhosts)
 
 }
-</code></pre></div><p>First we add some functionality to retrieve the vhost config from Hiera
+</code></pre><p>First we add some functionality to retrieve the vhost config from Hiera
 using a Hiera lookup function in Puppet:</p>
 <pre><code>$vhosts = hiera('proxy::walletv2::vhosts')
 </code></pre>
@@ -513,31 +500,31 @@ nginx config files, using the key/values as parameters.</p>
 iteration learnings into the Profile so that each vhost that gets
 created, also gets the same set of locations.</p>
 <p><em>Example 10: nginx Profile with vhosts and locations being created</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">class profile::linux::nginx {
+<pre><code>class profile::linux::nginx {
 
-  $mail							= hiera(&#39;nginx::default::mail&#39;)
-  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
-  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
-  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
-  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
-  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
-  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
-  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
-  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
-  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+  $mail							= hiera('nginx::default::mail')
+  $worker_processes				= hiera('nginx::default::worker_processes')
+  $server_tokens				= hiera('nginx::default::server_tokens')
+  $nginx_error_log				= hiera('nginx::default::nginx_error_log')
+  $http_access_log				= hiera('nginx::default::http_access_log')
+  $proxy_cache_path				= hiera('nginx::default::proxy_cache_path')
+  $proxy_cache_levels			= hiera('nginx::default::proxy_cache_levels')
+  $proxy_cache_keys_zone		= hiera('nginx::default::proxy_cache_keys_zone')
+  $proxy_cache_max_size			= hiera('nginx::default::proxy_cache_max_size')
+  $names_hash_bucket_size		= hiera('nginx::default::names_hash_bucket_size')
 
   #################################################
   # Get the hash of vhosts from Hiera. Extract the hash keys into a list (array).
   #################################################
 
-  $vhosts						= hiera(&#39;proxy::sites::vhosts&#39;)
+  $vhosts						= hiera('proxy::sites::vhosts')
   $vhostslist					= keys($vhosts)
 
   #################################################
   # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
   #################################################
 
-  class { &#39;::nginx&#39;:
+  class { '::nginx':
     mail						=&gt; $mail,
     worker_processes			=&gt; $worker_processes,
     server_tokens 				=&gt; $server_tokens,
@@ -555,14 +542,14 @@ created, also gets the same set of locations.</p>
   # into the nginx::resource::vhost resource defined by the nginx module
   ################################################
 
-  create_resources(&#39;::nginx::resource::vhost&#39;, $vhosts)
+  create_resources('::nginx::resource::vhost', $vhosts)
 
   define profile::linux::nginx::location {
     ### Creating Locations
-    $locations = hiera(&#39;proxy::sites::locations&#39;)
+    $locations = hiera('proxy::sites::locations')
     $vhostslocations = { vhost =&gt; $name }
 
-    create_resources(&#39;::nginx::resource::location&#39;, $locations, $vhostslocations)
+    create_resources('::nginx::resource::location', $locations, $vhostslocations)
   }
 
   ################################################
@@ -574,7 +561,7 @@ created, also gets the same set of locations.</p>
   profile::linux::nginx::location { $vhostslist: }
 
 }
-</code></pre></div><p>So what have we done here?</p>
+</code></pre><p>So what have we done here?</p>
 <p>The first thing is that we&rsquo;ve added an array called <code>$vhostslist</code>, whos
 array members are made up of the key names of the <code>$vhosts</code> hash:</p>
 <pre><code>$vhostslist = keys($vhosts)
@@ -584,14 +571,14 @@ the Puppet iteration section. The array members in this example will be
 &ldquo;SiteA&rdquo; and &ldquo;SiteB&rdquo;, i.e. <code>[ &quot;SiteA&quot;, &quot;SiteB&quot; ]</code>.</p>
 <p>The second thing we&rsquo;ve added is a new define,
 <code>profile::linux::nginx::location</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">define profile::linux::nginx::location {
+<pre><code>define profile::linux::nginx::location {
   ### Creating Locations
-  $locations = hiera(&#39;proxy::sites::locations&#39;)
+  $locations = hiera('proxy::sites::locations')
   $vhostslocations = { vhost =&gt; $name }
 
-  create_resources(&#39;::nginx::resource::location&#39;, $locations, $vhostslocations)
+  create_resources('::nginx::resource::location', $locations, $vhostslocations)
  }
-</code></pre></div><p>This can be thought of as a function in more general programming
+</code></pre><p>This can be thought of as a function in more general programming
 languages, that will iterate over the array <code>$vhostslist</code>. Within this
 define we are retrieving the list of locations into a has called
 <code>$locations</code>, using another Hiera lookup, on the key
@@ -615,7 +602,7 @@ the resource being created.</p>
 <p>Before we go further, we need to look at the Hiera data again, and
 modify it slightly:</p>
 <p><em>Example 11: Modified Hiera data</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">proxy::sites::vhosts:
+<pre><code>proxy::sites::vhosts:
   SiteA:
     listen_port : 8080
     rewrite_to_https : false
@@ -626,15 +613,15 @@ modify it slightly:</p>
     use_default_location : false
 
 proxy::sites::locations:
-  &#34;%{name}_root&#34;
-    location : &#39;/&#39;
-    ensure : &#39;present&#39;
-    proxy : &#39;http://serviceA&#39;
-  &#34;%{name}_server_status&#34;
-    location : &#39;/server-status&#39;
-    ensure : &#39;present&#39;
+  &quot;%{name}_root&quot;
+    location : '/'
+    ensure : 'present'
+    proxy : 'http://serviceA'
+  &quot;%{name}_server_status&quot;
+    location : '/server-status'
+    ensure : 'present'
     stub_status : true
-</code></pre></div><p>The change here is the variable we want interpolated has been changed to
+</code></pre><p>The change here is the variable we want interpolated has been changed to
 <code>%{name}</code>, and the <code>vhost</code> parameter has been removed.</p>
 <p>You&rsquo;ll notice in Example 10 the newly added define suddenly makes use of
 a variable called <code>$name</code>. We&rsquo;re also now referencing it in our modified
@@ -693,28 +680,28 @@ resource.</li>
 <p>If anyone has any improvements, suggestions, comments or criticisms let
 me know at mahhy at undertow dot ca.</p>
 
+      
+      <div class="related">
 </div>
-
-
-  </main>
-
-  <footer>
-  <div>
-    &copy; Rob Rankin 2020
-
-    &middot; <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>
-
+      
+    </div>
     
   </div>
-</footer>
+</section>
+
+    <script src="/js/copycode.js"></script>
 
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"
-          integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0="
-          crossorigin="anonymous"></script>
 
-  <script src="https://robrankin.github.io/js/blog.js"></script>
+<section class="section">
+  <div class="container has-text-centered">
+    <p></p>
+    
+  </div>
+</section>
 
-  
+
+
 </body>
 </html>
+

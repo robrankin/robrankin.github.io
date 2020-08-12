@@ -13,11 +13,6 @@
   </url>
   
   <url>
-    <loc>https://robrankin.github.io/categories/</loc>
-    <lastmod>2020-08-06T12:34:50+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://robrankin.github.io/tags/elasticsearch/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
@@ -54,11 +49,6 @@
   
   <url>
     <loc>https://robrankin.github.io/tags/</loc>
-    <lastmod>2020-08-06T12:34:50+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://robrankin.github.io/categories/tech/</loc>
     <lastmod>2020-08-06T12:34:50+01:00</lastmod>
   </url>
   
@@ -125,10 +115,6 @@
   <url>
     <loc>https://robrankin.github.io/tags/roles/</loc>
     <lastmod>2014-09-17T18:26:08+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://robrankin.github.io/series/</loc>
   </url>
   
 </urlset>

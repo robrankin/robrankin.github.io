@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://robrankin.github.io/sitemap.xml
