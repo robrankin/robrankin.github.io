@@ -6,10 +6,73 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 11 Sep 2020 17:32:50 +0100</lastBuildDate>
     
 	<atom:link href="https://robrankin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>curl</title>
+      <link>https://robrankin.github.io/tags/curl/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/curl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cylance</title>
+      <link>https://robrankin.github.io/tags/cylance/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/cylance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>elasticsearch</title>
+      <link>https://robrankin.github.io/tags/elasticsearch/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jq</title>
+      <link>https://robrankin.github.io/tags/jq/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/jq/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jwt</title>
+      <link>https://robrankin.github.io/tags/jwt/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/jwt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>openssl</title>
+      <link>https://robrankin.github.io/tags/openssl/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/openssl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://robrankin.github.io/tags/shell/</link>
+      <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/shell/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>authentication</title>
@@ -17,15 +80,6 @@
       <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
       
       <guid>https://robrankin.github.io/tags/authentication/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>elasticsearch</title>
-      <link>https://robrankin.github.io/tags/elasticsearch/</link>
-      <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
-      
-      <guid>https://robrankin.github.io/tags/elasticsearch/</guid>
       <description></description>
     </item>
     
