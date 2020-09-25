@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>logstash on </title>
+    <link>https://robrankin.github.io/tags/logstash/</link>
+    <description>Recent content in logstash on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 25 Sep 2020 09:22:36 +0100</lastBuildDate>
+    
+	<atom:link href="https://robrankin.github.io/tags/logstash/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Event Threat Enrichment using Logstash and Minemeld</title>
+      <link>https://robrankin.github.io/posts/event-threat-enrichment-logstash-minemeld/</link>
+      <pubDate>Fri, 25 Sep 2020 09:22:36 +0100</pubDate>
+      
+      <guid>https://robrankin.github.io/posts/event-threat-enrichment-logstash-minemeld/</guid>
+      <description>At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &amp;ldquo;official&amp;rdquo; roles is as our SIEM. Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.
+One of the features that the Elastic Stack doesn&amp;rsquo;t really support well (yet) is an enrichment system. They did introduce an elasticsearch side enrichment system in 7.5, but in my opinionn theres a few problems with it:</description>
+    </item>
+    
+  </channel>
+</rss>

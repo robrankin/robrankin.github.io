@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Event Threat Enrichment using Logstash and Minemeld | </title>
+
+<meta property='og:title' content='Event Threat Enrichment using Logstash and Minemeld - '>
+<meta property='og:description' content='At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &ldquo;official&rdquo; roles is as our SIEM. Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.
+One of the features that the Elastic Stack doesn&rsquo;t really support well (yet) is an enrichment system. They did introduce an elasticsearch side enrichment system in 7.5, but in my opinionn theres a few problems with it:'>
+<meta property='og:url' content='https://robrankin.github.io/posts/event-threat-enrichment-logstash-minemeld/'>
+<meta property='og:site_name' content=''>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69b8322cb79d5a0c1fc6786379d86eb8?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='minemeld'><meta property='article:tag' content='logstash'><meta property='article:tag' content='threat feeds'><meta property='article:tag' content='security'><meta property='article:tag' content='elasticsearch'><meta property='article:tag' content='kibana'><meta property='article:published_time' content='2020-09-25T09:22:36&#43;01:00'/><meta property='article:modified_time' content='2020-09-25T09:22:36&#43;01:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@mahhyzero'><meta name='twitter:creator' content='@mahhyzero'>
+
+
+<link href="https://robrankin.github.io/index.xml" rel="alternate" type="application/rss+xml" title="" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel='stylesheet' href='https://robrankin.github.io/css/custom.css'><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="canonical" href="https://robrankin.github.io/posts/event-threat-enrichment-logstash-minemeld/">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav id="nav-main" class="nav">
+      <div id="nav-name" class="nav-left">
+        <a id="nav-anchor" class="nav-item" href="https://robrankin.github.io">
+          <h1 id="nav-heading" class="title is-4"></h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav id="nav-items" class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/robrankin'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="twitter" href='https://twitter.com/mahhyzero'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="linkedin" href='https://linkedin.com/in/rob-rankin-7312234'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path stroke-width="1.8" d="m5.839218,4.101561c0,1.211972 -0.974141,2.194011 -2.176459,2.194011s-2.176459,-0.982039 -2.176459,-2.194011c0,-1.211094 0.974141,-2.194011 2.176459,-2.194011s2.176459,0.982917 2.176459,2.194011zm0.017552,3.94922l-4.388022,0l0,14.04167l4.388022,0l0,-14.04167zm7.005038,0l-4.359939,0l0,14.04167l4.360816,0l0,-7.370999c0,-4.098413 5.291077,-4.433657 5.291077,0l0,7.370999l4.377491,0l0,-8.89101c0,-6.915523 -7.829986,-6.66365 -9.669445,-3.259423l0,-1.891237z"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:blog@undertow.ca'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+  <script src="/js/navicon-shift.js"></script>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/minemeld/">#minemeld</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/logstash/">#logstash</a>
+  
+  | <a class="subtitle is-6" href="/tags/threat-feeds/">#threat feeds</a>
+  
+  | <a class="subtitle is-6" href="/tags/security/">#security</a>
+  
+  | <a class="subtitle is-6" href="/tags/elasticsearch/">#elasticsearch</a>
+  
+  | <a class="subtitle is-6" href="/tags/kibana/">#kibana</a>
+  
+
+
+      
+    </div>
+    <h2 class="subtitle is-6">September 25, 2020</h2>
+    <h1 class="title">Event Threat Enrichment using Logstash and Minemeld</h1>
+    
+    <div class="content">
+      <p>At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &ldquo;official&rdquo; roles is as our SIEM.  Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.</p>
+<p>One of the features that the Elastic Stack doesn&rsquo;t really support well (yet) is an enrichment system.  They did introduce an elasticsearch side <a href="https://www.elastic.co/blog/introducing-the-enrich-processor-for-elasticsearch-ingest-nodes">enrichment system</a> in 7.5, but in my opinionn theres a few problems with it:</p>
+<ul>
+<li>It runs inside ElasticSeach using ES pipelines, which are harder to design and operate than something Logstash side, as wellas not quite being as flexible I&rsquo;d like.</li>
+<li>As it runs in ES ingest nodes, it has a license cost impact</li>
+<li>The processors available have some limitations, such as no support for range queries currently, which is important in the use case I&rsquo;ll be writing about here.</li>
+</ul>
+<p>One of the requirements I have for our SIEM is to be able to identify events coming from &ldquo;known risky IPs&rdquo;.  Those risky IPs could be known botnets, spam sources, tor exit nodes, or anything else that you or threat intelligence providers/feeds classify as a risk.</p>
+<p>After much research I settled on the approach I&rsquo;ll detail below.</p>
+<p>First I needed a way of collecting threat feeds in such a way that they&rsquo;d be useable by the SIEM.  For this I settled on using <a href="https://www.paloaltonetworks.com/products/secure-the-network/subscriptions/minemeld">Minemeld</a>, a product by Palo Alto networks, as they describe it &ldquo;an open-source application that streamlines the aggregation, enforcement and sharing of threat intelligence&rdquo;.</p>
+<p>There are quite a few other options for this, but Minemeld seemed ideal for me because:</p>
+<ul>
+<li>It&rsquo;s a pretty focused design, where some other options are far far more than just threat feed aggregation.</li>
+<li>It&rsquo;s pretty simple to use and setup</li>
+<li>It has support for delivering threat feed data to Logstash</li>
+</ul>
+<h1 id="minemeld">Minemeld</h1>
+<blockquote>
+<p>Note
+This post only deals with IoCs of &ldquo;IP type&rdquo;.  Minemeld can consume, aggregate, and distribute IoCs of other tyes, such as URLs, domains, etc, but they are not dealt with by this article.</p>
+</blockquote>
+<p>How to install, run and configure feeds/aggregators/etc in Minemeld is an exercise left to the reader.</p>
+<p>To enable Logstash output, you can use the built in prototype <code>stdlib.localLogStash</code>, if your logstash instance is running on the same system as Minemeld and is reachable over localhost:</p>
+<p><img src="/images/234a165e8b86498c8956617b0d01e6ca.png" alt=""></p>
+<p>However in my case, my logstash instances arent runnin on the same host, and in fact I have multiple target instances.</p>
+<p>In a case like this, you need to create a new prototype by pressing the &ldquo;New&rdquo; button highlighted in the above screenshot.</p>
+<p>Set your new &ldquo;local prototype&rdquo; name, and then the important part, set the <code>logstash_host:</code> config field:</p>
+<p><img src="/images/465f6543348749ac96240d6db28031b0.png" alt=""></p>
+<p>Hit save, and thats it.  You now have a method of outputting IoCs from various IP threat feeds to Logstash.  I&rsquo;ve done this two times, with different <code>logstash_host:</code> set for each new local prototype.  So I&rsquo;m duplicating my IoCs to two different logstash and elasticsearch clusters.</p>
+<h1 id="logstash-part-1---minemeld-ingestion">Logstash Part 1 - Minemeld Ingestion</h1>
+<blockquote>
+<p>Important Note:
+You will need to define an index template/mapping that ensures the start and end IP address fields created by the dissect filter below are actually of IP datatype.  IP Range queries used in Part 2 will not work without this.</p>
+</blockquote>
+<p>On the logstash side the configs for reading and storing the Minemeld provided IoCs are reasonably simple.</p>
+<p>Part 2 will look at how I do event enrichment.</p>
+<p>First, you need to listen on the TCP input port configured in your Minemeld local prototypes, in the case above:</p>
+<pre><code>input {
+  tcp {
+    port =&gt; 5514
+  }
+}
+</code></pre><p>You then need some filters to parse the message field, create a predictable document ID, and split the <code>@indicator</code> into a start and end IP address, which will be used for ES range queries in Part 2.</p>
+<pre><code>filter {
+  # Parse the message field as JSON into the target minemeld field
+  json {
+    source =&gt; &quot;message&quot;
+    target =&gt; &quot;minemeld&quot;
+  }
+  
+  # Generate a fingerprint on the @indicator field, this will be used as the Document ID in the Elasticsearch outputs.
+  fingerprint {
+    source =&gt; &quot;[minemeld][@indicator]&quot;
+    target =&gt; &quot;[@metadata][fingerprint]&quot;
+    method =&gt; &quot;MURMUR3&quot;
+  }
+
+  # Split the IP indicator field on the -, so we have a start and end IP address
+  dissect {
+    mapping =&gt; { &quot;[minemeld][@indicator]&quot; =&gt; &quot;%{[minemeld][indicator][ip][start]}-%{[minemeld][indicator][ip][end]}&quot; }
+  }
+
+}
+</code></pre><p>So now you just need to store that docuement in an ES index.  The slightly different part, as compared to for example storing log data in ES, is that IoCs can and will &ldquo;expire&rdquo;, and therefore need to be removed from the index when that happens.</p>
+<p>Minemeld caters for this by providing a &ldquo;message&rdquo;, and if the value of that message is &ldquo;withdraw&rdquo;, the IoC can be removed.  As can be seen in the Logstash output configs below, when we receive an event with <code>[minemeld][message] == &quot;withdraw&quot;</code> we issue a delete against the ES index, as indicated by <code>action =&gt; &quot;delete&quot;</code>.  This uses the predictable document ID we create in the earlier filter, so we know which document to delete.</p>
+<p>Also note the index template specified in the configs, and refer to the note at the start of this section.</p>
+<pre><code>output {
+    if [minemeld][message] == &quot;withdraw&quot; {
+      elasticsearch {
+        hosts =&gt; [
+          &quot;http://&lt;es&gt;&quot;
+        ]
+        index =&gt; &quot;minemeld&quot;
+        manage_template =&gt; true
+        template_name =&gt; &quot;minemeld&quot;
+        template =&gt; &quot;/etc/logstash/minemeld.indextemplate&quot;
+        document_id =&gt; &quot;%{[@metadata][fingerprint]}&quot;
+        action =&gt; &quot;delete&quot;
+      }
+    } else {
+      elasticsearch {
+        hosts =&gt; [
+          &quot;http://&lt;es&gt;&quot;
+        ]
+        index =&gt; &quot;minemeld&quot;
+        manage_template =&gt; true
+        template_name =&gt; &quot;minemeld&quot;
+        template =&gt; &quot;/etc/logstash/minemeld.indextemplate&quot;
+        document_id =&gt; &quot;%{[@metadata][fingerprint]}&quot;
+      }
+    }
+}
+</code></pre><p>So at this point you should have some Minemeld provided IoCs stored in an Elasticsearch index, which can be used to enrich other events in real time.</p>
+<h1 id="logstash-part-2---event-enrichment">Logstash Part 2 - Event Enrichment</h1>
+<p>So now onto how to enrich events.  In my case, certain events come with a <code>source.ip</code> address, and I then do a ES lookup using the Logstash elasticsearch <em>filter</em>.</p>
+<pre><code>filter {
+      elasticsearch {
+          hosts =&gt; [
+            &quot;http://&lt;es&gt;/&quot;
+          ]
+        index =&gt; &quot;minemeld&quot;
+        enable_sort =&gt; &quot;false&quot;
+        tag_on_failure =&gt; [ &quot;_threat_lookup_failure&quot; ]
+        add_tag =&gt; [&quot;_threat_found&quot;]
+        query_template =&gt; &quot;/etc/logstash/conf.d/threat_query.json&quot;
+        fields =&gt; {
+          &quot;[minemeld][sources]&quot; =&gt; &quot;[custom][threat][sources]&quot;
+        }
+      }
+}
+</code></pre><p>The query, specified in <code>query_template =&gt; &quot;/etc/logstash/conf.d/threat_query.json&quot;</code> is as follows:</p>
+<pre><code>{
+  &quot;query&quot;: {
+    &quot;bool&quot;: {
+      &quot;filter&quot;: [
+        { &quot;range&quot;: { &quot;minemeld.indicator.ip.start&quot;: { &quot;lte&quot;: &quot;%{[source][ip]}&quot; }}},
+        { &quot;range&quot;: { &quot;minemeld.indicator.ip.end&quot;: { &quot;gte&quot;: &quot;%{[source][ip]}&quot; }}}
+      ]
+    }
+  }
+}
+</code></pre><blockquote>
+<p>Note
+This is where you need to ensure you&rsquo;ve created these fields as IP datatypes, as mentioned previously.</p>
+</blockquote>
+<p>All this does is excute the above query against the Minemeld ES index, and looks for a match where the Minemeld <code>minemeld.indicator.ip.start</code> is less than or equal to, and the <code>minemeld.indicator.ip.end</code> is greater than or equal to the source IP in the event that we&rsquo;re attempting to enrich.</p>
+<p>Basically: &ldquo;if the source IP is between the start and end range provided by Minemeld&rdquo;.</p>
+<p>The actual enrichment is performed by the <code>fields</code> parameter of the <code>elasticsearch</code> filter.  In the example above, it sets a field <code>custom.threat.sources</code> to the value of <code>minemeld.sources</code> from the document in the Minemeld index, which is a list of source &ldquo;names&rdquo; provided by minemeld.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>That&rsquo;s it.  We now have an indication if a source IP in an event is considered a threat by various threat feeds, which is obviously very useful for informing any decisions around responses.</p>
+<p>Some closing thoughts.</p>
+<p>Performance.  This approach is almost definitely not scalable to extremely high throughput levels, due to the overhead of network connections between logstash and elasticsearch, and the impact of querying elasticsearch for every event.  It would be signficantly better tyo take advantage of Logstashs&rsquo; translate filter or its memcache filter.</p>
+<p>However, both the dictionary and memcache filter suffer from the same limitation: theres no (easy?) way of doing range type queries.</p>
+<p>As I mentioned earlier, Elasticsearchs new enrichment pipeline features also doesnt support range queries, at this time.</p>
+<p>Since the Minemeld threat feeds provide IP ranges, the only options are:</p>
+<ul>
+<li>Use a queryable source that supports range queries on IP addresses (or their integer representation thereof)</li>
+<li>Expand the Minemeld provided IP ranges into lists of singlular IPs.</li>
+</ul>
+<p>I actually experimented with option two, expanding the Minemeld ranges into complete lists of single /32 IPs. Depending on the number of the threat feeds being consumed and their size, you will end up with millions and millions of IP addresses in your new list, which may not be usable in logstash dictionaries or memcache.  YMMV.</p>
+<p>At the time I decided to continue using the Elasticsearch IP range query approach for now, as the number of events I&rsquo;m enriching is low enough to not impact our performance or availability.  However in the future I&rsquo;m going to want to apply this kind of enrichment against a much larger amount of events, so I&rsquo;m going to have to revisit the approach I think.</p>
+
+      
+      <div class="related">
+
+<h3>Similar articles:</h3>
+<ul>
+	
+	<li><a href="/posts/kibaba-oauth-kubernetes/">Kibana Authentication using OAuth2 Proxy in Kubernetes</a></li>
+	
+	<li><a href="/posts/querying-cylance-protect-api-from-shell/">Querying Cylance Protect Api From Shell</a></li>
+	
+	<li><a href="/posts/elasticsearch-gc-and-field-mapping-debugging/">Bringing ElasticSearch to its knees</a></li>
+	
+	<li><a href="/posts/2014-09-22-integrating-puppet-with-azure/">Integrating Puppet with Azure</a></li>
+	
+	<li><a href="/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/">Modelling an nginx Application Proxy using Puppet and Hiera</a></li>
+	
+</ul>
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+    <script src="/js/copycode.js"></script>
+
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p></p>
+    
+  </div>
+</section>
+
+
+
+</body>
+</html>
+
