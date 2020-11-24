@@ -6,10 +6,20 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Sep 2020 09:22:36 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2020 07:39:19 +0000</lastBuildDate>
     
 	<atom:link href="https://robrankin.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</title>
+      <link>https://robrankin.github.io/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
+      <pubDate>Tue, 24 Nov 2020 07:39:19 +0000</pubDate>
+      
+      <guid>https://robrankin.github.io/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</guid>
+      <description>Note: This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
+ Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.</description>
+    </item>
     
     <item>
       <title>Event Threat Enrichment using Logstash and Minemeld</title>

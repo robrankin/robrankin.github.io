@@ -6,7 +6,7 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Sep 2020 09:22:36 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2020 07:39:19 +0000</lastBuildDate>
     
 	<atom:link href="https://robrankin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,27 @@
     <item>
       <title>elasticsearch</title>
       <link>https://robrankin.github.io/tags/elasticsearch/</link>
-      <pubDate>Fri, 25 Sep 2020 09:22:36 +0100</pubDate>
+      <pubDate>Tue, 24 Nov 2020 07:39:19 +0000</pubDate>
       
       <guid>https://robrankin.github.io/tags/elasticsearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>filebeat</title>
+      <link>https://robrankin.github.io/tags/filebeat/</link>
+      <pubDate>Tue, 24 Nov 2020 07:39:19 +0000</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/filebeat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>logstash</title>
+      <link>https://robrankin.github.io/tags/logstash/</link>
+      <pubDate>Tue, 24 Nov 2020 07:39:19 +0000</pubDate>
+      
+      <guid>https://robrankin.github.io/tags/logstash/</guid>
       <description></description>
     </item>
     
@@ -26,15 +44,6 @@
       <pubDate>Fri, 25 Sep 2020 09:22:36 +0100</pubDate>
       
       <guid>https://robrankin.github.io/tags/kibana/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>logstash</title>
-      <link>https://robrankin.github.io/tags/logstash/</link>
-      <pubDate>Fri, 25 Sep 2020 09:22:36 +0100</pubDate>
-      
-      <guid>https://robrankin.github.io/tags/logstash/</guid>
       <description></description>
     </item>
     
