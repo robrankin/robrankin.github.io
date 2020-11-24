@@ -244,7 +244,7 @@ This is where you need to ensure you&rsquo;ve created these fields as IP datatyp
 <h1 id="conclusion">Conclusion</h1>
 <p>That&rsquo;s it.  We now have an indication if a source IP in an event is considered a threat by various threat feeds, which is obviously very useful for informing any decisions around responses.</p>
 <p>Some closing thoughts.</p>
-<p>Performance.  This approach is almost definitely not scalable to extremely high throughput levels, due to the overhead of network connections between logstash and elasticsearch, and the impact of querying elasticsearch for every event.  It would be signficantly better tyo take advantage of Logstashs&rsquo; translate filter or its memcache filter.</p>
+<p>Performance.  This approach is almost definitely not scalable to extremely high throughput levels, due to the overhead of network connections between logstash and elasticsearch, and the impact of querying elasticsearch for every event.  It would be signficantly better to take advantage of Logstashs&rsquo; translate filter or its memcache filter.</p>
 <p>However, both the dictionary and memcache filter suffer from the same limitation: theres no (easy?) way of doing range type queries.</p>
 <p>As I mentioned earlier, Elasticsearchs new enrichment pipeline features also doesnt support range queries, at this time.</p>
 <p>Since the Minemeld threat feeds provide IP ranges, the only options are:</p>
