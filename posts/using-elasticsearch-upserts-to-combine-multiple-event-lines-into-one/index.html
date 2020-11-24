@@ -143,20 +143,28 @@ Line 7
   }
 }
 </code></pre><p>The next step is to parse the common data of each event into a structure that allows the use of Logstash&rsquo;s fingerprint filter.  I extract the datetime and ip/port information, and use Logstash&rsquo;s <code>fingerprint</code> filter to create an ECS style <code>[event][id]</code> field.</p>
-<p>Fingerprint the event line:</p>
-<pre><code>    fingerprint {
-      method =&gt; &quot;SHA1&quot;
-      source =&gt; [
-        &quot;[tmp_date_day]&quot;,
-        &quot;[tmp_date_month]&quot;,
-        &quot;[tmp_date_daynum]&quot;,
-        &quot;[tmp_date_time]&quot;,
-        &quot;[tmp_date_year]&quot;,
-        &quot;[tmp_source_ip]&quot;,
-        &quot;[tmp_source_port]&quot;
-      ]
-      target =&gt; &quot;[event][id]&quot;
-    }
+<p>Expanding upon the first step gives us this:</p>
+<pre><code>if ( [message] =~ /phrase1/ ) or ( [message] =~ /phrase2/ ) {
+  mutate {
+    add_tag =&gt; [ &quot;_upserts&quot; ]
+  }
+
+  &lt;parse out the shared event data to use to fingerprint&gt;
+
+  fingerprint {
+    method =&gt; &quot;SHA1&quot;
+    source =&gt; [
+      &quot;[tmp_date_day]&quot;,
+      &quot;[tmp_date_month]&quot;,
+      &quot;[tmp_date_daynum]&quot;,
+      &quot;[tmp_date_time]&quot;,
+      &quot;[tmp_date_year]&quot;,
+      &quot;[tmp_source_ip]&quot;,
+      &quot;[tmp_source_port]&quot;
+    ]
+    target =&gt; &quot;[event][id]&quot;
+  }
+}
 </code></pre><p>In my Elasticsearch outputs I then simply filter for that tag, and set a few parameters, as below.  This uses the <code>[event][id]</code> as the document ID, and will perform an update if a document exists already with the same document id:</p>
 <pre><code>if &quot;_upserts&quot; in [tags] {
   elasticsearch {
