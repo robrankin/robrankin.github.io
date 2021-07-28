@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>foundationdb on Home</title>
+    <link>/tags/foundationdb/</link>
+    <description>Home (foundationdb)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 18 Nov 2014 16:30:00 +0000</lastBuildDate>
+    
+    <atom:link href="/tags/foundationdb/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Puppet Module for FoundationDB</title>
+      <link>/posts/puppet-module-for-foundationdb/</link>
+      <pubDate>Tue, 18 Nov 2014 16:30:00 +0000</pubDate>
+      
+      <guid>/posts/puppet-module-for-foundationdb/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;FoundationDB has been purchased by Apple, and is no longer a product. Apple will be cancelling all support contracts and apprently not continuing to offer FDB for sale. Therefore this module is of course deprecated and no longer supported (at least by me!).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here at Bede we&amp;rsquo;ve been using &lt;a href=&#34;https://foundationdb.com/&#34;&gt;FoundationDB&lt;/a&gt; for some time, and are basically in love with it.  Fully distributed, ACID compliant transactions?  Yes please.  It&amp;rsquo;s fast, it scales, it&amp;rsquo;s reliable and redundant.  From an operations persons point of view it&amp;rsquo;s simply sexy.&lt;/p&gt;
+&lt;p&gt;However, it is a relatively new technology, with a small but growing community.  That means that the ecosystem surrounding FDB is not quite as extensive as many of the other, longer lived persistence technologies.  Therefore there was no Puppet modules available to manage installation and configuration, so we had to write our own.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://github.com/BedeGaming/puppet-foundationdb&#34;&gt;module&lt;/a&gt; can manage installation, configuration, upgrading, etc.  All the usual bits&amp;rsquo;n&amp;rsquo;bobs you&amp;rsquo;d expect a Puppet module to manage.  This does come with one caveat however:  it doesn&amp;rsquo;t currently manage FDB cluster membership, due to the way FDB itself manages membership.  We&amp;rsquo;re still exploring ways to add at least some amount of membership management into the module, and of course if anyone wants to contribute towards the module, feel free to fork and issue PR&amp;rsquo;s.&lt;/p&gt;
+&lt;p&gt;The FoundationDB module can be found on the &lt;a href=&#34;https://forge.puppetlabs.com/bedegaming/foundationdb&#34;&gt;Forge&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

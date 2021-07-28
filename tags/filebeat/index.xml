@@ -1,24 +1,92 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>filebeat on </title>
-    <link>https://robrankin.github.io/tags/filebeat/</link>
-    <description>Recent content in filebeat on </description>
+    <title>filebeat on Home</title>
+    <link>/tags/filebeat/</link>
+    <description>Home (filebeat)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 24 Nov 2020 07:39:19 +0000</lastBuildDate>
     
-	<atom:link href="https://robrankin.github.io/tags/filebeat/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/filebeat/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</title>
-      <link>https://robrankin.github.io/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
+      <link>/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
       <pubDate>Tue, 24 Nov 2020 07:39:19 +0000</pubDate>
       
-      <guid>https://robrankin.github.io/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</guid>
-      <description>Note: This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
- Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.</description>
+      <guid>/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;Note
+This approach is probably not appropriate for high volume / high throughput events.  It required in my case quite a lot of Logstash parsing, and Elasticsearch &lt;code&gt;doc_as_upsert&lt;/code&gt; use, both of which will have a significant performance penalty.  For low throughput use it works fine.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.&lt;/p&gt;
+&lt;p&gt;This particular case is not dealt with well by Filebeat multiline support&lt;sup&gt;1&lt;/sup&gt;.  In fact it simply doesn&amp;rsquo;t work in this case.&lt;/p&gt;
+&lt;p&gt;The structure I&amp;rsquo;m talking about is this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Line 1
+Line 2
+Line 3 - Some event starts
+Line 4 - Content of event
+Line 5 - End of event
+Line 6
+Line 7
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Where Lines 1 and 2 are individual events, Lines 3, 4, and 5 are actually multiple lines of the same event, and Lines 6 and 7 are separate individual events again.&lt;/p&gt;
+&lt;p&gt;Since Filebeat doesn&amp;rsquo;t deal with this type of setup, at all, I had to look elsewhere to see if I could combine Lines 3, 4, and 5 into one event.&lt;/p&gt;
+&lt;p&gt;Logically the next place to look would be Logstash, as we have it in our ingestion pipeline and it has multiline capabilities.  However, we use a set of Azure Event Hubs (essentially Kafka for those not familiar) as our event queueing mechanism, with a group of Logstash processes consuming the events as they arrive.  There&amp;rsquo;s no grouping or ordering here, so Lines 3,4,5 may arrive:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;out of order in time&lt;/li&gt;
+&lt;li&gt;across multiuple different Logstash consumers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This means it impossible to combine these 3 lines into one event, as we may never see all 3 lines at a single logstash process/instance, and therefore can&amp;rsquo;t combine them.&lt;/p&gt;
+&lt;p&gt;So they can&amp;rsquo;t be combined at source using Filebeat, and they can&amp;rsquo;t be combined during processing by using Logstashs multiline codec, which only leaves one place where all 3 lines will be in the same place: Elasticsearch itself.&lt;/p&gt;
+&lt;p&gt;The approach I settled on was using (or perhaps abusing) Elasticseach&amp;rsquo;s &lt;code&gt;doc_as_upsert&lt;/code&gt;&lt;sup&gt;2&lt;/sup&gt; capability to incrementally add data to a single ES document.&lt;/p&gt;
+&lt;p&gt;The key is to identify something that can group the multiple lines together, and use that information as the Document ID.&lt;/p&gt;
+&lt;p&gt;In my case, we have the following:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Two common &amp;ldquo;phrases&amp;rdquo; in the event line, such that I can identify all lines reliably as being part of a logical group (i.e. they need to be processed as per the next step)&lt;/li&gt;
+&lt;li&gt;A set of datetime and ip/port information thats common across the event lines, that can be used to create a shared &amp;ldquo;signature&amp;rdquo; (using Logstash fingerprint filter)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first step is to identify the common &amp;ldquo;phrases&amp;rdquo; that identify the event lines, and mark each event as part of an &amp;ldquo;upsert&amp;rdquo;.  I do this as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if ( [message] =~ /phrase1/ ) or ( [message] =~ /phrase2/ ) {
+    mutate {
+      add_tag =&amp;gt; [ &amp;quot;_upserts&amp;quot; ]
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The next step is to parse the common data of each event into a structure that allows the use of Logstash&amp;rsquo;s fingerprint filter.  I extract the datetime and ip/port information, and use Logstash&amp;rsquo;s &lt;code&gt;fingerprint&lt;/code&gt; filter to create an ECS style &lt;code&gt;[event][id]&lt;/code&gt; field.&lt;/p&gt;
+&lt;p&gt;Fingerprint the event line:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    fingerprint {
+      method =&amp;gt; &amp;quot;SHA1&amp;quot;
+      source =&amp;gt; [
+        &amp;quot;[tmp_date_day]&amp;quot;,
+        &amp;quot;[tmp_date_month]&amp;quot;,
+        &amp;quot;[tmp_date_daynum]&amp;quot;,
+        &amp;quot;[tmp_date_time]&amp;quot;,
+        &amp;quot;[tmp_date_year]&amp;quot;,
+        &amp;quot;[tmp_source_ip]&amp;quot;,
+        &amp;quot;[tmp_source_port]&amp;quot;
+      ]
+      target =&amp;gt; &amp;quot;[event][id]&amp;quot;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In my Elasticsearch outputs I then simply filter for that tag, and set a few paramters, as below.  This uses the &lt;code&gt;[event][id]&lt;/code&gt; as the document ID, and will perform an update if a document exists already with the same document id:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if &amp;quot;_upserts&amp;quot; in [tags] {
+  elasticsearch {
+    hosts =&amp;gt; [
+      &amp;quot;es&amp;quot;
+    ]
+    index =&amp;gt; &amp;quot;&amp;lt;target index&amp;gt;&amp;quot;
+    document_id =&amp;gt; &amp;quot;%{[event][id]}&amp;quot;
+    doc_as_upsert =&amp;gt; true
+    action =&amp;gt; &amp;quot;update&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;That&amp;rsquo;s it.  Abusing Elasticsearch Update API to combine multiline log events into one document.  Please don&amp;rsquo;t do this if you have better options available!&lt;/p&gt;
+&lt;h3 id=&#34;references&#34;&gt;References:&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/elastic/beats/pull/4019&#34;&gt;https://github.com/elastic/beats/pull/4019&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#doc_as_upsert&#34;&gt;https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#doc_as_upsert&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
     </item>
     
   </channel>

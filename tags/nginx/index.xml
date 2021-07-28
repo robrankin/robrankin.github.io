@@ -1,24 +1,603 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>nginx on </title>
-    <link>https://robrankin.github.io/tags/nginx/</link>
-    <description>Recent content in nginx on </description>
+    <title>nginx on Home</title>
+    <link>/tags/nginx/</link>
+    <description>Home (nginx)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Sep 2014 18:26:08 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Nov 2014 15:53:08 +0000</lastBuildDate>
     
-	<atom:link href="https://robrankin.github.io/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/nginx/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Modelling an nginx Application Proxy using Puppet and Hiera</title>
-      <link>https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
-      <pubDate>Wed, 17 Sep 2014 18:26:08 +0000</pubDate>
+      <link>/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
+      <pubDate>Wed, 05 Nov 2014 15:53:08 +0000</pubDate>
       
-      <guid>https://robrankin.github.io/posts/2014-09-17-modelling-an-nginx-application-proxy-using-puppet-and-hiera/</guid>
-      <description>Goal To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.
-Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Scoping Namespacing  Puppet Roles/Profiles  Craig Dunn, Designing Puppet Talk End to End Roles and Profiles Example Puppet Workflow Part 1 Puppet Workflow Part 2  Hiera  Puppet Labs Hiera Docs Passing Variables to Hiera  nginx Module  jfryman nginx Puppet Module  nginx  nginx Project Page  Requirements Within nginx we need to define a set of nginx &amp;ldquo;server&amp;rdquo; contexts with the same set of &amp;ldquo;location&amp;rdquo; contexts in each &amp;ldquo;server&amp;rdquo;.</description>
+      <guid>/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</guid>
+      <description>&lt;h1 id=&#34;goal&#34;&gt;Goal&lt;/h1&gt;
+&lt;p&gt;To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;links&#34;&gt;Links&lt;/h1&gt;
+&lt;h2 id=&#34;puppet-docs&#34;&gt;Puppet Docs&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/learning/ral.html&#34;&gt;Puppet Resource Abstraction Layer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/references/latest/function.html#createresources&#34;&gt;Puppet create_resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/guides/scope_and_puppet.html&#34;&gt;Scoping&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/puppet/latest/reference/lang_namespaces.html&#34;&gt;Namespacing&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;puppet-rolesprofiles&#34;&gt;Puppet Roles/Profiles&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.slideshare.net/PuppetLabs/roles-talk&#34;&gt;Craig Dunn, Designing Puppet Talk&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://ask.puppetlabs.com/question/1655/an-end-to-end-roleprofile-example-using-hiera/&#34;&gt;End to End Roles and Profiles Example&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://garylarizza.com/blog/2014/02/17/puppet-workflow-part-1/&#34;&gt;Puppet Workflow Part 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://garylarizza.com/blog/2014/02/17/puppet-workflow-part-2/&#34;&gt;Puppet Workflow Part 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;hiera&#34;&gt;Hiera&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/hiera/1/&#34;&gt;Puppet Labs Hiera Docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/hiera/1/variables.html#passing-variables-to-hiera&#34;&gt;Passing Variables to Hiera&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;nginx-module&#34;&gt;nginx Module&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/jfryman/puppet-nginx&#34;&gt;jfryman nginx Puppet Module&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;nginx&#34;&gt;nginx&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://wiki.nginx.org/Main&#34;&gt;nginx Project Page&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;requirements&#34;&gt;Requirements&lt;/h1&gt;
+&lt;p&gt;Within nginx we need to define a set of nginx &amp;ldquo;server&amp;rdquo; contexts with the
+same set of &amp;ldquo;location&amp;rdquo; contexts in each &amp;ldquo;server&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Think of this as &amp;ldquo;&lt;a href=&#34;http://SiteA.com&#34;&gt;http://SiteA.com&lt;/a&gt;&amp;rdquo; and &amp;ldquo;&lt;a href=&#34;http://SiteB.com&#34;&gt;http://SiteB.com&lt;/a&gt;&amp;rdquo;, that both
+have the same set of &amp;ldquo;locations&amp;rdquo;, which define the nginx upstreams
+(backends), that combined provide a single site that is created from
+disparate SOA applications.&lt;/p&gt;
+&lt;p&gt;This is essentially a model to build a nginx based proxy layer sitting
+in front of a multi-tenant SOA application stack.&lt;/p&gt;
+&lt;h2 id=&#34;approach&#34;&gt;Approach&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;Example 1: Single Server, Two Locations modelled in Hiera (YAML)&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy::sites::vhosts:
+  SiteA:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+
+proxy::sites::locations:
+  root:
+    vhost : SiteA
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA&#39;
+  server_status: 
+    vhost : SiteA
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;In this example we have a single &amp;ldquo;server&amp;rdquo;, called SiteA. SiteA also has 2 locations defined, &amp;ldquo;root&amp;rdquo;, and &amp;ldquo;server-status&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;The relationship between the server and location is defined by the parameter &amp;ldquo;vhost&amp;rdquo; in the location stanza; by being set to &amp;ldquo;SiteA&amp;rdquo;, the location stanza is created within the SiteA server stanza, when all this is realized into an actual nginx configuration file.&lt;/p&gt;
+&lt;p&gt;There are possibly other Hiera/YAML structures that would allow us to
+model this relationship more clearly, however we&amp;rsquo;re using this specific
+structure because we want to take advantage of Puppets
+&lt;code&gt;create_resources&lt;/code&gt; function in conjunction with the nginx module:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/references/latest/function.html#createresources&#34;&gt;https://docs.puppetlabs.com/references/latest/function.html#createresources&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Essentially, with the data structured in the correct manner we can pass
+it to &lt;code&gt;create_resources&lt;/code&gt; as a Puppet hash and it will create the
+specified resource. In this case the specific resources are the location
+and vhost resources defined in the nginx module. By defining our config
+data in Hiera in the right structure, we can use &lt;code&gt;create_resources&lt;/code&gt; and
+make our life a bit simpler.&lt;/p&gt;
+&lt;p&gt;This presents a challenge when you want to create more than one server
+(multiple vhosts).&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 2: Two vhosts, Two locations&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy::sites::vhosts:
+  SiteA:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+  SiteB:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+
+proxy::sites::locations:
+  root:
+    vhost : SiteA
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA
+  server_status:
+    vhost : SiteA
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You now have 2 servers/vhosts. However the location stanzas are only
+related to the first server/vhost (SiteA), as specified by the locations
+vhost paramater.&lt;/p&gt;
+&lt;p&gt;In order to create a &amp;ldquo;root&amp;rdquo; and &amp;ldquo;server_status&amp;rdquo; location for SiteB,
+following the same model as above, you would end up with:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 3: Two vhosts, Four locations (2 per vhost)&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy::sites::vhosts:
+  SiteA:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+  SiteB:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+
+proxy::sites::locations:
+  SiteA_root:
+    vhost : SiteA
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA
+  SiteA_server_status:
+    vhost : SiteA
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+  SiteB_root:
+    vhost : SiteB
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA
+  SiteB_server_status:
+    vhost : SiteB
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is obviously suboptimal as you&amp;rsquo;re repeating configuration for both
+locations now. For each vhost SiteA and SiteB, you need to define 2
+locations.&lt;/p&gt;
+&lt;p&gt;You&amp;rsquo;ll also notice that the name of the locations have now changed to
+&amp;ldquo;SiteA_root&amp;rdquo;, &amp;ldquo;SiteA_server_status&amp;rdquo; and &amp;ldquo;SiteB_root&amp;rdquo;,
+&amp;ldquo;SiteB_server_status&amp;rdquo;. This is due to Puppet not allowing duplicate
+resource declarations, which these locations would be if they were both
+named &amp;ldquo;root&amp;rdquo; and &amp;ldquo;server_status&amp;rdquo;. So we create unique resources, by
+making the resource names unique.&lt;/p&gt;
+&lt;p&gt;You can see where this is leading. For every vhost that we want to add,
+that has the same set of locations, we&amp;rsquo;ll end up duplicating the
+location data, and just changing the location name and the vhost the
+location is associated with. This is probably bad, at least it feels
+very bad to me.&lt;/p&gt;
+&lt;p&gt;The natural response to this is &amp;ldquo;Simples! I&amp;rsquo;ll just iterate over the
+list of vhosts and create the set of locations for each server!&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Nope. Not really.&lt;/p&gt;
+&lt;p&gt;Puppet DSL doesn&amp;rsquo;t really do iteration. Not naturally anyhow.&lt;/p&gt;
+&lt;p&gt;My favorite comment on this:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://stackoverflow.com/questions/12958114/how-to-iterate-over-an-array-in-puppet/13008766#13008766&#34;&gt;http://stackoverflow.com/questions/12958114/how-to-iterate-over-an-array-in-puppet/13008766#13008766&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Quote: &amp;ldquo;The Puppet developers have irrational prejudices against
+iteration based on a misunderstanding about how declarative languages
+work.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;(Disclaimer: I&amp;rsquo;m not a dev, I won&amp;rsquo;t attempt to evaluate the truth of
+that statement, but I still think its amusing)&lt;/p&gt;
+&lt;p&gt;So we have 2 problems:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Iteration in Puppet is not… normal, allowed, right, easy?&lt;/li&gt;
+&lt;li&gt;The &amp;ldquo;names&amp;rdquo; of the locations need to be unique, which means they
+can&amp;rsquo;t simply be text labels in YAML. There must be some
+interpolation somewhere.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We&amp;rsquo;ll deal with the second problem first, as it&amp;rsquo;s a slightly easier
+problem to solve, at least in my experience.&lt;/p&gt;
+&lt;h2 id=&#34;hiera-interpolation&#34;&gt;Hiera Interpolation&lt;/h2&gt;
+&lt;p&gt;Hiera/Puppet allows variables to be passed into Hiera:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/hiera/1/variables.html#passing-variables-to-hiera&#34;&gt;https://docs.puppetlabs.com/hiera/1/variables.html#passing-variables-to-hiera&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Quote: &amp;ldquo;When used with Puppet, Hiera automatically receives all of
+Puppet&amp;rsquo;s current variables. This includes facts and built-in variables,
+as well as local variables from the current scope&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;This means we can pass Hiera some variable defined within the Puppet
+Manifest, and hopefully therereby creating dynamically named nginx
+location resources within Puppet. Probably the most important bit of
+that quote is that Hiera has access to &amp;ldquo;local variables from the current
+scope&amp;rdquo;. That&amp;rsquo;ll be touched upon further on in this article.&lt;/p&gt;
+&lt;p&gt;So, that would look something like Example 4.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 4: Two vhosts, 2 dynamically named locations&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy::sites::vhosts:
+  SiteA:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+  SiteB:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+
+proxy::sites::locations:
+  &amp;quot;%{vhost}_root&amp;quot;:
+    vhost : &amp;quot;%{vhost}&amp;quot;
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA
+  &amp;quot;%{vhost}_server_status&amp;quot;:
+    vhost : &amp;quot;%{vhost}&amp;quot;
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So, without getting into the intricate details, this suggests that the
+nginx location resources will be named &lt;code&gt;&amp;lt;vhost&amp;gt;_&amp;lt;location&amp;gt;&lt;/code&gt;. The goal
+would be to end up with 4 locations, 2 assigned to each vhost.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 5: Locations per Vhost&lt;/em&gt;&lt;/p&gt;
+&lt;table style=&#34;width:100%&#34;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Vhost&lt;/td&gt;
+    &lt;th&gt;Location Name&lt;/td&gt; 
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;SiteA&lt;/td&gt;
+    &lt;td&gt;SiteA_root&lt;/td&gt; 
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;/td&gt;
+    &lt;td&gt;SiteA_server_status&lt;/td&gt; 
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;SiteB&lt;/td&gt;
+    &lt;td&gt;SiteB_root&lt;/td&gt; 
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;/td&gt;
+    &lt;td&gt;SiteB_server_status	&lt;/td&gt; 
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;The next problem to solve is how to iterate over the list of vhosts.&lt;/p&gt;
+&lt;h2 id=&#34;puppet-iteration&#34;&gt;Puppet Iteration&lt;/h2&gt;
+&lt;p&gt;As mentioned, Puppet doesn&amp;rsquo;t really do iteration natively (ignoring the
+future parser for now). So how do we accomplish this using native Puppet
+DSL?&lt;/p&gt;
+&lt;p&gt;The first thing to realize is that iteration does in fact happen (or
+something similar enough that the difference doesnt matter to most
+people). A very good and clear blog article about this can be found
+here:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://tobrunet.ch/2013/01/iterate-over-datastructures-in-puppet-manifests/&#34;&gt;https://tobrunet.ch/2013/01/iterate-over-datastructures-in-puppet-manifests/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The basic point being made is that native Puppet functions will iterate
+over a Puppet array, executing for each array member.&lt;/p&gt;
+&lt;p&gt;The first example on that blog post is as follows.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 6: Iteration in Puppet DSL&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;define arrayDebug {
+ notify { [Item ${name}]() }
+}
+
+class array {
+ $array = [ &#39;item1&#39;, &#39;item2&#39;, &#39;item3&#39; ]
+ arrayDebug { $array: }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Essentially the &lt;code&gt;arrayDebug&lt;/code&gt; resource (define) will iterate over the
+array members of the array &lt;code&gt;$array&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;creating-a-puppet-profile&#34;&gt;Creating a Puppet Profile&lt;/h2&gt;
+&lt;p&gt;So the next step is to write a Puppet &amp;ldquo;Profile&amp;rdquo; for nginx that
+encapsulates the functionality we want, using Hiera as the data source,
+and the nginx module as the underlying component.&lt;/p&gt;
+&lt;p&gt;Lets start by creating the basic Hiera config needed for a very simple
+nginx install.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 7: Hiera for nginx&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;nginx::default::mail : false
+nginx::default::worker_processes : %{processorcount}
+nginx::default::server_tokens : &#39;off&#39;
+nginx::default::nginx_error_log : &#39;/var/log/nginx/error.log debug&#39;
+nginx::default::http_access_log : &#39;/var/log/nginx/access.log&#39;
+nginx::default::proxy_cache_path : &#39;/var/cache/nginx&#39;
+nginx::default::proxy_cache_levels : &#39;2&#39;
+nginx::default::proxy_cache_keys_zone : &#39;cache:10m&#39;
+nginx::default::proxy_cache_max_size : &#39;2048m&#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;There&amp;rsquo;s nothing exceptional here, this is all nginx boilerplate to set
+some global defaults for nginx. The interesting bit of this is when we
+start creating the nginx Profile.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 8: Base nginx Profile in Puppet DSL&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class profile::linux::nginx {
+
+  $mail							= hiera(&#39;nginx::default::mail&#39;)
+  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
+  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
+  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
+  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
+  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
+  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
+  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
+  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
+  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+
+  #################################################
+  # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
+  #################################################
+
+  class { &#39;::nginx&#39;:
+    mail						=&amp;gt; $mail,
+    worker_processes			=&amp;gt; $worker_processes,
+    server_tokens 				=&amp;gt; $server_tokens,
+    nginx_error_log 			=&amp;gt; $nginx_error_log,
+    http_access_log 			=&amp;gt; $http_access_log,
+    proxy_cache_path 			=&amp;gt; $proxy_cache_path,
+    proxy_cache_levels 			=&amp;gt; $proxy_cache_levels,
+    proxy_cache_keys_zone 		=&amp;gt; $proxy_cache_keys_zone,
+    proxy_cache_max_size 		=&amp;gt; $proxy_cache_max_size,
+    names_hash_bucket_size 		=&amp;gt; $names_hash_bucket_size,
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So this is all pretty simple again. This is a Puppet class called
+&lt;code&gt;profile::linux::nginx&lt;/code&gt;, which sets some default variables, and passes
+them to another class called &lt;code&gt;::nginx&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This class is a &amp;ldquo;Profile&amp;rdquo; simply by dint of it being created within the
+Profile module / namespace. It&amp;rsquo;s technically no different than any other
+Puppet module, it&amp;rsquo;s simply a widely accepted convention that Puppet
+Roles and Profiles are modules.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;::nginx&lt;/code&gt; class actually refers to the nginx module, denoted by the
+leading &lt;code&gt;::&lt;/code&gt;, basically meaning &amp;ldquo;at top scope, named nginx&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re wondering about the &lt;code&gt;::&lt;/code&gt; colon syntax, start by reading about
+Puppet scope and namespacing:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/guides/scope_and_puppet.html&#34;&gt;https://docs.puppetlabs.com/guides/scope_and_puppet.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/puppet/latest/reference/lang_namespaces.html&#34;&gt;https://docs.puppetlabs.com/puppet/latest/reference/lang_namespaces.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So this nginx Profile achieves the very first of our goals; that is to
+install nginx and set some very basic global nginx parameters.&lt;/p&gt;
+&lt;p&gt;The next step would be create the nginx &amp;ldquo;servers&amp;rdquo; (called vhosts here).
+In order to achieve this step we need to retrieve the vhost
+configuration data from Hiera. We&amp;rsquo;ll then use that data to create the
+vhosts.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 9: nginx Profile with vhosts being created&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class profile::linux::nginx {
+
+  $mail							= hiera(&#39;nginx::default::mail&#39;)
+  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
+  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
+  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
+  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
+  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
+  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
+  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
+  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
+  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+
+  #################################################
+  # Get the hash of vhosts from Hiera. Extract the hash keys into a list (array).
+  #################################################
+
+  $vhosts						= hiera(&#39;proxy::sites::vhosts&#39;)
+
+  #################################################
+  # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
+  #################################################
+
+  class { &#39;::nginx&#39;:
+    mail						=&amp;gt; $mail,
+    worker_processes			=&amp;gt; $worker_processes,
+    server_tokens 				=&amp;gt; $server_tokens,
+    nginx_error_log 			=&amp;gt; $nginx_error_log,
+    http_access_log 			=&amp;gt; $http_access_log,
+    proxy_cache_path 			=&amp;gt; $proxy_cache_path,
+    proxy_cache_levels 			=&amp;gt; $proxy_cache_levels,
+    proxy_cache_keys_zone 		=&amp;gt; $proxy_cache_keys_zone,
+    proxy_cache_max_size 		=&amp;gt; $proxy_cache_max_size,
+    names_hash_bucket_size 		=&amp;gt; $names_hash_bucket_size,
+  }
+
+  ################################################
+  # Create the ngingx vhosts (server blocks in nginx config terms). Pass create_resources the hash retrieved from Hiera,
+  # into the nginx::resource::vhost resource defined by the nginx module
+  ################################################
+
+  create_resources(&#39;::nginx::resource::vhost&#39;, $vhosts)
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;First we add some functionality to retrieve the vhost config from Hiera
+using a Hiera lookup function in Puppet:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$vhosts = hiera(&#39;proxy::walletv2::vhosts&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We then pass the resultant hash to a Puppet function called
+&lt;code&gt;create_resrouces&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;create_resources(&#39;::nginx::resource::vhost&#39;, $vhosts)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;create_resources&lt;/code&gt; is a very useful Puppet function. Given the right set
+of information, in the right structure, it will auto-magically create
+the specified resource. In this case the resource we&amp;rsquo;re talking about is
+the &lt;code&gt;::nginx::resource::vhost&lt;/code&gt; resource. This resource is defined in the
+nginx module, as denoted by the top scope &lt;code&gt;::nginx&lt;/code&gt;. The hash &lt;code&gt;$vhosts&lt;/code&gt;
+contains the data retrieved from Hiera, specifically from the key
+&lt;code&gt;proxy::sites::vhosts&lt;/code&gt; found in Example 2 to Example 4.&lt;/p&gt;
+&lt;p&gt;This will create the nginx vhost (server) configurations in the actual
+nginx config files, using the key/values as parameters.&lt;/p&gt;
+&lt;p&gt;Further reading:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/references/latest/function.html#createresources&#34;&gt;https://docs.puppetlabs.com/references/latest/function.html#createresources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.puppetlabs.com/learning/ral.html&#34;&gt;https://docs.puppetlabs.com/learning/ral.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The final step is to combine our interpolated Hiera data and Puppet
+iteration learnings into the Profile so that each vhost that gets
+created, also gets the same set of locations.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 10: nginx Profile with vhosts and locations being created&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class profile::linux::nginx {
+
+  $mail							= hiera(&#39;nginx::default::mail&#39;)
+  $worker_processes				= hiera(&#39;nginx::default::worker_processes&#39;)
+  $server_tokens				= hiera(&#39;nginx::default::server_tokens&#39;)
+  $nginx_error_log				= hiera(&#39;nginx::default::nginx_error_log&#39;)
+  $http_access_log				= hiera(&#39;nginx::default::http_access_log&#39;)
+  $proxy_cache_path				= hiera(&#39;nginx::default::proxy_cache_path&#39;)
+  $proxy_cache_levels			= hiera(&#39;nginx::default::proxy_cache_levels&#39;)
+  $proxy_cache_keys_zone		= hiera(&#39;nginx::default::proxy_cache_keys_zone&#39;)
+  $proxy_cache_max_size			= hiera(&#39;nginx::default::proxy_cache_max_size&#39;)
+  $names_hash_bucket_size		= hiera(&#39;nginx::default::names_hash_bucket_size&#39;)
+
+  #################################################
+  # Get the hash of vhosts from Hiera. Extract the hash keys into a list (array).
+  #################################################
+
+  $vhosts						= hiera(&#39;proxy::sites::vhosts&#39;)
+  $vhostslist					= keys($vhosts)
+
+  #################################################
+  # Create the base nginx config by passing the nginx module the minimum config that we use across all our systems
+  #################################################
+
+  class { &#39;::nginx&#39;:
+    mail						=&amp;gt; $mail,
+    worker_processes			=&amp;gt; $worker_processes,
+    server_tokens 				=&amp;gt; $server_tokens,
+    nginx_error_log 			=&amp;gt; $nginx_error_log,
+    http_access_log 			=&amp;gt; $http_access_log,
+    proxy_cache_path 			=&amp;gt; $proxy_cache_path,
+    proxy_cache_levels 			=&amp;gt; $proxy_cache_levels,
+    proxy_cache_keys_zone 		=&amp;gt; $proxy_cache_keys_zone,
+    proxy_cache_max_size 		=&amp;gt; $proxy_cache_max_size,
+    names_hash_bucket_size 		=&amp;gt; $names_hash_bucket_size,
+  }
+
+  ################################################
+  # Create the ngingx vhosts (server blocks in nginx config terms). Pass create_resources the hash retrieved from Hiera,
+  # into the nginx::resource::vhost resource defined by the nginx module
+  ################################################
+
+  create_resources(&#39;::nginx::resource::vhost&#39;, $vhosts)
+
+  define profile::linux::nginx::location {
+    ### Creating Locations
+    $locations = hiera(&#39;proxy::sites::locations&#39;)
+    $vhostslocations = { vhost =&amp;gt; $name }
+
+    create_resources(&#39;::nginx::resource::location&#39;, $locations, $vhostslocations)
+  }
+
+  ################################################
+  #
+  # This calls the above define per member of $vhostslist array
+  #
+  ################################################
+
+  profile::linux::nginx::location { $vhostslist: }
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;So what have we done here?&lt;/p&gt;
+&lt;p&gt;The first thing is that we&amp;rsquo;ve added an array called &lt;code&gt;$vhostslist&lt;/code&gt;, whos
+array members are made up of the key names of the &lt;code&gt;$vhosts&lt;/code&gt; hash:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$vhostslist = keys($vhosts)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This gives us the array that we want to iterate over, as discussed in
+the Puppet iteration section. The array members in this example will be
+&amp;ldquo;SiteA&amp;rdquo; and &amp;ldquo;SiteB&amp;rdquo;, i.e. &lt;code&gt;[ &amp;quot;SiteA&amp;quot;, &amp;quot;SiteB&amp;quot; ]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The second thing we&amp;rsquo;ve added is a new define,
+&lt;code&gt;profile::linux::nginx::location&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;define profile::linux::nginx::location {
+  ### Creating Locations
+  $locations = hiera(&#39;proxy::sites::locations&#39;)
+  $vhostslocations = { vhost =&amp;gt; $name }
+
+  create_resources(&#39;::nginx::resource::location&#39;, $locations, $vhostslocations)
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This can be thought of as a function in more general programming
+languages, that will iterate over the array &lt;code&gt;$vhostslist&lt;/code&gt;. Within this
+define we are retrieving the list of locations into a has called
+&lt;code&gt;$locations&lt;/code&gt;, using another Hiera lookup, on the key
+&lt;code&gt;proxy::sites::locations&lt;/code&gt; (Yes I&amp;rsquo;m aware this will be done for every
+iteration, not optimal). We then create a new hash called
+&lt;code&gt;$vhostslocations&lt;/code&gt; which contains the key &lt;code&gt;vhost&lt;/code&gt; and value &lt;code&gt;$name&lt;/code&gt;,
+i.e. &lt;code&gt;{ vhost =&amp;gt; $name }&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Once we have the &lt;code&gt;$locations&lt;/code&gt; hash and the &lt;code&gt;$vhostslocations&lt;/code&gt; hash, we
+then call &lt;code&gt;create_resources&lt;/code&gt;. Just like the previous time we called
+&lt;code&gt;create_resources&lt;/code&gt;, the specific resource is defined by the nginx
+module, and is called &lt;code&gt;::nginx::resource::location&lt;/code&gt;. However, in this
+case we&amp;rsquo;re giving the &lt;code&gt;create_resources&lt;/code&gt; function two items, not one.
+The first item is the list of locations we&amp;rsquo;d like to create, and the
+second is the &lt;code&gt;$vhostslocations&lt;/code&gt; hash.&lt;/p&gt;
+&lt;p&gt;The second optional item passed to &lt;code&gt;create_resources&lt;/code&gt; (
+&lt;code&gt;$vhostslocations&lt;/code&gt; ) is an anonymous hash of extra parameters to add to
+the resource being created.&lt;/p&gt;
+&lt;p&gt;This define is then &amp;ldquo;called&amp;rdquo; by the line:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;profile::linux::nginx::location { $vhostslist: }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Before we go further, we need to look at the Hiera data again, and
+modify it slightly:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Example 11: Modified Hiera data&lt;/em&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy::sites::vhosts:
+  SiteA:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+  SiteB:
+    listen_port : 8080
+    rewrite_to_https : false
+    use_default_location : false
+
+proxy::sites::locations:
+  &amp;quot;%{name}_root&amp;quot;
+    location : &#39;/&#39;
+    ensure : &#39;present&#39;
+    proxy : &#39;http://serviceA&#39;
+  &amp;quot;%{name}_server_status&amp;quot;
+    location : &#39;/server-status&#39;
+    ensure : &#39;present&#39;
+    stub_status : true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The change here is the variable we want interpolated has been changed to
+&lt;code&gt;%{name}&lt;/code&gt;, and the &lt;code&gt;vhost&lt;/code&gt; parameter has been removed.&lt;/p&gt;
+&lt;p&gt;You&amp;rsquo;ll notice in Example 10 the newly added define suddenly makes use of
+a variable called &lt;code&gt;$name&lt;/code&gt;. We&amp;rsquo;re also now referencing it in our modified
+Hiera config in Example 11.&lt;/p&gt;
+&lt;p&gt;So what is &lt;code&gt;$name&lt;/code&gt;? Well, this goes back to Puppet resources again. The
+define &lt;code&gt;profile::linux::nginx::location&lt;/code&gt; &lt;strong&gt;is&lt;/strong&gt; a Puppet resource, and
+as such must be &amp;ldquo;named&amp;rdquo; (and again, named uniquely). When we call the
+define:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;profile::linux::nginx::location { $vhostslist: }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We&amp;rsquo;re passing it the array that it iterates over, but under the hood in
+a bit of Puppet magic, the &amp;ldquo;name&amp;rdquo; of the resource becomes the value of
+the array member. So there will be two resources of type
+&lt;code&gt;profile::linux::nginx::location&lt;/code&gt;, one named &amp;ldquo;SiteA&amp;rdquo; and the other named
+&amp;ldquo;SiteB&amp;rdquo;. Within the scope of each of these resources, Puppet creates and
+makes available a variable called &lt;code&gt;$name&lt;/code&gt;, which of course is set to the
+&amp;ldquo;name&amp;rdquo; of the resource, or in our case &amp;ldquo;SiteA&amp;rdquo; and SiteB&amp;quot;.&lt;/p&gt;
+&lt;p&gt;Since we are performing a Hiera lookup within the resource (define)
+&lt;code&gt;profile::linux::nginx::location&lt;/code&gt;, that Hiera lookup now has access to
+all the Puppet variables within that scope (see previous info about
+Hiera being passed Puppet variables). Therefore the &lt;code&gt;%{name}&lt;/code&gt; Hiera
+variable is set to the &lt;code&gt;$name&lt;/code&gt; Puppet variable. Magic.&lt;/p&gt;
+&lt;p&gt;The final piece of the puzzle is the &lt;code&gt;$vhostslocations&lt;/code&gt; hash, and the
+actual use of the &lt;code&gt;$name&lt;/code&gt; variable. According to the &lt;code&gt;create_resources&lt;/code&gt;
+documentation:&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;The values given on the third argument are added to the parameters of
+each resource present in the set given on the second argument.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;So therefore the hash &lt;code&gt;$vhostslocations { vhost =&amp;gt; &amp;quot;$name&amp;quot; }&lt;/code&gt; basically
+gives the nginx module an extra parameter that is applied to each
+location created of &amp;ldquo;vhost =&amp;gt; SiteA&amp;rdquo; or &amp;ldquo;vhost =&amp;gt; SiteB&amp;rdquo;. This
+establishes the relationship between the locations and their parent
+vhosts.&lt;/p&gt;
+&lt;p&gt;Put it all together and we now have a start towards cleanly modelling
+nginx configurations in Hiera, without repeating data, and using the
+Roles and Profile pattern. This allows us to completely extract site
+configuration data from the Puppet DSL, by providing an abstraction
+layer to the nginx module (the nginx Profile). I didn&amp;rsquo;t actually touch
+upon a Puppet Role here, but once you have your Profile(s) created, the
+creation of Roles is generally much simpler, as they should be nothing
+more than a collection of Profiles. The links provided at the beginning
+of this post on Roles/Profiles should make the rest clear.&lt;/p&gt;
+&lt;p&gt;So that&amp;rsquo;s basically an end-to-end example (although not necessarily 100%
+working) of using Hiera to model nginx, and combining that with an
+abstraction layer (the Profile) above the nginx module.&lt;/p&gt;
+&lt;h2 id=&#34;possible-re-factors&#34;&gt;Possible re-factors&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Duplicate data in the vhosts configurations could be reduced using
+the same iteration trick used for the location configs.&lt;/li&gt;
+&lt;li&gt;Removing the Hiera lookup from the &lt;code&gt;profile::linux::nginx::location&lt;/code&gt;
+resource would prevent repeating the lookup.&lt;/li&gt;
+&lt;li&gt;Remove the use of the &lt;code&gt;$vhostslocations&lt;/code&gt; hash. Use Hiera
+interpolation to specify the vhost parameter in the location
+resource.&lt;/li&gt;
+&lt;li&gt;Many others I haven&amp;rsquo;t thought of :)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;If anyone has any improvements, suggestions, comments or criticisms let
+me know at bedeblog at undertow dot ca.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

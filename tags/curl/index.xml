@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>curl on </title>
-    <link>https://robrankin.github.io/tags/curl/</link>
-    <description>Recent content in curl on </description>
+    <title>curl on Home</title>
+    <link>/tags/curl/</link>
+    <description>Home (curl)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 11 Sep 2020 17:32:50 +0100</lastBuildDate>
     
-	<atom:link href="https://robrankin.github.io/tags/curl/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/curl/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Querying Cylance Protect Api From Shell</title>
-      <link>https://robrankin.github.io/posts/querying-cylance-protect-api-from-shell/</link>
+      <link>/posts/querying-cylance-protect-api-from-shell/</link>
       <pubDate>Fri, 11 Sep 2020 17:32:50 +0100</pubDate>
       
-      <guid>https://robrankin.github.io/posts/querying-cylance-protect-api-from-shell/</guid>
-      <description>We use Cylance as our AV type protection. They&amp;rsquo;re one of the better solutions I&amp;rsquo;ve seen, but theres some strange gaps in my opinion. There doesn&amp;rsquo;t seem to be a built in method for alerting. One of the things we&amp;rsquo;d like to be able to alert on is when a devices goes &amp;ldquo;offline&amp;rdquo;, and apparently this information is not provided through Cylance&amp;rsquo;s syslog output. It is however available from their API.</description>
+      <guid>/posts/querying-cylance-protect-api-from-shell/</guid>
+      <description>&lt;p&gt;We use Cylance as our AV type protection.  They&amp;rsquo;re one of the better solutions I&amp;rsquo;ve seen, but theres some strange gaps in my opinion.  There doesn&amp;rsquo;t seem to be a built in method for alerting.  One of the things we&amp;rsquo;d like to be able to alert on is when a devices goes &amp;ldquo;offline&amp;rdquo;, and apparently this information is not provided through Cylance&amp;rsquo;s syslog output.  It is however available from their API.&lt;/p&gt;
+&lt;p&gt;Since we use Elasticsearch at Bede, and use it for the basis of a lot of alerting, I wanted to get the device status records from Cylance, into Elasticsearch so I could alert our security team when Cylance agents stopped reporting in.&lt;/p&gt;
+&lt;p&gt;After a bit of reading, the Cylance API seemed simple enough so I whipped up a bit of shell using curl, jq, openssl, etc to authenticate/authorize, and be able to hit any of the API endpoints.&lt;/p&gt;
+&lt;p&gt;Hopefully someone else find it useful as well, the code can be found here: &lt;a href=&#34;https://github.com/robrankin/bash-cylance-protect-api&#34;&gt;https://github.com/robrankin/bash-cylance-protect-api&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Credit for some very helpful notes to: &lt;a href=&#34;https://gist.github.com/indrayam/dd47bf6eef849a57c07016c0036f5207&#34;&gt;https://gist.github.com/indrayam/dd47bf6eef849a57c07016c0036f5207&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

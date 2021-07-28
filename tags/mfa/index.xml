@@ -1,26 +1,172 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>mfa on </title>
-    <link>https://robrankin.github.io/tags/mfa/</link>
-    <description>Recent content in mfa on </description>
+    <title>mfa on Home</title>
+    <link>/tags/mfa/</link>
+    <description>Home (mfa)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 06 Aug 2020 12:34:50 +0100</lastBuildDate>
     
-	<atom:link href="https://robrankin.github.io/tags/mfa/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/mfa/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Kibana Authentication using OAuth2 Proxy in Kubernetes</title>
-      <link>https://robrankin.github.io/posts/kibaba-oauth-kubernetes/</link>
+      <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
+      <link>/posts/kibaba-oauth-kubernetes/</link>
       <pubDate>Thu, 06 Aug 2020 12:34:50 +0100</pubDate>
       
-      <guid>https://robrankin.github.io/posts/kibaba-oauth-kubernetes/</guid>
-      <description>NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): https://github.com/elastic/kibana/issues/74828
- Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&amp;rsquo;t the case this time.
-After a little bit of research I found this article, from February 2017:
-User Impersonation with X-Pack: Integrating Third Party Auth with Kibana</description>
+      <guid>/posts/kibaba-oauth-kubernetes/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): &lt;a href=&#34;https://github.com/elastic/kibana/issues/74828&#34;&gt;https://github.com/elastic/kibana/issues/74828&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication.  This might be easily possible if you have a commercial license with Elastic, but this wasn&amp;rsquo;t the case this time.&lt;/p&gt;
+&lt;p&gt;After a little bit of research I found this article, from February 2017:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.elastic.co/blog/user-impersonation-with-x-pack-integrating-third-party-auth-with-kibana&#34;&gt;User Impersonation with X-Pack: Integrating Third Party Auth with Kibana&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Obviously it&amp;rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.&lt;/p&gt;
+&lt;p&gt;The main trouble with the article is the specific setup used, illustrated by the image:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/oauth_kibana_1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Problems:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;oauth2_proxy&lt;/code&gt; terminating the browser connection (and possibly TLS)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;oauth2_proxy&lt;/code&gt; running in reverse proxy mode&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is more what I was looking for:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/Kibana_Oauth2_Kubernetes.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;For this deployment, Kibana and OAuth2 Proxy would be deployed on Kubernetes, and would be made available behind the standard k8s ingress controller, &lt;a href=&#34;https://github.com/kubernetes/ingress-nginx&#34;&gt;Ingress Nginx&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Therefore the browser connection would be terminated on the Ingress Nginx controller.  As a side note, this takes advantage of &lt;code&gt;cert-manager&lt;/code&gt; to automatically provision and manage TLS certificates, very handy.&lt;/p&gt;
+&lt;p&gt;I also didn&amp;rsquo;t really want to run &lt;code&gt;oauth2_proxy&lt;/code&gt; in full reverse proxy mode, as that&amp;rsquo;s the job of the ingress controller.  Don&amp;rsquo;t need more proxies involved here.&lt;/p&gt;
+&lt;p&gt;Luckily, nginx has just the feature for this, the &lt;a href=&#34;http://nginx.org/en/docs/http/ngx_http_auth_request_module.html&#34;&gt;ngx_http_auth_request&lt;/a&gt; module.  As per the documentation:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The ngx_http_auth_request_module module (1.5.4+) implements client authorization based on the result of a subrequest. If the subrequest returns a 2xx response code, the access is allowed. If it returns 401 or 403, the access is denied with the corresponding error code. Any other response code returned by the subrequest is considered an error.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So, in theory as long as a header called &lt;code&gt;es-security-runas-user&lt;/code&gt; can be passed to Kibana, with a value of a valid username, and be authrorized to do so by using HTTP Basic auth as a user with rights to impersonate another use, we&amp;rsquo;re good to go.&lt;/p&gt;
+&lt;p&gt;The short form is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &amp;ldquo;Service Account&amp;rdquo; is required in Kibana, with a Role that allows it to impersonate users.&lt;/li&gt;
+&lt;li&gt;User accounts in Kibana for your users, with whatever roles they require.&lt;/li&gt;
+&lt;li&gt;All requests from the ingress controller to Kibana must have 2 headers:
+&lt;ul&gt;
+&lt;li&gt;Basic Auth header for the &amp;ldquo;Service Account&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;An &lt;code&gt;es-security-runas-user&lt;/code&gt; with a valid username created in Kibana.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So let&amp;rsquo;s get down to it, then, here&amp;rsquo;s the specific configurations required to make this work!&lt;/p&gt;
+&lt;p&gt;These will be a mix between Helm chart values, and some &amp;ldquo;raw-ish&amp;rdquo; Kube configs (deployed using the &lt;code&gt;raw&lt;/code&gt; Helm chart).&lt;/p&gt;
+&lt;p&gt;OAuth2 Proxy Helm values.yaml&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;image:
+  repository: &amp;quot;quay.io/pusher/oauth2_proxy&amp;quot;
+  tag: &amp;quot;v6.0.0&amp;quot;
+  pullPolicy: &amp;quot;IfNotPresent&amp;quot;
+
+extraArgs:
+  provider: &#39;azure&#39;
+  email-domain: &#39;&amp;lt;your email domain here&amp;gt;&#39;
+  azure-tenant: &#39;&amp;lt;your tenant id here&amp;gt;&#39;
+  client-id: &#39;&amp;lt;your client id here&amp;gt;&#39;
+  client-secret: &#39;&amp;lt;your client secret here&amp;gt;&#39;
+
+  redirect-url: https://kibana.example.com/oauth2/callback
+
+  cookie-secret: &#39;&amp;lt;cookie secret&amp;gt;&#39;
+  cookie-domain: &amp;lt;cookie domain&amp;gt;
+  cookie-samesite: none
+
+  set-xauthrequest: true
+
+  session-store-type: redis
+  redis-connection-url: &#39;redis://redis-master:6379/0&#39;
+
+  request-logging: true
+  auth-logging: true
+  standard-logging: true
+  silence-ping-logging: true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Notes:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Ensure your callback URL does NOT have a trailing slash &lt;code&gt;/&lt;/code&gt;.  This caused me some problems.&lt;/li&gt;
+&lt;li&gt;To create an app in Azure for OAuth2 Proxy to use, please follow their documentation here: &lt;a href=&#34;https://oauth2-proxy.github.io/oauth2-proxy/auth-configuration#azure-auth-provider&#34;&gt;Azure Auth provider&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;You&amp;rsquo;ll notice the Redis connection config.  Please read &lt;a href=&#34;https://oauth2-proxy.github.io/oauth2-proxy/configuration#configuring-for-use-with-the-nginx-auth_request-directive&#34;&gt;this&lt;/a&gt; section of the docs carefully, particularly if you&amp;rsquo;re using Azure authentication.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The key is really the &lt;code&gt;set-xauthrequest&lt;/code&gt; config.  As per the documentation:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;set X-Auth-Request-User, X-Auth-Request-Email and X-Auth-Request-Preferred-Username response headers (useful in Nginx auth_request mode)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So when this is enabled, OAuth2 Proxy will return those 3 headers to the nginx subrequest, making their values available to nginx, rather than just returning an HTTP 2xx without them.&lt;/p&gt;
+&lt;p&gt;Is this specific case, we&amp;rsquo;re after the &lt;code&gt;X-Auth-Request-Email&lt;/code&gt; which is returned from Azure AD with the users email address, assuming successful authentication.&lt;/p&gt;
+&lt;p&gt;We then need to get that header value (&lt;a href=&#34;mailto:some.users@example.com&#34;&gt;some.users@example.com&lt;/a&gt;) into the &lt;code&gt;es-security-runas-user&lt;/code&gt; and pass that to the upstream Kibana instance.&lt;/p&gt;
+&lt;p&gt;Nginx Ingress Resources&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: kibana-ingress
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-Email
+      nginx.ingress.kubernetes.io/auth-url: &amp;quot;https://$host/oauth2/auth&amp;quot;
+      nginx.ingress.kubernetes.io/auth-signin: &amp;quot;https://$host/oauth2/start?rd=$escaped_request_uri&amp;quot;
+
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        proxy_set_header &#39;es-security-runas-user&#39; $authHeader0;
+        proxy_set_header Authorization &amp;quot;Basic &amp;lt;your basic auth string&amp;gt;&amp;quot;;
+  spec:
+    rules:
+    - host: kibana.example.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: kibana
+            servicePort: 5601
+
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: kibana-oauth2-ingress
+    annotations:
+      kubernetes.io/ingress.class: nginx
+  spec:
+    rules:
+    - host: kibana.example.com
+      http:
+        paths:
+        - path: /oauth2
+          backend:
+            serviceName: oauth2-proxy
+            servicePort: 80
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You&amp;rsquo;ll notice there&amp;rsquo;s actually 2 ingresses defined here, for the same hostname, but different paths.  I&amp;rsquo;m not sure this is required, but it appears to be based on my testing.  If you attempt to use a single host, with separate paths for Kibana and OAuth2 Proxy it simply doesnt work.&lt;/p&gt;
+&lt;p&gt;In the Nginx Ingress configs, the important pieces are as follows.&lt;/p&gt;
+&lt;h1 id=&#34;part-one&#34;&gt;Part One&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;nginx.ingress.kubernetes.io/auth-url: &amp;ldquo;https://$host/oauth2/auth&amp;rdquo;
+nginx.ingress.kubernetes.io/auth-signin: &amp;ldquo;https://$host/oauth2/start?rd=$escaped_request_uri&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The &lt;code&gt;auth-url&lt;/code&gt; and &lt;code&gt;auth-signin&lt;/code&gt; annotations activate the &lt;code&gt;ngx_http_auth_request_module&lt;/code&gt;, so that every request through this location ( &lt;code&gt;/&lt;/code&gt; ) must be authenticated by the external source specified.  This source is &lt;code&gt;$host/oauth2&lt;/code&gt;, which is the same hostname as kibana, but on the &lt;code&gt;oauth2&lt;/code&gt; path, so its the second of the ingress resources specified above.&lt;/p&gt;
+&lt;h1 id=&#34;part-two&#34;&gt;Part Two&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-Email&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The &lt;code&gt;auth-response-headers&lt;/code&gt; annotation simply passes the &lt;code&gt;X-Auth-Request-Email&lt;/code&gt; header that we received from Oauth2 Proxy onto the upstream, Kibana, assuming successful authentication.&lt;/p&gt;
+&lt;p&gt;Relevant documentation for the annotation:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;nginx.ingress.kubernetes.io/auth-response-headers: &amp;lt;Response_Header_1, &amp;hellip;, Response_Header_n&amp;gt; to specify headers to pass to backend once authentication request completes.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This by itself doesn&amp;rsquo;t help much, as Kibana has no idea to do anything with that specific header, but the trick is that the ingress controller does this by setting an nginx var to the value of that header as returned by Oauth2 Proxy, and then setting the same header to be passed upstream using &lt;code&gt;proxy_set_header&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Relevant nginx config snippet:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;auth_request_set $authHeader0 $upstream_http_x_auth_request_email;
+proxy_set_header &#39;X-Auth-Request-Email&#39; $authHeader0;
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&#34;part-three&#34;&gt;Part Three&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;proxy_set_header &amp;lsquo;es-security-runas-user&amp;rsquo; $authHeader0;
+proxy_set_header Authorization &amp;ldquo;Basic &lt;your basic auth string&gt;&amp;quot;;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The important piece for Kibana authentication comes next, by re-using the nginx var &lt;code&gt;$authHeader0&lt;/code&gt;, creating and setting the &lt;code&gt;es-security-runas-user&lt;/code&gt; header using that var, and passing that upstream using &lt;code&gt;proxy_set_header&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As long as Kibana receives the &lt;code&gt;es-security-runas-user&lt;/code&gt; and the basic auth header &lt;code&gt;Authorization: Basic &amp;lt;your basic auth string&amp;gt;&lt;/code&gt;, it will attempt to &amp;ldquo;login&amp;rdquo; using the value of the &lt;code&gt;es-security-runas-user&lt;/code&gt; header.&lt;/p&gt;
+&lt;p&gt;In this case we&amp;rsquo;re using emails as the username, but if your auth source provides a different value that OAuth2 Proxy can return to nginx, the same approach could be used.&lt;/p&gt;
+&lt;p&gt;Since this isintegrated with the Azure AD authentication flow, it can also take advantage of other authentication requirements, such as requiring MFA, or even Azure AD&amp;rsquo;s Conditional Access system.  These sorts of features are available on most other auth providers I&amp;rsquo;ve seen as well of course.&lt;/p&gt;
+</description>
     </item>
     
   </channel>
