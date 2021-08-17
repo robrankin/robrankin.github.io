@@ -1,15 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Categories on Home</title>
-    <link>/categories/</link>
-    <description>Home (Categories)</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 17 Aug 2021 10:21:48 +0100</lastBuildDate>
-    
-    <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-  </channel>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Categories - Category - </title>
+        <link>http://example.org/categories/</link>
+        <description>Categories - Category - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>security</title>
+    <link>http://example.org/categories/security/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/categories/security/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>tech</title>
+    <link>http://example.org/categories/tech/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/categories/tech/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
 </rss>

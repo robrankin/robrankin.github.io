@@ -1,15 +1,77 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags on Home</title>
-    <link>/tags/</link>
-    <description>Home (Tags)</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 17 Aug 2021 10:21:48 +0100</lastBuildDate>
-    
-    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-  </channel>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tags - Tag - </title>
+        <link>http://example.org/tags/</link>
+        <description>Tags - Tag - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>modsecurity</title>
+    <link>http://example.org/tags/modsecurity/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/modsecurity/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>waf</title>
+    <link>http://example.org/tags/waf/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/waf/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>web application firewall</title>
+    <link>http://example.org/tags/web-application-firewall/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/web-application-firewall/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>alerting</title>
+    <link>http://example.org/tags/alerting/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/alerting/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>elastalert</title>
+    <link>http://example.org/tags/elastalert/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/elastalert/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>elastalert2</title>
+    <link>http://example.org/tags/elastalert2/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/elastalert2/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>elasticsearch</title>
+    <link>http://example.org/tags/elasticsearch/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/elasticsearch/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>opensearch</title>
+    <link>http://example.org/tags/opensearch/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/opensearch/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>filebeat</title>
+    <link>http://example.org/tags/filebeat/</link>
+    <pubDate>Tue, 24 Nov 2020 07:39:19 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/filebeat/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>logstash</title>
+    <link>http://example.org/tags/logstash/</link>
+    <pubDate>Tue, 24 Nov 2020 07:39:19 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/tags/logstash/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
 </rss>
