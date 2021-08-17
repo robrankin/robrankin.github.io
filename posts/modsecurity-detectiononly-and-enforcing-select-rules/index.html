@@ -10,10 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer-when-downgrade">
 
-<title>Categories - Home</title>
+<title>Modsecurity, DetectionOnly and enforcing select rules - Home</title>
 <meta name="description" content="">
 
-<link rel="alternate" type="application/rss+xml" href="/categories/index.xml" title="Home" />
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon-precomposed" href="favicon.png">
 
@@ -37,15 +36,19 @@
 
 
 
-<meta property="og:title" content="Categories" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/categories/" />
+<meta property="og:title" content="Modsecurity, DetectionOnly and enforcing select rules" />
+<meta property="og:description" content="I recently had a reason to want to achieve the following:
+ ModSecurity globally in DetectionOnly mode (not enforcing rules, just logging)  Continue to operate the CRS in DetectionOnly mode.   For a specific ruleset:  Enforcing a default deny on inbound requests to an API. Enforcing allow rules for specific API routes and methods of the API    So I wanted all of our inbound CRS rules to continue to work in DetectionOnly mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/modsecurity-detectiononly-and-enforcing-select-rules/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-17T10:21:48+01:00" />
+<meta property="article:modified_time" content="2021-08-17T10:21:48+01:00" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Categories"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="Modsecurity, DetectionOnly and enforcing select rules"/>
+<meta name="twitter:description" content="I recently had a reason to want to achieve the following:
+ ModSecurity globally in DetectionOnly mode (not enforcing rules, just logging)  Continue to operate the CRS in DetectionOnly mode.   For a specific ruleset:  Enforcing a default deny on inbound requests to an API. Enforcing allow rules for specific API routes and methods of the API    So I wanted all of our inbound CRS rules to continue to work in DetectionOnly mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths."/>
 
 
 
@@ -183,29 +186,137 @@ if (!doNotTrack) {
         </header>
         <main id="main" tabindex="-1"> 
             
-    <div class="index-content">
+    
+    
+    <article class="post h-entry">
+        <header class="post-header">
+            <h1 class="p-name post-title">Modsecurity, DetectionOnly and enforcing select rules</h1>
+
+            
+        </header>
+        <div class="content e-content">
+            <p>I recently had a reason to want to achieve the following:</p>
+<ul>
+<li>ModSecurity globally in <code>DetectionOnly</code>  mode (not enforcing rules, just logging)
+<ul>
+<li>Continue to operate the CRS in <code>DetectionOnly</code> mode.</li>
+</ul>
+</li>
+<li>For a specific ruleset:
+<ul>
+<li>Enforcing a default deny on inbound requests to an API.</li>
+<li>Enforcing allow rules for specific API routes and methods of the API</li>
+</ul>
+</li>
+</ul>
+<p>So I wanted all of our inbound CRS rules to continue to work in <code>DetectionOnly</code> mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.</p>
+<p>It wasn&rsquo;t entirely clear from the documentation or  searches this was even possible, but after some trial and error turns out it is.</p>
+<p>First, you can enable or disable the SecAuditEngine on a rule by rule basis by using <code>ctl:ruleEngine=On</code>.  So while the global setting <code>SecRuleEngine DetectionOnly</code> is configured, you can set <code>ctl:ruleEngine=On</code> on individual rules to enable the engine and allow disruptive actions to take place.</p>
+<p>Second you need to understand both ModSecurity Phases<sup>2,3</sup> and RuleIDs<sup>4</sup></p>
+<p>The short version is:</p>
+<p>Rules are executed in phase first, rule id second order.  All rules in Phase 1, regardless of Rule ID, will be executed before any rules in Phase 2.  Took me a bit to find this documented clearly.</p>
+<p>So to achieve the inbound deny all, I created the following rule.  It&rsquo;s in Phase 2 and the Rule ID is higher than any other Phase 2 rule, so it should execute last.</p>
+<pre><code>SecRule REQUEST_URI &quot;@beginsWith /&quot; \ 
+  &quot;id:9999999,\ 
+  msg:'Default Block/Deny All',\ 
+  phase:2,\ 
+  drop,\ 
+  nolog,noauditlog,\ 
+  ctl:ruleEngine=On,\ 
+  t:none,t:lowercase,t:normalizePath&quot;
+</code></pre><p>Next step is to create the whitelist rules, a couple of examples below.  Each of them is in Phase 2 and has a Rule ID higher than the CRS Rule Ids, and lower than the above default deny Rule ID.  They should execute after the CRS rules, and before the above default deny.</p>
+<pre><code>SecRule REQUEST_METHOD &quot;^(?:DELETE|OPTIONS)$&quot; \
+  &quot;id:5000001,\
+  msg:&quot;ALLOW DELETE /path/one&quot;,\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain&quot;
+	SecRule REQUEST_URI &quot;@streq /path/one&quot; &quot;t:none,t:lowercase,t:normalizePath&quot;
+
+SecRule REQUEST_METHOD &quot;^(?:DELETE|OPTIONS)$&quot; \
+  &quot;id:5000002,\
+  msg:&quot;ALLOW DELETE /path/two/{someId}/more/{anotherId}&quot;,\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain&quot;
+	SecRule REQUEST_URI &quot;@rx ^/path/two/\d+/more/\d+$&quot; &quot;t:none,t:lowercase,t:normalizePath&quot;
+</code></pre><p>That&rsquo;s it really.  Any inbound request to this API can trigger any of the CRS rules, which as they&rsquo;re running in <code>DetectionOnly</code> will only log and not actually block the request.  Next the request will traverse the custom set of whitelist rules, and if it matches it will be allowed, and rule matching will stop here.  Next, if the request does not match any of the whitelist rules it will end up triggering the default deny rule and be dropped.</p>
+<h3 id="notes">Notes:</h3>
+<ol>
+<li><a href="https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)">https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)</a></li>
+<li><a href="https://malware.expert/modsecurity/processing-phases-modsecurity/">https://malware.expert/modsecurity/processing-phases-modsecurity/</a></li>
+<li><a href="https://subscription.packtpub.com/book/networking-and-servers/9781847194749/2/ch02lvl1sec10/phases-and-rule-ordering">https://subscription.packtpub.com/book/networking-and-servers/9781847194749/2/ch02lvl1sec10/phases-and-rule-ordering</a></li>
+<li><a href="https://coreruleset.org/docs/ruleid.html">https://coreruleset.org/docs/ruleid.html</a></li>
+</ol>
+
+        </div>
+        
+
+    
+
+
+<div class="post-info">
+    
+        <div class="post-date dt-published">2021-08-17</div>
+    
+    
+    <a class="post-hidden-url u-url" href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/">/posts/modsecurity-detectiononly-and-enforcing-select-rules/</a>
+    <a href="" class="p-name p-author post-hidden-author h-card" rel="me">Rob Rankin</a>
+
+
+    <div class="post-taxonomies">
+        
+            <ul class="post-categories">
+                
+                    <li><a href="categories/">tech</a></li>
+                
+                    <li><a href="categories/">security</a></li>
+                
+            </ul>
+            
+            
+                <ul class="post-tags">
+                    
+                        <li><a href="tags/modsecurity">#modsecurity</a></li>
+                    
+                        <li><a href="tags/waf">#waf</a></li>
+                    
+                        <li><a href="tags/web-application-firewall">#web application firewall</a></li>
+                    
+                </ul>
         
     </div>
+</div>
 
-    <h1>Categories</h1>
+    </article>
 
-    <ul class="terms">
+    
         
-        <li>
-            <a href="categories/security">
-            security
-            </a>
-            (1)
-        </li>
-        
-        <li>
-            <a href="categories/tech">
-            tech
-            </a>
-            (8)
-        </li>
-        
-    </ul>
+    <div class="pagination post-pagination">
+        <div class="left pagination-item disabled">
+            
+        </div>
+        <div class="right pagination-item ">
+            
+                <a href="/posts/alerting-using-siem-detections-and-elastalert/">Alerting using SIEM Detections and ElastAlert</a>
+            
+        </div>
+    </div>
+
+
+
+
+    
+
+    
+
+    
 
 
         </main>

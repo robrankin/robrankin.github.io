@@ -2,13 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/categories/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/tags/modsecurity/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/posts/modsecurity-detectiononly-and-enforcing-select-rules/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/categories/security/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/categories/tech/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/tags/waf/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
+    <loc>/tags/web-application-firewall/</loc>
+    <lastmod>2021-08-17T10:21:48+01:00</lastmod>
+  </url><url>
     <loc>/tags/alerting/</loc>
     <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
     <loc>/posts/alerting-using-siem-detections-and-elastalert/</loc>
-    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
-  </url><url>
-    <loc>/categories/</loc>
     <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
     <loc>/tags/elastalert/</loc>
@@ -20,19 +47,7 @@
     <loc>/tags/elasticsearch/</loc>
     <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
-    <loc>/</loc>
-    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
-  </url><url>
     <loc>/tags/opensearch/</loc>
-    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
-  </url><url>
-    <loc>/categories/tech/</loc>
     <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
     <loc>/tags/filebeat/</loc>

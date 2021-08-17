@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>security on Home</title>
+    <link>/categories/security/</link>
+    <description>Home (security)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 17 Aug 2021 10:21:48 +0100</lastBuildDate>
+    
+    <atom:link href="/categories/security/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Modsecurity, DetectionOnly and enforcing select rules</title>
+      <link>/posts/modsecurity-detectiononly-and-enforcing-select-rules/</link>
+      <pubDate>Tue, 17 Aug 2021 10:21:48 +0100</pubDate>
+      
+      <guid>/posts/modsecurity-detectiononly-and-enforcing-select-rules/</guid>
+      <description>&lt;p&gt;I recently had a reason to want to achieve the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ModSecurity globally in &lt;code&gt;DetectionOnly&lt;/code&gt;  mode (not enforcing rules, just logging)
+&lt;ul&gt;
+&lt;li&gt;Continue to operate the CRS in &lt;code&gt;DetectionOnly&lt;/code&gt; mode.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;For a specific ruleset:
+&lt;ul&gt;
+&lt;li&gt;Enforcing a default deny on inbound requests to an API.&lt;/li&gt;
+&lt;li&gt;Enforcing allow rules for specific API routes and methods of the API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;So I wanted all of our inbound CRS rules to continue to work in &lt;code&gt;DetectionOnly&lt;/code&gt; mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.&lt;/p&gt;
+&lt;p&gt;It wasn&amp;rsquo;t entirely clear from the documentation or  searches this was even possible, but after some trial and error turns out it is.&lt;/p&gt;
+&lt;p&gt;First, you can enable or disable the SecAuditEngine on a rule by rule basis by using &lt;code&gt;ctl:ruleEngine=On&lt;/code&gt;.  So while the global setting &lt;code&gt;SecRuleEngine DetectionOnly&lt;/code&gt; is configured, you can set &lt;code&gt;ctl:ruleEngine=On&lt;/code&gt; on individual rules to enable the engine and allow disruptive actions to take place.&lt;/p&gt;
+&lt;p&gt;Second you need to understand both ModSecurity Phases&lt;sup&gt;2,3&lt;/sup&gt; and RuleIDs&lt;sup&gt;4&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;The short version is:&lt;/p&gt;
+&lt;p&gt;Rules are executed in phase first, rule id second order.  All rules in Phase 1, regardless of Rule ID, will be executed before any rules in Phase 2.  Took me a bit to find this documented clearly.&lt;/p&gt;
+&lt;p&gt;So to achieve the inbound deny all, I created the following rule.  It&amp;rsquo;s in Phase 2 and the Rule ID is higher than any other Phase 2 rule, so it should execute last.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;SecRule REQUEST_URI &amp;quot;@beginsWith /&amp;quot; \ 
+  &amp;quot;id:9999999,\ 
+  msg:&#39;Default Block/Deny All&#39;,\ 
+  phase:2,\ 
+  drop,\ 
+  nolog,noauditlog,\ 
+  ctl:ruleEngine=On,\ 
+  t:none,t:lowercase,t:normalizePath&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Next step is to create the whitelist rules, a couple of examples below.  Each of them is in Phase 2 and has a Rule ID higher than the CRS Rule Ids, and lower than the above default deny Rule ID.  They should execute after the CRS rules, and before the above default deny.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;SecRule REQUEST_METHOD &amp;quot;^(?:DELETE|OPTIONS)$&amp;quot; \
+  &amp;quot;id:5000001,\
+  msg:&amp;quot;ALLOW DELETE /path/one&amp;quot;,\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain&amp;quot;
+	SecRule REQUEST_URI &amp;quot;@streq /path/one&amp;quot; &amp;quot;t:none,t:lowercase,t:normalizePath&amp;quot;
+
+SecRule REQUEST_METHOD &amp;quot;^(?:DELETE|OPTIONS)$&amp;quot; \
+  &amp;quot;id:5000002,\
+  msg:&amp;quot;ALLOW DELETE /path/two/{someId}/more/{anotherId}&amp;quot;,\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain&amp;quot;
+	SecRule REQUEST_URI &amp;quot;@rx ^/path/two/\d+/more/\d+$&amp;quot; &amp;quot;t:none,t:lowercase,t:normalizePath&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;That&amp;rsquo;s it really.  Any inbound request to this API can trigger any of the CRS rules, which as they&amp;rsquo;re running in &lt;code&gt;DetectionOnly&lt;/code&gt; will only log and not actually block the request.  Next the request will traverse the custom set of whitelist rules, and if it matches it will be allowed, and rule matching will stop here.  Next, if the request does not match any of the whitelist rules it will end up triggering the default deny rule and be dropped.&lt;/p&gt;
+&lt;h3 id=&#34;notes&#34;&gt;Notes:&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)&#34;&gt;https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://malware.expert/modsecurity/processing-phases-modsecurity/&#34;&gt;https://malware.expert/modsecurity/processing-phases-modsecurity/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://subscription.packtpub.com/book/networking-and-servers/9781847194749/2/ch02lvl1sec10/phases-and-rule-ordering&#34;&gt;https://subscription.packtpub.com/book/networking-and-servers/9781847194749/2/ch02lvl1sec10/phases-and-rule-ordering&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://coreruleset.org/docs/ruleid.html&#34;&gt;https://coreruleset.org/docs/ruleid.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -190,6 +190,60 @@ if (!doNotTrack) {
     
         <article class="post-list h-feed">
     <header class="post-header">
+        <h1 class="p-name post-title"><a class="u-url" href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/">Modsecurity, DetectionOnly and enforcing select rules</a></h1>
+        
+    </header>
+
+    
+        <div class="content post-summary p-summary">
+            I recently had a reason to want to achieve the following:
+ ModSecurity globally in DetectionOnly mode (not enforcing rules, just logging)  Continue to operate the CRS in DetectionOnly mode.   For a specific ruleset:  Enforcing a default deny on inbound requests to an API. Enforcing allow rules for specific API routes and methods of the API    So I wanted all of our inbound CRS rules to continue to work in DetectionOnly mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.
+        </div>
+    
+    
+    
+    
+
+    
+
+
+<div class="post-info">
+    
+        <div class="post-date dt-published">2021-08-17</div>
+    
+    
+    <a class="post-hidden-url u-url" href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/">/posts/modsecurity-detectiononly-and-enforcing-select-rules/</a>
+    <a href="" class="p-name p-author post-hidden-author h-card" rel="me">Rob Rankin</a>
+
+
+    <div class="post-taxonomies">
+        
+            <ul class="post-categories">
+                
+                    <li><a href="categories/">tech</a></li>
+                
+                    <li><a href="categories/">security</a></li>
+                
+            </ul>
+            
+            
+                <ul class="post-tags">
+                    
+                        <li><a href="tags/modsecurity">#modsecurity</a></li>
+                    
+                        <li><a href="tags/waf">#waf</a></li>
+                    
+                        <li><a href="tags/web-application-firewall">#web application firewall</a></li>
+                    
+                </ul>
+        
+    </div>
+</div>
+
+</article>
+    
+        <article class="post-list h-feed">
+    <header class="post-header">
         <h1 class="p-name post-title"><a class="u-url" href="/posts/alerting-using-siem-detections-and-elastalert/">Alerting using SIEM Detections and ElastAlert</a></h1>
         
     </header>
