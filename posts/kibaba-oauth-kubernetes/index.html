@@ -248,7 +248,7 @@ proxy_set_header 'X-Auth-Request-Email' $authHeader0;
 </code></pre><h1 id="part-three">Part Three</h1>
 <blockquote>
 <p>proxy_set_header &lsquo;es-security-runas-user&rsquo; $authHeader0;
-proxy_set_header Authorization &ldquo;Basic <!-- raw HTML omitted -->&quot;;</p>
+proxy_set_header Authorization &ldquo;Basic <your basic auth string>&quot;;</p>
 </blockquote>
 <p>The important piece for Kibana authentication comes next, by re-using the nginx var <code>$authHeader0</code>, creating and setting the <code>es-security-runas-user</code> header using that var, and passing that upstream using <code>proxy_set_header</code>.</p>
 <p>As long as Kibana receives the <code>es-security-runas-user</code> and the basic auth header <code>Authorization: Basic &lt;your basic auth string&gt;</code>, it will attempt to &ldquo;login&rdquo; using the value of the <code>es-security-runas-user</code> header.</p>

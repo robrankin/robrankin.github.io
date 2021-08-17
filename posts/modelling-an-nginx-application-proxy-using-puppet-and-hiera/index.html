@@ -29,7 +29,7 @@ Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Sco
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/modelling-an-nginx-application-proxy-using-puppet-and-hiera\/"
-        },"genre": "posts","keywords": "puppet, nginx, proxy","wordcount":  2941 ,
+        },"genre": "posts","keywords": "puppet, nginx, proxy","wordcount":  2950 ,
         "url": "http:\/\/example.org\/posts\/modelling-an-nginx-application-proxy-using-puppet-and-hiera\/","datePublished": "2014-11-05T15:53:08+00:00","dateModified": "2014-11-05T15:53:08+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@ Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Sco
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Modelling an nginx Application Proxy using Puppet and Hiera</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2014-11-05">2014-11-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2941 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2014-11-05">2014-11-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2950 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;14 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -105,7 +105,7 @@ Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Sco
 </nav></div>
             </div><div class="content" id="content"><h1 id="goal">Goal</h1>
 <p>To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.</p>
-<!-- raw HTML omitted -->
+<!-- more -->
 <h1 id="links">Links</h1>
 <h2 id="puppet-docs">Puppet Docs</h2>
 <ul>
@@ -314,7 +314,28 @@ proxy::sites::locations:
 nginx location resources will be named <code>&lt;vhost&gt;_&lt;location&gt;</code>. The goal
 would be to end up with 4 locations, 2 assigned to each vhost.</p>
 <p><em>Example 5: Locations per Vhost</em></p>
-<!-- raw HTML omitted -->
+<table style="width:100%">
+  <tr>
+    <th>Vhost</td>
+    <th>Location Name</td> 
+  </tr>
+  <tr>
+    <td>SiteA</td>
+    <td>SiteA_root</td> 
+  </tr>
+  <tr>
+    <td></td>
+    <td>SiteA_server_status</td> 
+  </tr>
+  <tr>
+    <td>SiteB</td>
+    <td>SiteB_root</td> 
+  </tr>
+  <tr>
+    <td></td>
+    <td>SiteB_server_status	</td> 
+  </tr>
+</table>
 <p>The next problem to solve is how to iterate over the list of vhosts.</p>
 <h2 id="puppet-iteration">Puppet Iteration</h2>
 <p>As mentioned, Puppet doesn&rsquo;t really do iteration natively (ignoring the

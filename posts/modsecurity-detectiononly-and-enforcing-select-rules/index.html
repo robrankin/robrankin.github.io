@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/modsecurity-detectiononly-and-enforcing-select-rules\/"
-        },"genre": "posts","keywords": "modsecurity, waf, web application firewall","wordcount":  431 ,
+        },"genre": "posts","keywords": "modsecurity, waf, web application firewall","wordcount":  433 ,
         "url": "http:\/\/example.org\/posts\/modsecurity-detectiononly-and-enforcing-select-rules\/","datePublished": "2021-08-17T10:21:48+01:00","dateModified": "2021-08-17T10:21:48+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Modsecurity, DetectionOnly and enforcing select rules</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a>&nbsp;<a href="/categories/security/"><i class="far fa-folder fa-fw"></i>security</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-17">2021-08-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;431 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-17">2021-08-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;433 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -112,7 +112,7 @@
 <p>So I wanted all of our inbound CRS rules to continue to work in <code>DetectionOnly</code> mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.</p>
 <p>It wasn&rsquo;t entirely clear from the documentation or  searches this was even possible, but after some trial and error turns out it is.</p>
 <p>First, you can enable or disable the SecAuditEngine on a rule by rule basis by using <code>ctl:ruleEngine=On</code>.  So while the global setting <code>SecRuleEngine DetectionOnly</code> is configured, you can set <code>ctl:ruleEngine=On</code> on individual rules to enable the engine and allow disruptive actions to take place.</p>
-<p>Second you need to understand both ModSecurity Phases<!-- raw HTML omitted -->2,3<!-- raw HTML omitted --> and RuleIDs<!-- raw HTML omitted -->4<!-- raw HTML omitted --></p>
+<p>Second you need to understand both ModSecurity Phases<sup><a href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/#references" rel="">2,3</a></sup> and RuleIDs<sup><a href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/#references" rel="">4</a></sup></p>
 <p>The short version is:</p>
 <p>Rules are executed in phase first, rule id second order.  All rules in Phase 1, regardless of Rule ID, will be executed before any rules in Phase 2.  Took me a bit to find this documented clearly.</p>
 <p>So to achieve the inbound deny all, I created the following rule.  It&rsquo;s in Phase 2 and the Rule ID is higher than any other Phase 2 rule, so it should execute last.</p>
@@ -177,7 +177,7 @@ SecRule REQUEST_METHOD &quot;^(?:DELETE|OPTIONS)$&quot; \
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/alerting-using-siem-detections-and-elastalert/" class="prev" rel="prev" title="Alerting using SIEM Detections and ElastAlert"><i class="fas fa-angle-left fa-fw"></i>Alerting using SIEM Detections and ElastAlert</a></div>
+    <div class="post-nav"><a href="/posts/alerting-using-siem-detections-and-elastalert/" class="prev" rel="prev" title="Alerting using SIEM Detections and ElastAlert2"><i class="fas fa-angle-left fa-fw"></i>Alerting using SIEM Detections and ElastAlert2</a></div>
 </div>
 </article></div>
             </main><footer class="footer">

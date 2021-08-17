@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one\/"
-        },"genre": "posts","keywords": "elasticsearch, filebeat, logstash","wordcount":  651 ,
+        },"genre": "posts","keywords": "elasticsearch, filebeat, logstash","wordcount":  653 ,
         "url": "http:\/\/example.org\/posts\/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one\/","datePublished": "2020-11-24T07:39:19+00:00","dateModified": "2020-11-24T07:39:19+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-11-24">2020-11-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;651 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-11-24">2020-11-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;653 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -100,7 +100,7 @@
 This approach is probably not appropriate for high volume / high throughput events.  It required in my case quite a lot of Logstash parsing, and Elasticsearch <code>doc_as_upsert</code> use, both of which will have a significant performance penalty.  For low throughput use it works fine.</p>
 </blockquote>
 <p>Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.</p>
-<p>This particular case is not dealt with well by Filebeat multiline support<!-- raw HTML omitted -->1<!-- raw HTML omitted -->.  In fact it simply doesn&rsquo;t work in this case.</p>
+<p>This particular case is not dealt with well by Filebeat multiline support <sup><a href="/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/#references" rel="">1</a></sup>.  In fact it simply doesn&rsquo;t work in this case.</p>
 <p>The structure I&rsquo;m talking about is this:</p>
 <pre><code>Line 1
 Line 2
@@ -118,7 +118,7 @@ Line 7
 </ul>
 <p>This means it impossible to combine these 3 lines into one event, as we may never see all 3 lines at a single logstash process/instance, and therefore can&rsquo;t combine them.</p>
 <p>So they can&rsquo;t be combined at source using Filebeat, and they can&rsquo;t be combined during processing by using Logstashs multiline codec, which only leaves one place where all 3 lines will be in the same place: Elasticsearch itself.</p>
-<p>The approach I settled on was using (or perhaps abusing) Elasticseach&rsquo;s <code>doc_as_upsert</code><!-- raw HTML omitted -->2<!-- raw HTML omitted --> capability to incrementally add data to a single ES document.</p>
+<p>The approach I settled on was using (or perhaps abusing) Elasticseach&rsquo;s <code>doc_as_upsert</code><sup>2</sup> capability to incrementally add data to a single ES document.</p>
 <p>The key is to identify something that can group the multiple lines together, and use that information as the Document ID.</p>
 <p>In my case, we have the following:</p>
 <ol>
@@ -188,7 +188,7 @@ Line 7
     </div>
 
     <div class="post-nav"><a href="/posts/shell-script-azure-storage-using-a-service-principle/" class="prev" rel="prev" title="Shell script, Azure Storage using a Service Principle"><i class="fas fa-angle-left fa-fw"></i>Shell script, Azure Storage using a Service Principle</a>
-            <a href="/posts/alerting-using-siem-detections-and-elastalert/" class="next" rel="next" title="Alerting using SIEM Detections and ElastAlert">Alerting using SIEM Detections and ElastAlert<i class="fas fa-angle-right fa-fw"></i></a></div>
+            <a href="/posts/alerting-using-siem-detections-and-elastalert/" class="next" rel="next" title="Alerting using SIEM Detections and ElastAlert2">Alerting using SIEM Detections and ElastAlert2<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">

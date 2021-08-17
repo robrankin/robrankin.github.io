@@ -14,14 +14,14 @@
     <description><![CDATA[I recently had a reason to want to achieve the following:
  ModSecurity globally in DetectionOnly mode (not enforcing rules, just logging)  Continue to operate the CRS in DetectionOnly mode.   For a specific ruleset:  Enforcing a default deny on inbound requests to an API. Enforcing allow rules for specific API routes and methods of the API    So I wanted all of our inbound CRS rules to continue to work in DetectionOnly mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.]]></description>
 </item><item>
-    <title>Alerting using SIEM Detections and ElastAlert</title>
+    <title>Alerting using SIEM Detections and ElastAlert2</title>
     <link>http://example.org/posts/alerting-using-siem-detections-and-elastalert/</link>
     <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
     <author>Author</author>
     <guid>http://example.org/posts/alerting-using-siem-detections-and-elastalert/</guid>
     <description><![CDATA[ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall. So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide alerting support.
 Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.
-If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21to handle the Alerting requirements.]]></description>
+If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21 to handle the Alerting requirements.]]></description>
 </item><item>
     <title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</title>
     <link>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
