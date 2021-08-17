@@ -21,6 +21,12 @@
             <loc>http://example.org/tags/filebeat/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/logstash/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/tags/azure/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/azure-storage/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/bash/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/script/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/shell/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/posts/shell-script-azure-storage-using-a-service-principle/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
             <loc>http://example.org/posts/event-threat-enrichment-logstash-minemeld/</loc><lastmod>2020-09-25T09:22:36&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/kibana/</loc><lastmod>2020-09-25T09:22:36&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/minemeld/</loc><lastmod>2020-09-25T09:22:36&#43;01:00</lastmod></url><url>
@@ -32,7 +38,6 @@
             <loc>http://example.org/tags/jwt/</loc><lastmod>2020-09-11T17:32:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/openssl/</loc><lastmod>2020-09-11T17:32:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/posts/querying-cylance-protect-api-from-shell/</loc><lastmod>2020-09-11T17:32:50&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/tags/shell/</loc><lastmod>2020-09-11T17:32:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/authentication/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/posts/kibaba-oauth-kubernetes/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/kubernetes/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>

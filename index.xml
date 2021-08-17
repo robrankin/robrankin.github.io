@@ -31,6 +31,13 @@ If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting avai
     <description><![CDATA[Note This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
  Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.]]></description>
 </item><item>
+    <title>Shell script, Azure Storage using a Service Principle</title>
+    <link>http://example.org/posts/shell-script-azure-storage-using-a-service-principle/</link>
+    <pubDate>Tue, 20 Oct 2020 08:19:21 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/shell-script-azure-storage-using-a-service-principle/</guid>
+    <description><![CDATA[Needed something in shell to upload files to an Azure Storage account. Hopefully its useful for others, so put it up on Github here ( https://github.com/robrankin/bash-azure-storage )]]></description>
+</item><item>
     <title>Event Threat Enrichment using Logstash and Minemeld</title>
     <link>http://example.org/posts/event-threat-enrichment-logstash-minemeld/</link>
     <pubDate>Fri, 25 Sep 2020 09:22:36 &#43;0100</pubDate>
