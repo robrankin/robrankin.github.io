@@ -1,0 +1,80 @@
+---
+title: "Modsecurity, DetectionOnly and enforcing select rules"
+date: 2021-08-17T10:21:48+01:00
+author: Rob Rankin
+categories:
+  - tech
+  - security
+tags:
+  - modsecurity
+  - waf
+  - web application firewall
+draft: false
+---
+
+I recently had a reason to want to achieve the following:
+
+* ModSecurity globally in `DetectionOnly`  mode (not enforcing rules, just logging)
+  * Continue to operate the CRS in `DetectionOnly` mode.
+* For a specific ruleset:
+  * Enforcing a default deny on inbound requests to an API.
+  * Enforcing allow rules for specific API routes and methods of the API
+
+So I wanted all of our inbound CRS rules to continue to work in `DetectionOnly` mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.
+
+It wasn't entirely clear from the documentation or  searches this was even possible, but after some trial and error turns out it is.
+
+First, you can enable or disable the SecAuditEngine on a rule by rule basis by using `ctl:ruleEngine=On`.  So while the global setting `SecRuleEngine DetectionOnly` is configured, you can set `ctl:ruleEngine=On` on individual rules to enable the engine and allow disruptive actions to take place.
+
+Second you need to understand both ModSecurity Phases<sup>2,3</sup> and RuleIDs<sup>4</sup>
+
+The short version is:
+
+Rules are executed in phase first, rule id second order.  All rules in Phase 1, regardless of Rule ID, will be executed before any rules in Phase 2.  Took me a bit to find this documented clearly.
+
+So to achieve the inbound deny all, I created the following rule.  It's in Phase 2 and the Rule ID is higher than any other Phase 2 rule, so it should execute last.
+
+```
+SecRule REQUEST_URI "@beginsWith /" \ 
+  "id:9999999,\ 
+  msg:'Default Block/Deny All',\ 
+  phase:2,\ 
+  drop,\ 
+  nolog,noauditlog,\ 
+  ctl:ruleEngine=On,\ 
+  t:none,t:lowercase,t:normalizePath"
+```
+
+Next step is to create the whitelist rules, a couple of examples below.  Each of them is in Phase 2 and has a Rule ID higher than the CRS Rule Ids, and lower than the above default deny Rule ID.  They should execute after the CRS rules, and before the above default deny.
+
+```
+SecRule REQUEST_METHOD "^(?:DELETE|OPTIONS)$" \
+  "id:5000001,\
+  msg:"ALLOW DELETE /path/one",\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain"
+	SecRule REQUEST_URI "@streq /path/one" "t:none,t:lowercase,t:normalizePath"
+
+SecRule REQUEST_METHOD "^(?:DELETE|OPTIONS)$" \
+  "id:5000002,\
+  msg:"ALLOW DELETE /path/two/{someId}/more/{anotherId}",\
+  phase:2,\
+  allow,\
+  t:none,\
+  ctl:ruleEngine=On,\
+  log,auditlog,\
+  chain"
+	SecRule REQUEST_URI "@rx ^/path/two/\d+/more/\d+$" "t:none,t:lowercase,t:normalizePath"
+```
+
+That's it really.  Any inbound request to this API can trigger any of the CRS rules, which as they're running in `DetectionOnly` will only log and not actually block the request.  Next the request will traverse the custom set of whitelist rules, and if it matches it will be allowed, and rule matching will stop here.  Next, if the request does not match any of the whitelist rules it will end up triggering the default deny rule and be dropped.
+
+### Notes:
+1. https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)
+2. https://malware.expert/modsecurity/processing-phases-modsecurity/
+3. https://subscription.packtpub.com/book/networking-and-servers/9781847194749/2/ch02lvl1sec10/phases-and-rule-ordering
+4. https://coreruleset.org/docs/ruleid.html
