@@ -33,7 +33,7 @@ User Impersonation with X-Pack: Integrating Third Party Auth with Kibana"/>
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/kibaba-oauth-kubernetes\/"
-        },"genre": "posts","keywords": "kubernetes, kibana, authentication, mfa, elasticsearch, oauth2_proxy","wordcount":  1090 ,
+        },"genre": "posts","keywords": "kubernetes, kibana, authentication, mfa, elasticsearch, oauth2_proxy","wordcount":  1096 ,
         "url": "http:\/\/example.org\/posts\/kibaba-oauth-kubernetes\/","datePublished": "2020-08-06T12:34:50+01:00","dateModified": "2020-08-06T12:34:50+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -83,7 +83,7 @@ User Impersonation with X-Pack: Integrating Third Party Auth with Kibana"/>
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Kibaba Authentication using OAuth2 Proxy in Kubernetes</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-08-06">2020-08-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1090 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-08-06">2020-08-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1096 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -99,28 +99,22 @@ User Impersonation with X-Pack: Integrating Third Party Auth with Kibana"/>
 <p><a href="https://www.elastic.co/blog/user-impersonation-with-x-pack-integrating-third-party-auth-with-kibana" target="_blank" rel="noopener noreffer">User Impersonation with X-Pack: Integrating Third Party Auth with Kibana</a></p>
 <p>Obviously it&rsquo;s starting to get a little long in the tooth, but as long as user impersonation is still supported, the basic outline should work.</p>
 <p>The main trouble with the article is the specific setup used, illustrated by the image:</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/oauth_kibana_1.png"
-        data-srcset="/images/oauth_kibana_1.png, /images/oauth_kibana_1.png 1.5x, /images/oauth_kibana_1.png 2x"
-        data-sizes="auto"
-        alt="/images/oauth_kibana_1.png"
-        title="/images/oauth_kibana_1.png" /></p>
+<figure><img src="/images/oauth_kibana_1.png"/><figcaption>
+            <h4>Article setup (figure)</h4>
+        </figcaption>
+</figure>
+
 <p>Problems:</p>
 <ol>
 <li><code>oauth2_proxy</code> terminating the browser connection (and possibly TLS)</li>
 <li><code>oauth2_proxy</code> running in reverse proxy mode</li>
 </ol>
 <p>This is more what I was looking for:</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="/images/Kibana_Oauth2_Kubernetes.jpg"
-        data-srcset="/images/Kibana_Oauth2_Kubernetes.jpg, /images/Kibana_Oauth2_Kubernetes.jpg 1.5x, /images/Kibana_Oauth2_Kubernetes.jpg 2x"
-        data-sizes="auto"
-        alt="/images/Kibana_Oauth2_Kubernetes.jpg"
-        title="/images/Kibana_Oauth2_Kubernetes.jpg" /></p>
+<figure><img src="/images/Kibana_Oauth2_Kubernetes.jpg"/><figcaption>
+            <h4>My setup (figure)</h4>
+        </figcaption>
+</figure>
+
 <p>For this deployment, Kibana and OAuth2 Proxy would be deployed on Kubernetes, and would be made available behind the standard k8s ingress controller, <a href="https://github.com/kubernetes/ingress-nginx" target="_blank" rel="noopener noreffer">Ingress Nginx</a>.</p>
 <p>Therefore the browser connection would be terminated on the Ingress Nginx controller.  As a side note, this takes advantage of <code>cert-manager</code> to automatically provision and manage TLS certificates, very handy.</p>
 <p>I also didn&rsquo;t really want to run <code>oauth2_proxy</code> in full reverse proxy mode, as that&rsquo;s the job of the ingress controller.  Don&rsquo;t need more proxies involved here.</p>
