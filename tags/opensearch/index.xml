@@ -18,7 +18,7 @@ If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting avai
     <pubDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</pubDate>
     <author>Author</author>
     <guid>http://example.org/posts/elasticsearch-provided-name/</guid>
-    <description><![CDATA[As I was learning a little about ElasticSearches ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
+    <description><![CDATA[As I was learning a little about ElasticSearch&rsquo;s ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
 A bit of searching turned up the this Github issue, but it doesn&rsquo;t really explain where it comes from.
 A bit more searching led me here.
 So provided_name is a method of templating index names it seems, using date math as explained in the documentation.
