@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>elastalert on Home</title>
+    <link>/tags/elastalert/</link>
+    <description>Home (elastalert)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 17 Aug 2021 08:32:41 +0100</lastBuildDate>
+    
+    <atom:link href="/tags/elastalert/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Alerting using SIEM Detections and ElastAlert</title>
+      <link>/posts/alerting-using-siem-detections-and-elastalert/</link>
+      <pubDate>Tue, 17 Aug 2021 08:32:41 +0100</pubDate>
+      
+      <guid>/posts/alerting-using-siem-detections-and-elastalert/</guid>
+      <description>&lt;p&gt;ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall.  So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide &lt;em&gt;alerting&lt;/em&gt; support.&lt;/p&gt;
+&lt;p&gt;Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.&lt;/p&gt;
+&lt;p&gt;If you can&amp;rsquo;t move off ElasticSearch to &lt;a href=&#34;https://opensearch.org/&#34;&gt;OpenSearch&lt;/a&gt;, which has Alerting available for free, you can use tools such as &lt;a href=&#34;https://github.com/jertel/elastalert2&#34;&gt;ElastAlert2&lt;/a&gt;&lt;sup&gt;1&lt;/sup&gt; to handle the Alerting requirements.&lt;/p&gt;
+&lt;h1 id=&#34;siem-detections&#34;&gt;SIEM Detections&lt;/h1&gt;
+&lt;p&gt;The following example is for SIEM Detections, and alerting with ElastAlert2.&lt;/p&gt;
+&lt;p&gt;SIEM Detections record their results in an index called &lt;code&gt;.siem-signales-default&lt;/code&gt;.  The &lt;code&gt;-default&lt;/code&gt; part is based on the Kibana space, so if you&amp;rsquo;re using a Kibana space called &lt;code&gt;exampleA&lt;/code&gt;, the index name would be &lt;code&gt;.siem-signals-examplea&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Make sure to create a Kibana Index Pattern for this index, so you can explore it fully.&lt;/p&gt;
+&lt;p&gt;The key field to be aware of is the &lt;code&gt;signal.rule.name&lt;/code&gt;, which is of course the SIEM Detection Rule name.  This is what we&amp;rsquo;ll use to create an ElastAlert rule.&lt;/p&gt;
+&lt;p&gt;You&amp;rsquo;ll want to check what kind of ElastAlert rule you want to create, which you can find &lt;a href=&#34;https://elastalert2.readthedocs.io/en/latest/ruletypes.html#rule-types&#34;&gt;here ( https://elastalert2.readthedocs.io/en/latest/ruletypes.html#rule-types )&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For many of our SIEM Detection rules we use the ElastAlert &lt;code&gt;any&lt;/code&gt; rule type.  According to the ElastAlert documentation:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The any rule will match everything. Every hit that the query returns will generate an alert.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In many cases this will not be what you want as it could generate a lot of noise, but in the case of SIEM Detections, if they&amp;rsquo;re tuned well, hopefully they won&amp;rsquo;t be generating hundreds of records that this ElastAlert rule would be alerting on.&lt;/p&gt;
+&lt;p&gt;Below is an example ElastAlert rule that alerts us when there are Azure Subscription level IAM changes (as detected by a SIEM Detection rule).&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;name: Azure Subscription IAM Change
+
+index: .siem-signals-default-*
+
+filter:
+- query:
+    query_string:
+      query: &#39;signal.rule.name: &amp;quot;Azure Subscription IAM Change&amp;quot; AND event.outcome: *&#39;
+
+type: any
+
+realert:
+  minutes: 0
+
+alert:
+- &amp;quot;slack&amp;quot;
+
+alert_subject: &amp;quot;Azure Subscription IAM Change&amp;quot;
+
+alert_text: &amp;quot;
+{0}\n
+Grantor:\n
+User Name: {1}\n
+Application Name: {2}\n
+Application ID: {3}\n
+\n
+Grantee:\n
+Principal Name: {4}\n
+Principal ID: {5}\n
+Principal Type: {6}\n
+Role Name: {7}\n
+Role ID: {8}\n
+Subscription Name: {9}\n
+Subscription ID: {10}\n
+\n&amp;quot;
+
+alert_missing_value: &amp;quot;N/A&amp;quot;
+
+alert_text_args:
+- &amp;quot;signal.rule.name&amp;quot;
+- &amp;quot;user.name&amp;quot;
+- &amp;quot;aad.application.name&amp;quot;
+- &amp;quot;aad.application.id&amp;quot;
+- &amp;quot;azure.iam.principal.name&amp;quot;
+- &amp;quot;azure.iam.principal.id&amp;quot;
+- &amp;quot;azure.iam.principal.type&amp;quot;
+- &amp;quot;azure.iam.role.name&amp;quot;
+- &amp;quot;azure.iam.role.id&amp;quot;
+- &amp;quot;azure.subscription.name&amp;quot;
+- &amp;quot;azure.subscription.id&amp;quot;
+
+alert_text_type: alert_text_only
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;Note: ElastAlert uses the older Lucene query syntax, whereas modern Kibana uses Kibana Query Language (KQL) by default.  Make sure to switch to using Lucene in Kibana when exploring or writing searches for use with ElastAlert.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ElastAlert has an extensive set of possible alert targets, in the example I&amp;rsquo;m using Slack, but a few of the other common ones I use are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HTTP POST&lt;/li&gt;
+&lt;li&gt;Command&lt;/li&gt;
+&lt;li&gt;Alerta (quite useful alert dashboard)&lt;/li&gt;
+&lt;li&gt;Email&lt;/li&gt;
+&lt;li&gt;Jira&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The full list can be found here: &lt;a href=&#34;https://elastalert2.readthedocs.io/en/latest/ruletypes.html#alerts&#34;&gt;ElastAlert Alerters&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;notes&#34;&gt;Notes&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;ElastAlert2 is the community fork of the original Yelp created ElastAlert which they abandoned a year or two ago, without any real effort to hand over to anyone to maintain.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -2,28 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/tags/alerting/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/posts/alerting-using-siem-detections-and-elastalert/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
     <loc>/categories/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/tags/elastalert/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/tags/elastalert2/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
     <loc>/tags/elasticsearch/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/tags/opensearch/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
+  </url><url>
+    <loc>/categories/tech/</loc>
+    <lastmod>2021-08-17T08:32:41+01:00</lastmod>
   </url><url>
     <loc>/tags/filebeat/</loc>
     <lastmod>2020-11-24T07:39:19+00:00</lastmod>
   </url><url>
-    <loc>/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
-  </url><url>
     <loc>/tags/logstash/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2020-11-24T07:39:19+00:00</lastmod>
-  </url><url>
-    <loc>/categories/tech/</loc>
     <lastmod>2020-11-24T07:39:19+00:00</lastmod>
   </url><url>
     <loc>/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</loc>

@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer-when-downgrade">
 
-<title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One - Home</title>
+<title>Alerting using SIEM Detections and ElastAlert - Home</title>
 <meta name="description" content="">
 
 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -36,19 +36,21 @@
 
 
 
-<meta property="og:title" content="Using Elasticsearch Upserts to Combine Multiple Event Lines Into One" />
-<meta property="og:description" content="Note This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
- Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events." />
+<meta property="og:title" content="Alerting using SIEM Detections and ElastAlert" />
+<meta property="og:description" content="ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall. So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide alerting support.
+Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.
+If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21 to handle the Alerting requirements." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-11-24T07:39:19+00:00" />
-<meta property="article:modified_time" content="2020-11-24T07:39:19+00:00" />
+<meta property="og:url" content="/posts/alerting-using-siem-detections-and-elastalert/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-17T08:32:41+01:00" />
+<meta property="article:modified_time" content="2021-08-17T08:32:41+01:00" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Using Elasticsearch Upserts to Combine Multiple Event Lines Into One"/>
-<meta name="twitter:description" content="Note This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
- Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events."/>
+<meta name="twitter:title" content="Alerting using SIEM Detections and ElastAlert"/>
+<meta name="twitter:description" content="ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall. So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide alerting support.
+Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.
+If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21 to handle the Alerting requirements."/>
 
 
 
@@ -190,79 +192,93 @@ if (!doNotTrack) {
     
     <article class="post h-entry">
         <header class="post-header">
-            <h1 class="p-name post-title">Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</h1>
+            <h1 class="p-name post-title">Alerting using SIEM Detections and ElastAlert</h1>
 
             
         </header>
         <div class="content e-content">
-            <blockquote>
-<p>Note
-This approach is probably not appropriate for high volume / high throughput events.  It required in my case quite a lot of Logstash parsing, and Elasticsearch <code>doc_as_upsert</code> use, both of which will have a significant performance penalty.  For low throughput use it works fine.</p>
+            <p>ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall.  So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide <em>alerting</em> support.</p>
+<p>Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.</p>
+<p>If you can&rsquo;t move off ElasticSearch to <a href="https://opensearch.org/">OpenSearch</a>, which has Alerting available for free, you can use tools such as <a href="https://github.com/jertel/elastalert2">ElastAlert2</a><sup>1</sup> to handle the Alerting requirements.</p>
+<h1 id="siem-detections">SIEM Detections</h1>
+<p>The following example is for SIEM Detections, and alerting with ElastAlert2.</p>
+<p>SIEM Detections record their results in an index called <code>.siem-signales-default</code>.  The <code>-default</code> part is based on the Kibana space, so if you&rsquo;re using a Kibana space called <code>exampleA</code>, the index name would be <code>.siem-signals-examplea</code>.</p>
+<p>Make sure to create a Kibana Index Pattern for this index, so you can explore it fully.</p>
+<p>The key field to be aware of is the <code>signal.rule.name</code>, which is of course the SIEM Detection Rule name.  This is what we&rsquo;ll use to create an ElastAlert rule.</p>
+<p>You&rsquo;ll want to check what kind of ElastAlert rule you want to create, which you can find <a href="https://elastalert2.readthedocs.io/en/latest/ruletypes.html#rule-types">here ( https://elastalert2.readthedocs.io/en/latest/ruletypes.html#rule-types )</a>.</p>
+<p>For many of our SIEM Detection rules we use the ElastAlert <code>any</code> rule type.  According to the ElastAlert documentation:</p>
+<blockquote>
+<p>The any rule will match everything. Every hit that the query returns will generate an alert.</p>
 </blockquote>
-<p>Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.</p>
-<p>This particular case is not dealt with well by Filebeat multiline support<sup>1</sup>.  In fact it simply doesn&rsquo;t work in this case.</p>
-<p>The structure I&rsquo;m talking about is this:</p>
-<pre><code>Line 1
-Line 2
-Line 3 - Some event starts
-Line 4 - Content of event
-Line 5 - End of event
-Line 6
-Line 7
-</code></pre><p>Where Lines 1 and 2 are individual events, Lines 3, 4, and 5 are actually multiple lines of the same event, and Lines 6 and 7 are separate individual events again.</p>
-<p>Since Filebeat doesn&rsquo;t deal with this type of setup, at all, I had to look elsewhere to see if I could combine Lines 3, 4, and 5 into one event.</p>
-<p>Logically the next place to look would be Logstash, as we have it in our ingestion pipeline and it has multiline capabilities.  However, we use a set of Azure Event Hubs (essentially Kafka for those not familiar) as our event queueing mechanism, with a group of Logstash processes consuming the events as they arrive.  There&rsquo;s no grouping or ordering here, so Lines 3,4,5 may arrive:</p>
+<p>In many cases this will not be what you want as it could generate a lot of noise, but in the case of SIEM Detections, if they&rsquo;re tuned well, hopefully they won&rsquo;t be generating hundreds of records that this ElastAlert rule would be alerting on.</p>
+<p>Below is an example ElastAlert rule that alerts us when there are Azure Subscription level IAM changes (as detected by a SIEM Detection rule).</p>
+<pre><code>name: Azure Subscription IAM Change
+
+index: .siem-signals-default-*
+
+filter:
+- query:
+    query_string:
+      query: 'signal.rule.name: &quot;Azure Subscription IAM Change&quot; AND event.outcome: *'
+
+type: any
+
+realert:
+  minutes: 0
+
+alert:
+- &quot;slack&quot;
+
+alert_subject: &quot;Azure Subscription IAM Change&quot;
+
+alert_text: &quot;
+{0}\n
+Grantor:\n
+User Name: {1}\n
+Application Name: {2}\n
+Application ID: {3}\n
+\n
+Grantee:\n
+Principal Name: {4}\n
+Principal ID: {5}\n
+Principal Type: {6}\n
+Role Name: {7}\n
+Role ID: {8}\n
+Subscription Name: {9}\n
+Subscription ID: {10}\n
+\n&quot;
+
+alert_missing_value: &quot;N/A&quot;
+
+alert_text_args:
+- &quot;signal.rule.name&quot;
+- &quot;user.name&quot;
+- &quot;aad.application.name&quot;
+- &quot;aad.application.id&quot;
+- &quot;azure.iam.principal.name&quot;
+- &quot;azure.iam.principal.id&quot;
+- &quot;azure.iam.principal.type&quot;
+- &quot;azure.iam.role.name&quot;
+- &quot;azure.iam.role.id&quot;
+- &quot;azure.subscription.name&quot;
+- &quot;azure.subscription.id&quot;
+
+alert_text_type: alert_text_only
+</code></pre><blockquote>
+<p>Note: ElastAlert uses the older Lucene query syntax, whereas modern Kibana uses Kibana Query Language (KQL) by default.  Make sure to switch to using Lucene in Kibana when exploring or writing searches for use with ElastAlert.</p>
+</blockquote>
+<p>ElastAlert has an extensive set of possible alert targets, in the example I&rsquo;m using Slack, but a few of the other common ones I use are:</p>
 <ul>
-<li>out of order in time</li>
-<li>across multiuple different Logstash consumers</li>
+<li>HTTP POST</li>
+<li>Command</li>
+<li>Alerta (quite useful alert dashboard)</li>
+<li>Email</li>
+<li>Jira</li>
 </ul>
-<p>This means it impossible to combine these 3 lines into one event, as we may never see all 3 lines at a single logstash process/instance, and therefore can&rsquo;t combine them.</p>
-<p>So they can&rsquo;t be combined at source using Filebeat, and they can&rsquo;t be combined during processing by using Logstashs multiline codec, which only leaves one place where all 3 lines will be in the same place: Elasticsearch itself.</p>
-<p>The approach I settled on was using (or perhaps abusing) Elasticseach&rsquo;s <code>doc_as_upsert</code><sup>2</sup> capability to incrementally add data to a single ES document.</p>
-<p>The key is to identify something that can group the multiple lines together, and use that information as the Document ID.</p>
-<p>In my case, we have the following:</p>
+<p>The full list can be found here: <a href="https://elastalert2.readthedocs.io/en/latest/ruletypes.html#alerts">ElastAlert Alerters</a></p>
+<h1 id="notes">Notes</h1>
 <ol>
-<li>Two common &ldquo;phrases&rdquo; in the event line, such that I can identify all lines reliably as being part of a logical group (i.e. they need to be processed as per the next step)</li>
-<li>A set of datetime and ip/port information thats common across the event lines, that can be used to create a shared &ldquo;signature&rdquo; (using Logstash fingerprint filter)</li>
-</ol>
-<p>The first step is to identify the common &ldquo;phrases&rdquo; that identify the event lines, and mark each event as part of an &ldquo;upsert&rdquo;.  I do this as follows:</p>
-<pre><code>if ( [message] =~ /phrase1/ ) or ( [message] =~ /phrase2/ ) {
-    mutate {
-      add_tag =&gt; [ &quot;_upserts&quot; ]
-	}
-}
-</code></pre><p>The next step is to parse the common data of each event into a structure that allows the use of Logstash&rsquo;s fingerprint filter.  I extract the datetime and ip/port information, and use Logstash&rsquo;s <code>fingerprint</code> filter to create an ECS style <code>[event][id]</code> field.</p>
-<p>Fingerprint the event line:</p>
-<pre><code>    fingerprint {
-      method =&gt; &quot;SHA1&quot;
-      source =&gt; [
-        &quot;[tmp_date_day]&quot;,
-        &quot;[tmp_date_month]&quot;,
-        &quot;[tmp_date_daynum]&quot;,
-        &quot;[tmp_date_time]&quot;,
-        &quot;[tmp_date_year]&quot;,
-        &quot;[tmp_source_ip]&quot;,
-        &quot;[tmp_source_port]&quot;
-      ]
-      target =&gt; &quot;[event][id]&quot;
-    }
-</code></pre><p>In my Elasticsearch outputs I then simply filter for that tag, and set a few paramters, as below.  This uses the <code>[event][id]</code> as the document ID, and will perform an update if a document exists already with the same document id:</p>
-<pre><code>if &quot;_upserts&quot; in [tags] {
-  elasticsearch {
-    hosts =&gt; [
-      &quot;es&quot;
-    ]
-    index =&gt; &quot;&lt;target index&gt;&quot;
-    document_id =&gt; &quot;%{[event][id]}&quot;
-    doc_as_upsert =&gt; true
-    action =&gt; &quot;update&quot;
-  }
-}
-</code></pre><p>That&rsquo;s it.  Abusing Elasticsearch Update API to combine multiline log events into one document.  Please don&rsquo;t do this if you have better options available!</p>
-<h3 id="references">References:</h3>
-<ol>
-<li><a href="https://github.com/elastic/beats/pull/4019">https://github.com/elastic/beats/pull/4019</a></li>
-<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#doc_as_upsert">https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#doc_as_upsert</a></li>
+<li>ElastAlert2 is the community fork of the original Yelp created ElastAlert which they abandoned a year or two ago, without any real effort to hand over to anyone to maintain.</li>
 </ol>
 
         </div>
@@ -273,10 +289,10 @@ Line 7
 
 <div class="post-info">
     
-        <div class="post-date dt-published">2020-11-24</div>
+        <div class="post-date dt-published">2021-08-17</div>
     
     
-    <a class="post-hidden-url u-url" href="/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/">/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</a>
+    <a class="post-hidden-url u-url" href="/posts/alerting-using-siem-detections-and-elastalert/">/posts/alerting-using-siem-detections-and-elastalert/</a>
     <a href="" class="p-name p-author post-hidden-author h-card" rel="me">Rob Rankin</a>
 
 
@@ -293,9 +309,13 @@ Line 7
                     
                         <li><a href="tags/elasticsearch">#elasticsearch</a></li>
                     
-                        <li><a href="tags/filebeat">#filebeat</a></li>
+                        <li><a href="tags/opensearch">#opensearch</a></li>
                     
-                        <li><a href="tags/logstash">#logstash</a></li>
+                        <li><a href="tags/elastalert">#elastalert</a></li>
+                    
+                        <li><a href="tags/elastalert2">#elastalert2</a></li>
+                    
+                        <li><a href="tags/alerting">#alerting</a></li>
                     
                 </ul>
         
@@ -307,14 +327,12 @@ Line 7
     
         
     <div class="pagination post-pagination">
-        <div class="left pagination-item ">
-            
-                <a href="/posts/alerting-using-siem-detections-and-elastalert/">Alerting using SIEM Detections and ElastAlert</a>
+        <div class="left pagination-item disabled">
             
         </div>
         <div class="right pagination-item ">
             
-                <a href="/posts/event-threat-enrichment-logstash-minemeld/">Event Threat Enrichment using Logstash and Minemeld</a>
+                <a href="/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/">Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</a>
             
         </div>
     </div>
