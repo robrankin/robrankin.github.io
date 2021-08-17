@@ -54,6 +54,17 @@ One of the features that the Elastic Stack doesn&rsquo;t really support well (ye
 After a little bit of research I found this article, from February 2017:
 User Impersonation with X-Pack: Integrating Third Party Auth with Kibana]]></description>
 </item><item>
+    <title>Elasticsearch Provided Name and ILM</title>
+    <link>http://example.org/posts/elasticsearch-provided-name/</link>
+    <pubDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/elasticsearch-provided-name/</guid>
+    <description><![CDATA[As I was learning a little about ElasticSearches ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
+A bit of searching turned up the this Github issue, but it doesn&rsquo;t really explain where it comes from.
+A bit more searching led me here.
+So provided_name is a method of templating index names it seems, using date math as explained in the documentation.
+Just make sure to HTML encode the index name, as per the example from the documentation:]]></description>
+</item><item>
     <title>Puppet Module for FoundationDB</title>
     <link>http://example.org/posts/puppet-module-for-foundationdb/</link>
     <pubDate>Tue, 18 Nov 2014 16:30:00 &#43;0000</pubDate>

@@ -38,6 +38,10 @@
             <loc>http://example.org/tags/kubernetes/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/mfa/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/oauth2_proxy/</loc><lastmod>2020-08-06T12:34:50&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/posts/elasticsearch-provided-name/</loc><lastmod>2020-06-04T10:43:51&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/ilm/</loc><lastmod>2020-06-04T10:43:51&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/index-lifecycle-management/</loc><lastmod>2020-06-04T10:43:51&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/provided_name/</loc><lastmod>2020-06-04T10:43:51&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/foundationdb/</loc><lastmod>2014-11-18T16:30:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/puppet-module-for-foundationdb/</loc><lastmod>2014-11-18T16:30:00&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</loc><lastmod>2014-11-05T15:53:08&#43;00:00</lastmod></url><url>

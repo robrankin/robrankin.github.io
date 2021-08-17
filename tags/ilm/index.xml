@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>ilm - Tag - </title>
+        <link>http://example.org/tags/ilm/</link>
+        <description>ilm - Tag - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/ilm/" rel="self" type="application/rss+xml" /><item>
+    <title>Elasticsearch Provided Name and ILM</title>
+    <link>http://example.org/posts/elasticsearch-provided-name/</link>
+    <pubDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/elasticsearch-provided-name/</guid>
+    <description><![CDATA[As I was learning a little about ElasticSearches ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
+A bit of searching turned up the this Github issue, but it doesn&rsquo;t really explain where it comes from.
+A bit more searching led me here.
+So provided_name is a method of templating index names it seems, using date math as explained in the documentation.
+Just make sure to HTML encode the index name, as per the example from the documentation:]]></description>
+</item></channel>
+</rss>

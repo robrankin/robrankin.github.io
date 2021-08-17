@@ -12,5 +12,16 @@
     <description><![CDATA[ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall. So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide alerting support.
 Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.
 If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21to handle the Alerting requirements.]]></description>
+</item><item>
+    <title>Elasticsearch Provided Name and ILM</title>
+    <link>http://example.org/posts/elasticsearch-provided-name/</link>
+    <pubDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/elasticsearch-provided-name/</guid>
+    <description><![CDATA[As I was learning a little about ElasticSearches ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
+A bit of searching turned up the this Github issue, but it doesn&rsquo;t really explain where it comes from.
+A bit more searching led me here.
+So provided_name is a method of templating index names it seems, using date math as explained in the documentation.
+Just make sure to HTML encode the index name, as per the example from the documentation:]]></description>
 </item></channel>
 </rss>
