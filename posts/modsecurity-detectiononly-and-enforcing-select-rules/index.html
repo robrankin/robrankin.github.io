@@ -90,7 +90,7 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#notes">Notes:</a></li>
+        <li><a href="#references">References</a></li>
       </ul>
     </li>
   </ul>
@@ -147,7 +147,7 @@ SecRule REQUEST_METHOD &quot;^(?:DELETE|OPTIONS)$&quot; \
   chain&quot;
 	SecRule REQUEST_URI &quot;@rx ^/path/two/\d+/more/\d+$&quot; &quot;t:none,t:lowercase,t:normalizePath&quot;
 </code></pre><p>That&rsquo;s it really.  Any inbound request to this API can trigger any of the CRS rules, which as they&rsquo;re running in <code>DetectionOnly</code> will only log and not actually block the request.  Next the request will traverse the custom set of whitelist rules, and if it matches it will be allowed, and rule matching will stop here.  Next, if the request does not match any of the whitelist rules it will end up triggering the default deny rule and be dropped.</p>
-<h3 id="notes">Notes:</h3>
+<h3 id="references">References</h3>
 <ol>
 <li><a href="https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-%28v2.x%29" target="_blank" rel="noopener noreffer">https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-(v2.x)</a></li>
 <li><a href="https://malware.expert/modsecurity/processing-phases-modsecurity/" target="_blank" rel="noopener noreffer">https://malware.expert/modsecurity/processing-phases-modsecurity/</a></li>
