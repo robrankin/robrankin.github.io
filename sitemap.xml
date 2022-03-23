@@ -2,14 +2,18 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>http://example.org/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/categories/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/categories/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/tags/coreos/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/tags/fedora/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/posts/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/tags/raspberrypi/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/tags/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/categories/tech/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/modsecurity/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/posts/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/categories/security/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/tags/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/categories/tech/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/waf/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/web-application-firewall/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/alerting/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>

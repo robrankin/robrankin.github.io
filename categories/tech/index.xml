@@ -3,7 +3,15 @@
         <title>tech - Category - </title>
         <link>http://example.org/categories/tech/</link>
         <description>tech - Category - </description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/tech/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 23 Mar 2022 08:55:15 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/tech/" rel="self" type="application/rss+xml" /><item>
+    <title>Fedora Coreos 35 on Raspberry Pi4</title>
+    <link>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</link>
+    <pubDate>Wed, 23 Mar 2022 08:55:15 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</guid>
+    <description><![CDATA[For whatever reason, Fedora&rsquo;s support of Raspberry Pi4&rsquo;s seems a bit iffy. The official documentation (here) is quite good, and I managed to easily get the RPI4 booting CoreOS via the EDK2 UEFI firmware approach. The problem was that I wanted to use the U-Boot approach, and that was just not playing ball.
+I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 and 37, all with and without the steps in the documentation regarding updating the files from the RPMs:]]></description>
+</item><item>
     <title>Modsecurity, DetectionOnly and enforcing select rules</title>
     <link>http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/</link>
     <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
@@ -79,13 +87,5 @@ Just make sure to HTML encode the index name, as per the example from the docume
     <guid>http://example.org/posts/puppet-module-for-foundationdb/</guid>
     <description><![CDATA[FoundationDB has been purchased by Apple, and is no longer a product. Apple will be cancelling all support contracts and apprently not continuing to offer FDB for sale. Therefore this module is of course deprecated and no longer supported (at least by me!).
  Here at Bede we&rsquo;ve been using FoundationDB for some time, and are basically in love with it. Fully distributed, ACID compliant transactions? Yes please. It&rsquo;s fast, it scales, it&rsquo;s reliable and redundant.]]></description>
-</item><item>
-    <title>Modelling an nginx Application Proxy using Puppet and Hiera</title>
-    <link>http://example.org/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
-    <pubDate>Wed, 05 Nov 2014 15:53:08 &#43;0000</pubDate>
-    <author>Author</author>
-    <guid>http://example.org/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</guid>
-    <description><![CDATA[Goal To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.
-Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Scoping Namespacing  Puppet Roles/Profiles  Craig Dunn, Designing Puppet Talk End to End Roles and Profiles Example Puppet Workflow Part 1 Puppet Workflow Part 2  Hiera  Puppet Labs Hiera Docs Passing Variables to Hiera  nginx Module  jfryman nginx Puppet Module  nginx  nginx Project Page  Requirements Within nginx we need to define a set of nginx &ldquo;server&rdquo; contexts with the same set of &ldquo;location&rdquo; contexts in each &ldquo;server&rdquo;.]]></description>
 </item></channel>
 </rss>

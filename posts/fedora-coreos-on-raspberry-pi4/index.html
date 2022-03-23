@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Fedora Coreos 35 on Raspberry Pi4 - </title><meta name="Description" content=""><meta property="og:title" content="Fedora Coreos 35 on Raspberry Pi4" />
+<meta property="og:description" content="For whatever reason, Fedora&rsquo;s support of Raspberry Pi4&rsquo;s seems a bit iffy. The official documentation (here) is quite good, and I managed to easily get the RPI4 booting CoreOS via the EDK2 UEFI firmware approach. The problem was that I wanted to use the U-Boot approach, and that was just not playing ball.
+I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 and 37, all with and without the steps in the documentation regarding updating the files from the RPMs:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/fedora-coreos-on-raspberry-pi4/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-23T08:55:15+00:00" />
+<meta property="article:modified_time" content="2022-03-23T08:55:15+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Fedora Coreos 35 on Raspberry Pi4"/>
+<meta name="twitter:description" content="For whatever reason, Fedora&rsquo;s support of Raspberry Pi4&rsquo;s seems a bit iffy. The official documentation (here) is quite good, and I managed to easily get the RPI4 booting CoreOS via the EDK2 UEFI firmware approach. The problem was that I wanted to use the U-Boot approach, and that was just not playing ball.
+I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 and 37, all with and without the steps in the documentation regarding updating the files from the RPMs:"/>
+<meta name="application-name" content="">
+<meta name="apple-mobile-web-app-title" content=""><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/fedora-coreos-on-raspberry-pi4/" /><link rel="prev" href="http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Fedora Coreos 35 on Raspberry Pi4",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/"
+        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  317 ,
+        "url": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/","datePublished": "2022-03-23T08:55:15+00:00","dateModified": "2022-03-23T08:55:15+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Rob Rankin"},"author": {
+                "@type": "Person",
+                "name": "Rob Rankin"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> Home </a><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/" title="">Home</a><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Fedora Coreos 35 on Raspberry Pi4</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;317 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>For whatever reason, Fedora&rsquo;s support of Raspberry Pi4&rsquo;s seems a bit iffy.  The official documentation (<a href="https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-raspberry-pi4/" target="_blank" rel="noopener noreffer">here</a>) is quite good, and I managed to easily get the RPI4 booting CoreOS  via the EDK2 UEFI firmware approach.  The problem was that I wanted to use the U-Boot approach, and that was just not playing ball.</p>
+<p>I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 and 37, all with and without the steps in the documentation regarding updating the files from the RPMs:</p>
+<ul>
+<li>uboot-images-armv8</li>
+<li>bcm2711-firmware</li>
+<li>bcm283x-firmware</li>
+<li>bcm283x-overlays</li>
+</ul>
+<p>Every single combination/variation I tried resulted in the error <code>&quot;Unexpected XHCI event TRB, skipping...&quot;</code> on attempting to boot.</p>
+<p>There is a bug report about this issue, but it appears to be closed, you can read it <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1993250" target="_blank" rel="noopener noreffer">here</a>.</p>
+<p>After a little bit of searching, it seems there are some updates to the <code>uboot-images-armv8</code> package as seen <a href="https://packages.fedoraproject.org/pkgs/uboot-tools/uboot-images-armv8/" target="_blank" rel="noopener noreffer">here</a>, and they are available in rawhide.</p>
+<p>Using the rawhide packages to update the CoreOS 35 install worked, and the RPI boots successfully.</p>
+<p>Script adapted from the official documentation:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span>
+<span class="c1"># The target Fedora Release. Use the same one that current FCOS is based on.</span>
+<span class="nv">RELEASE</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">DEV</span><span class="o">=</span><span class="nv">$2</span>
+<span class="nv">IMAGE</span><span class="o">=</span><span class="nv">$3</span>
+
+<span class="nv">TMPDIR</span><span class="o">=</span><span class="s2">&#34;/tmp/RPi4boot/</span><span class="si">${</span><span class="nv">RELEASE</span><span class="si">}</span><span class="s2">&#34;</span>
+
+rm -rf <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>
+mkdir -p <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/boot/efi/
+
+sudo dnf install -y --downloadonly --release<span class="o">=</span><span class="nv">$RELEASE</span> --forcearch<span class="o">=</span>aarch64 --destdir<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/  uboot-images-armv8 bcm283x-firmware bcm283x-overlays
+
+<span class="k">for</span> rpm in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/*rpm
+<span class="k">do</span>
+  rpm2cpio <span class="nv">$rpm</span> <span class="p">|</span> sudo cpio -idv -D <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/
+<span class="k">done</span>
+
+sudo mv <span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span>/usr/share/uboot/rpi_4/u-boot.bin <span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span>/boot/efi/rpi4-u-boot.bin
+
+
+
+<span class="nv">FCOSDISK</span><span class="o">=</span><span class="s2">&#34;/dev/</span><span class="si">${</span><span class="nv">DEV</span><span class="si">}</span><span class="s2">&#34;</span>
+<span class="nv">FCOSEFIPARTITION</span><span class="o">=</span><span class="k">$(</span>lsblk <span class="nv">$FCOSDISK</span> -J -oLABEL,PATH  <span class="p">|</span> jq -r <span class="s1">&#39;.blockdevices[] | select(.label == &#34;EFI-SYSTEM&#34;)&#39;</span>.path<span class="k">)</span>
+umount /tmp/FCOSEFIpart
+mkdir -p /tmp/FCOSEFIpart
+
+sudo coreos-installer install --architecture<span class="o">=</span>aarch64 -f <span class="s2">&#34;</span><span class="si">${</span><span class="nv">IMAGE</span><span class="si">}</span><span class="s2">&#34;</span> --insecure -i rpi4.ign <span class="s2">&#34;</span><span class="si">${</span><span class="nv">FCOSDISK</span><span class="si">}</span><span class="s2">&#34;</span>
+
+sudo mount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</span><span class="s2">&#34;</span> /tmp/FCOSEFIpart
+
+sudo rsync -avh --ignore-existing <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/boot/efi/ /tmp/FCOSEFIpart/
+
+sudo umount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</span><span class="s2">&#34;</span>
+</code></pre></div><p>Run like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">./update.sh rawhide sdf fedora-coreos-35.20220313.2.0-metal.aarch64.raw.xz
+</code></pre></div><p>That will put Fedora Rawhides U-Boot files for RPI4 in place and should successfully boot.</p>
+<p>I&rsquo;m not sure if these updated packages will make it into CoreOS 35, or will only be available in CoreOS 36.</p>
+<h3 id="references">References</h3>
+<ol>
+<li><a href="https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-raspberry-pi4/" target="_blank" rel="noopener noreffer">https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-raspberry-pi4/</a></li>
+<li><a href="https://bugzilla.redhat.com/show_bug.cgi?id=1993250" target="_blank" rel="noopener noreffer">https://bugzilla.redhat.com/show_bug.cgi?id=1993250</a></li>
+<li><a href="https://packages.fedoraproject.org/pkgs/uboot-tools/uboot-images-armv8/" target="_blank" rel="noopener noreffer">https://packages.fedoraproject.org/pkgs/uboot-tools/uboot-images-armv8/</a></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-03-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/raspberrypi/">raspberrypi</a>,&nbsp;<a href="/tags/fedora/">fedora</a>,&nbsp;<a href="/tags/coreos/">coreos</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/modsecurity-detectiononly-and-enforcing-select-rules/" class="prev" rel="prev" title="Modsecurity, DetectionOnly and enforcing select rules"><i class="fas fa-angle-left fa-fw"></i>Modsecurity, DetectionOnly and enforcing select rules</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.87.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
