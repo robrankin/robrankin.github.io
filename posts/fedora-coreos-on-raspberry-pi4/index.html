@@ -29,7 +29,7 @@ I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/"
-        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  317 ,
+        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  325 ,
         "url": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/","datePublished": "2022-03-23T08:55:15+00:00","dateModified": "2022-03-23T08:55:15+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@ I tried Fedora CoreOS 34 and 35, as well as various development versions for 36 
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Fedora Coreos 35 on Raspberry Pi4</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;317 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;325 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -143,7 +143,7 @@ sudo mount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</span
 sudo rsync -avh --ignore-existing <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span><span class="s2">&#34;</span>/boot/efi/ /tmp/FCOSEFIpart/
 
 sudo umount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</span><span class="s2">&#34;</span>
-</code></pre></div><p>Run like this:</p>
+</code></pre></div><p>Download the CoreOS 35 image, and run the script like this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">./update.sh rawhide sdf fedora-coreos-35.20220313.2.0-metal.aarch64.raw.xz
 </code></pre></div><p>That will put Fedora Rawhides U-Boot files for RPI4 in place and should successfully boot.</p>
 <p>I&rsquo;m not sure if these updated packages will make it into CoreOS 35, or will only be available in CoreOS 36.</p>
