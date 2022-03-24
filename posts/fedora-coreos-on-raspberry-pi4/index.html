@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/"
-        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  351 ,
+        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  506 ,
         "url": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/","datePublished": "2022-03-23T08:55:15+00:00","dateModified": "2022-03-23T08:55:15+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,8 +79,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Fedora Coreos 35 USB Boot on Raspberry Pi 4</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;351 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;506 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -91,6 +91,7 @@
     <li>
       <ul>
         <li><a href="#references">References</a></li>
+        <li><a href="#coreos-ignitionbutane-file">CoreOS Ignition/Butane File</a></li>
       </ul>
     </li>
   </ul>
@@ -156,7 +157,69 @@ sudo umount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</spa
 <li><a href="https://bugzilla.redhat.com/show_bug.cgi?id=1993250" target="_blank" rel="noopener noreffer">https://bugzilla.redhat.com/show_bug.cgi?id=1993250</a></li>
 <li><a href="https://packages.fedoraproject.org/pkgs/uboot-tools/uboot-images-armv8/" target="_blank" rel="noopener noreffer">https://packages.fedoraproject.org/pkgs/uboot-tools/uboot-images-armv8/</a></li>
 </ol>
-</div><div class="post-footer" id="post-footer">
+<h3 id="coreos-ignitionbutane-file">CoreOS Ignition/Butane File</h3>
+<p>For reference, below is the Butane file I used to bootstrap my Pi, using Butane is documented <a href="https://docs.fedoraproject.org/en-US/fedora-coreos/producing-ign/" target="_blank" rel="noopener noreffer">here</a></p>
+<p>Change the <code>password_hash</code> and the <code>&quot;username&quot;</code> portion of the user added to <code>sudoers.d</code>.</p>
+<pre><code>variant: fcos
+version: 1.4.0
+passwd:
+  users:
+  - name: undertow
+    password_hash: &lt;password hash here&gt;
+    groups:
+    - wheel
+    - docker
+
+storage:
+  links:
+    - path: /etc/localtime
+      target: ../usr/share/zoneinfo/UTC
+
+  files:
+    - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
+      mode: 0644
+      contents:
+        inline: |
+          PasswordAuthentication yes
+
+    - path: /etc/sudoers.d/username
+      mode: 0644
+      contents:
+        inline: |
+          username  ALL=(ALL) NOPASSWD:ALL
+
+    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth0
+          type=ethernet
+          interface-name=eth0
+          [ipv4]
+          may-fail=false
+          method=auto
+
+    - path: /etc/hostname
+      overwrite: true
+      contents:
+        inline: rasppi4
+
+    - path: /etc/profile.d/systemd-pager.sh
+      mode: 0644
+      contents:
+        inline: |
+          # Tell systemd to not use a pager when printing information
+          export SYSTEMD_PAGER=cat
+
+    - path: /etc/sysctl.d/20-silence-audit.conf
+      mode: 0644
+      contents:
+        inline: |
+          # Raise console message logging level from DEBUG (7) to WARNING (4)
+          # to hide audit messages from the interactive console
+          kernel.printk=4
+</code></pre></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
