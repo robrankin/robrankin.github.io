@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/"
-        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  506 ,
+        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  440 ,
         "url": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/","datePublished": "2022-03-23T08:55:15+00:00","dateModified": "2022-03-23T08:55:15+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Fedora CoreOS 35 USB Boot on Raspberry Pi 4</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;506 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;440 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -160,66 +160,66 @@ sudo umount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</spa
 <h3 id="coreos-ignitionbutane-file">CoreOS Ignition/Butane File</h3>
 <p>For reference, below is the Butane file I used to bootstrap my Pi, using Butane is documented <a href="https://docs.fedoraproject.org/en-US/fedora-coreos/producing-ign/" target="_blank" rel="noopener noreffer">here</a></p>
 <p>Change the <code>password_hash</code> and the <code>&quot;username&quot;</code> portion of the user added to <code>sudoers.d</code>.</p>
-<pre><code>variant: fcos
-version: 1.4.0
-passwd:
-  users:
-  - name: undertow
-    password_hash: &lt;password hash here&gt;
-    groups:
-    - wheel
-    - docker
-
-storage:
-  links:
-    - path: /etc/localtime
-      target: ../usr/share/zoneinfo/UTC
-
-  files:
-    - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
-      mode: 0644
-      contents:
-        inline: |
-          PasswordAuthentication yes
-
-    - path: /etc/sudoers.d/username
-      mode: 0644
-      contents:
-        inline: |
-          username  ALL=(ALL) NOPASSWD:ALL
-
-    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
-      mode: 0600
-      contents:
-        inline: |
-          [connection]
-          id=eth0
-          type=ethernet
-          interface-name=eth0
-          [ipv4]
-          may-fail=false
-          method=auto
-
-    - path: /etc/hostname
-      overwrite: true
-      contents:
-        inline: rasppi4
-
-    - path: /etc/profile.d/systemd-pager.sh
-      mode: 0644
-      contents:
-        inline: |
-          # Tell systemd to not use a pager when printing information
-          export SYSTEMD_PAGER=cat
-
-    - path: /etc/sysctl.d/20-silence-audit.conf
-      mode: 0644
-      contents:
-        inline: |
-          # Raise console message logging level from DEBUG (7) to WARNING (4)
-          # to hide audit messages from the interactive console
-          kernel.printk=4
-</code></pre></div><div class="post-footer" id="post-footer">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">variant</span><span class="p">:</span><span class="w"> </span><span class="l">fcos</span><span class="w">
+</span><span class="w"></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">1.4.0</span><span class="w">
+</span><span class="w"></span><span class="nt">passwd</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">undertow</span><span class="w">
+</span><span class="w">    </span><span class="nt">password_hash</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;password hash here&gt;</span><span class="w">
+</span><span class="w">    </span><span class="nt">groups</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="l">wheel</span><span class="w">
+</span><span class="w">    </span>- <span class="l">docker</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nt">storage</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/localtime</span><span class="w">
+</span><span class="w">      </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l">../usr/share/zoneinfo/UTC</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="nt">files</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/ssh/sshd_config.d/20-enable-passwords.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0644</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          </span><span class="w">          </span><span class="l">PasswordAuthentication yes</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/sudoers.d/username</span><span class="w">
+</span><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0644</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          </span><span class="w">          </span><span class="l">username  ALL=(ALL) NOPASSWD:ALL</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/NetworkManager/system-connections/eth0.nmconnection</span><span class="w">
+</span><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0600</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          [connection]
+</span><span class="sd">          id=eth0
+</span><span class="sd">          type=ethernet
+</span><span class="sd">          interface-name=eth0
+</span><span class="sd">          [ipv4]
+</span><span class="sd">          may-fail=false
+</span><span class="sd">          method=auto</span><span class="w">          
+</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/hostname</span><span class="w">
+</span><span class="w">      </span><span class="nt">overwrite</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="l">rasppi4</span><span class="w">
+</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/profile.d/systemd-pager.sh</span><span class="w">
+</span><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0644</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          # Tell systemd to not use a pager when printing information
+</span><span class="sd">          export SYSTEMD_PAGER=cat</span><span class="w">          
+</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/sysctl.d/20-silence-audit.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="m">0644</span><span class="w">
+</span><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">inline</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">          # Raise console message logging level from DEBUG (7) to WARNING (4)
+</span><span class="sd">          # to hide audit messages from the interactive console
+</span><span class="sd">          kernel.printk=4</span><span class="w">          
+</span></code></pre></div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
