@@ -29,7 +29,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/"
-        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  440 ,
+        },"genre": "posts","keywords": "raspberrypi, fedora, coreos","wordcount":  443 ,
         "url": "http:\/\/example.org\/posts\/fedora-coreos-on-raspberry-pi4\/","datePublished": "2022-03-23T08:55:15+00:00","dateModified": "2022-03-23T08:55:15+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
@@ -79,7 +79,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Fedora CoreOS 35 USB Boot on Raspberry Pi 4</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;440 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-23">2022-03-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;443 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -159,12 +159,12 @@ sudo umount <span class="s2">&#34;</span><span class="nv">$FCOSEFIPARTITION</spa
 </ol>
 <h3 id="coreos-ignitionbutane-file">CoreOS Ignition/Butane File</h3>
 <p>For reference, below is the Butane file I used to bootstrap my Pi, using Butane is documented <a href="https://docs.fedoraproject.org/en-US/fedora-coreos/producing-ign/" target="_blank" rel="noopener noreffer">here</a></p>
-<p>Change the <code>password_hash</code> and the <code>&quot;username&quot;</code> portion of the user added to <code>sudoers.d</code>.</p>
+<p>Change the <code>password_hash</code> and all instances of the word <code>&quot;username&quot;</code> to whatever actual username you want.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">variant</span><span class="p">:</span><span class="w"> </span><span class="l">fcos</span><span class="w">
 </span><span class="w"></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">1.4.0</span><span class="w">
 </span><span class="w"></span><span class="nt">passwd</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">users</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">undertow</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">username</span><span class="w">
 </span><span class="w">    </span><span class="nt">password_hash</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;password hash here&gt;</span><span class="w">
 </span><span class="w">    </span><span class="nt">groups</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="l">wheel</span><span class="w">
