@@ -152,7 +152,7 @@ will be copied into the current events fields of <code>[tmp_translated_title]</c
   }
 }
 </code></pre><p>If all goes well, there will be a translated title in the field <code>[tmp][translated][en][xml][channel][item][title]</code>.</p>
-<p>If the translation attempt fails, it will be retried the next time Logstash parses the RSS feed.  Failures happen reasonable frequently for me as I&rsquo;m attempting quite a few translations as rapidly as possible and am getting 429&rsquo;s TOo Mant Requests back from the Translation Service.  I can&rsquo;t find documentation on translation service throttling, but it&rsquo;s evidently doing it.</p>
+<p>If the translation attempt fails, it will be retried the next time Logstash parses the RSS feed.  Failures happen reasonable frequently for me as I&rsquo;m attempting quite a few translations as rapidly as possible and am getting 429&rsquo;s Too Many Requests back from the Translation Service.  I can&rsquo;t find documentation on translation service throttling, but it&rsquo;s evidently doing it.</p>
 <h3 id="insertupdate-the-document">Insert/Update the document</h3>
 <p>So finally use the Logstash Elasticsearch output plugin to perform an upsert ( <a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">doc_as_upsert</a> )</p>
 <p>If the document with this ID does not exist, it will be created.  If it does exist, it will be updated using the event.</p>
