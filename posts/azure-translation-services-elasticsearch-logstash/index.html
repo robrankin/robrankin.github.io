@@ -7,16 +7,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
         <title>Azure Translation Services with Elasticsearch and Logstash - </title><meta name="Description" content=""><meta property="og:title" content="Azure Translation Services with Elasticsearch and Logstash" />
 <meta property="og:description" content="Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds. Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them. One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.
-Thought I&rsquo;d give Azure Translation Services a try, and translate the title/description of the items. Since Translation Services cost is based on number of characters translated, I&rsquo;d want to avoid translating items more than once." />
+Since this would be parsing the same RSS feeds repeatedly, I need a predictable Document ID, so I can re-insert / upsert the item, and not create a new document every time the RSS feed is parsed." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://example.org/posts/azure-translation-services-elasticsearch-logstash/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-04-05T08:44:40+01:00" />
-<meta property="article:modified_time" content="2022-04-05T08:44:40+01:00" />
+<meta property="article:published_time" content="2022-03-31T06:54:40+01:00" />
+<meta property="article:modified_time" content="2022-03-31T06:54:40+01:00" />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Azure Translation Services with Elasticsearch and Logstash"/>
 <meta name="twitter:description" content="Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds. Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them. One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.
-Thought I&rsquo;d give Azure Translation Services a try, and translate the title/description of the items. Since Translation Services cost is based on number of characters translated, I&rsquo;d want to avoid translating items more than once."/>
+Since this would be parsing the same RSS feeds repeatedly, I need a predictable Document ID, so I can re-insert / upsert the item, and not create a new document every time the RSS feed is parsed."/>
 <meta name="application-name" content="">
 <meta name="apple-mobile-web-app-title" content=""><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -29,8 +29,8 @@ Thought I&rsquo;d give Azure Translation Services a try, and translate the title
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/example.org\/posts\/azure-translation-services-elasticsearch-logstash\/"
-        },"genre": "posts","keywords": "azure, cloud, elasticsearch, logstash","wordcount":  521 ,
-        "url": "http:\/\/example.org\/posts\/azure-translation-services-elasticsearch-logstash\/","datePublished": "2022-04-05T08:44:40+01:00","dateModified": "2022-04-05T08:44:40+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        },"genre": "posts","keywords": "azure, cloud, elasticsearch, logstash","wordcount":  598 ,
+        "url": "http:\/\/example.org\/posts\/azure-translation-services-elasticsearch-logstash\/","datePublished": "2022-03-31T06:54:40+01:00","dateModified": "2022-03-31T06:54:40+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Rob Rankin"},"author": {
                 "@type": "Person",
@@ -79,17 +79,30 @@ Thought I&rsquo;d give Azure Translation Services a try, and translate the title
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Azure Translation Services with Elasticsearch and Logstash</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-04-05">2022-04-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;521 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-31">2022-03-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;598 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#predictable-document-id">Predictable Document ID</a></li>
+        <li><a href="#look-for-existing-document">Look for existing document</a></li>
+        <li><a href="#translation">Translation</a></li>
+        <li><a href="#insertupdate-the-document">Insert/Update the document</a></li>
+        <li><a href="#references">References</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
             </div><div class="content" id="content"><p>Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds.  Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them.  One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.</p>
-<p>Thought I&rsquo;d give Azure Translation Services a try, and translate the title/description of the items.  Since Translation Services cost is based on number of characters translated, I&rsquo;d want to avoid translating items more than once.</p>
 <p>Since this would be parsing the same RSS feeds repeatedly, I need a predictable Document ID, so I can re-insert / upsert the item, and not create a new document every time the RSS feed is parsed.</p>
+<p>For translating the title and description, thought I&rsquo;d give Azure Translation Services a try.  Since Translation Services cost is based on number of characters translated, I&rsquo;d want to avoid translating items more than once.</p>
+<h3 id="predictable-document-id">Predictable Document ID</h3>
 <p>When parsed, each RSS item is an object in the <code>[xml][channel][item]</code> field, so I create a unique and predictable ID using Logstash <code>fingerprint</code> filter.</p>
 <pre><code>  fingerprint {
     method =&gt; &quot;MURMUR3&quot;
@@ -98,7 +111,8 @@ Thought I&rsquo;d give Azure Translation Services a try, and translate the title
     ]
     target =&gt; &quot;[event][id]&quot;
   }
-</code></pre><p>Then use that ID as the Document ID to attempt to lookup the document in Elasticsearch.</p>
+</code></pre><h3 id="look-for-existing-document">Look for existing document</h3>
+<p>Then use that ID as the Document ID to attempt to lookup the document in Elasticsearch.</p>
 <p>If this is the first time this specific RSS feed/item is being processed, this will not return anything as we haven&rsquo;t stored the item as a document yet.</p>
 <p>If this is a repeated parsing, there should already be a document with this Document ID in Elasticsearch, and this query will return it.</p>
 <p>From the returned document, the fields <code>[rss][item][title][en]</code> and <code>[rss][item][description][en]</code>
@@ -114,7 +128,8 @@ will be copied into the current events fields of <code>[tmp_translated_title]</c
       &quot;[rss][item][description][en]&quot;    =&gt; &quot;[tmp_translated_description]&quot;
     }
   }
-</code></pre><p>If this is the first time this RSS item has been parsed, or if previous attempts failed to translate, the <code>[tmp_translated_title]</code> and <code>[tmp_translated_description]</code> will not be set.  This is how we know to attempt to translate this event.</p>
+</code></pre><h3 id="translation">Translation</h3>
+<p>If this is the first time this RSS item has been parsed, or if previous attempts failed to translate, the <code>[tmp_translated_title]</code> and <code>[tmp_translated_description]</code> will not be set.  This is how we know to attempt to translate this event.</p>
 <p>So now check if <code>[xml][channel][item][language]</code> exists and is not <code>&quot;en&quot;</code>.  Then check if <code>[xml][channel][item][title]</code> exists, and that this item has not been translated previously ( <code>! [tmp_translated_title]</code> ).  If all that is true, then use the <a href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-http.html" target="_blank" rel="noopener noreffer">HTTP Filter</a> to POST to your Translation Services instance.</p>
 <pre><code>if ([xml][channel][item][language] and [xml][channel][item][language] != &quot;en&quot;){
   if ! [tmp_translated_title] and [xml][channel][item][title] {
@@ -138,17 +153,32 @@ will be copied into the current events fields of <code>[tmp_translated_title]</c
 }
 </code></pre><p>If all goes well, there will be a translated title in the field <code>[tmp][translated][en][xml][channel][item][title]</code>.</p>
 <p>If the translation attempt fails, it will be retried the next time Logstash parses the RSS feed.  Failures happen reasonable frequently for me as I&rsquo;m attempting quite a few translations as rapidly as possible and am getting 429&rsquo;s TOo Mant Requests back from the Translation Service.  I can&rsquo;t find documentation on translation service throttling, but it&rsquo;s evidently doing it.</p>
-<h1 id="references">References</h1>
+<h3 id="insertupdate-the-document">Insert/Update the document</h3>
+<p>So finally use the Logstash Elasticsearch output plugin to perform an upsert ( <a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">doc_as_upsert</a> )</p>
+<p>If the document with this ID does not exist, it will be created.  If it does exist, it will be updated using the event.</p>
+<pre><code>  elasticsearch {
+	hosts =&gt; [
+	  &quot;es&quot;
+	]
+	index =&gt; &quot;index&quot;
+	document_id =&gt; &quot;%{[event][id]}&quot;
+	doc_as_upsert =&gt; true
+	action =&gt; &quot;update&quot;
+	user =&gt; &quot;user&quot;
+	password =&gt; &quot;pw&quot;
+  }
+</code></pre><h3 id="references">References</h3>
 <ul>
 <li><a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-http_poller.html" target="_blank" rel="noopener noreffer">Logstash HTTP Poler Input Plugin</a></li>
 <li><a href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-http.html" target="_blank" rel="noopener noreffer">Logstash HTTP Filter Plugin</a></li>
 <li><a href="https://docs.microsoft.com/en-us/azure/cognitive-services/translator/reference/v3-0-translate" target="_blank" rel="noopener noreffer">Azure Translation Service REST API Reference</a></li>
+<li><a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">Logstash doc_as_upsert</a></li>
 </ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022-04-05</span>
+                <span>Updated on 2022-03-31</span>
             </div>
             <div class="post-info-license"></div>
         </div>
