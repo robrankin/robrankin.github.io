@@ -2,15 +2,20 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>http://example.org/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/categories/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
+            <loc>http://example.org/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/azure/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/categories/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/cloud/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/elasticsearch/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/logstash/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/posts/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/tags/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
+            <loc>http://example.org/categories/tech/</loc><lastmod>2022-04-05T08:44:40&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/coreos/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/fedora/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/posts/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/raspberrypi/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/tags/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/categories/tech/</loc><lastmod>2022-03-23T08:55:15&#43;00:00</lastmod></url><url>
             <loc>http://example.org/tags/modsecurity/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
             <loc>http://example.org/categories/security/</loc><lastmod>2021-08-17T10:21:48&#43;01:00</lastmod></url><url>
@@ -20,12 +25,9 @@
             <loc>http://example.org/posts/alerting-using-siem-detections-and-elastalert/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/elastalert/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/elastalert2/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>
-            <loc>http://example.org/tags/elasticsearch/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/opensearch/</loc><lastmod>2021-08-17T08:32:41&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/filebeat/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/tags/logstash/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
             <loc>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</loc><lastmod>2020-11-24T07:39:19&#43;00:00</lastmod></url><url>
-            <loc>http://example.org/tags/azure/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/azure-storage/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/bash/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>
             <loc>http://example.org/tags/script/</loc><lastmod>2020-10-20T08:19:21&#43;01:00</lastmod></url><url>

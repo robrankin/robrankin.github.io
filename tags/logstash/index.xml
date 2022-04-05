@@ -3,7 +3,15 @@
         <title>logstash - Tag - </title>
         <link>http://example.org/tags/logstash/</link>
         <description>logstash - Tag - </description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 24 Nov 2020 07:39:19 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/logstash/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 05 Apr 2022 08:44:40 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/logstash/" rel="self" type="application/rss+xml" /><item>
+    <title>Azure Translation Services with Elasticsearch and Logstash</title>
+    <link>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</link>
+    <pubDate>Tue, 05 Apr 2022 08:44:40 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</guid>
+    <description><![CDATA[Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds. Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them. One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.
+Thought I&rsquo;d give Azure Translation Services a try, and translate the title/description of the items. Since Translation Services cost is based on number of characters translated, I&rsquo;d want to avoid translating items more than once.]]></description>
+</item><item>
     <title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</title>
     <link>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
     <pubDate>Tue, 24 Nov 2020 07:39:19 &#43;0000</pubDate>
