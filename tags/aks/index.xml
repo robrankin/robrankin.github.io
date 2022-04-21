@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>aks - Tag - </title>
+        <link>http://example.org/tags/aks/</link>
+        <description>aks - Tag - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/aks/" rel="self" type="application/rss+xml" /><item>
+    <title>Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</title>
+    <link>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</link>
+    <pubDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</guid>
+    <description><![CDATA[Assuming the target containers can actually install new software (apt install is available) what follows is a quick and very dirty method to run tcpdump on k8s/AKS containers in Azure.
+Install some needed utilities Use whatever pod label is required to target the right pods.
+kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y update kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y install tcpdump screen psmisc rclone Check kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- tcpdump --version Start tcpdump in a screen Use whatever tcpdump &lt;FILTER&gt; here as needed.]]></description>
+</item></channel>
+</rss>

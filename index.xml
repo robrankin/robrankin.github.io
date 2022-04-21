@@ -3,9 +3,18 @@
         <title></title>
         <link>http://example.org/</link>
         <description></description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 31 Mar 2022 06:54:40 &#43;0100</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</lastBuildDate>
             <atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</title>
+    <link>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</link>
+    <pubDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</guid>
+    <description><![CDATA[Assuming the target containers can actually install new software (apt install is available) what follows is a quick and very dirty method to run tcpdump on k8s/AKS containers in Azure.
+Install some needed utilities Use whatever pod label is required to target the right pods.
+kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y update kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y install tcpdump screen psmisc rclone Check kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- tcpdump --version Start tcpdump in a screen Use whatever tcpdump &lt;FILTER&gt; here as needed.]]></description>
+</item><item>
     <title>Azure Translation Services with Elasticsearch and Logstash</title>
     <link>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</link>
     <pubDate>Thu, 31 Mar 2022 06:54:40 &#43;0100</pubDate>
@@ -78,16 +87,5 @@ One of the features that the Elastic Stack doesn&rsquo;t really support well (ye
  Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
 After a little bit of research I found this article, from February 2017:
 User Impersonation with X-Pack: Integrating Third Party Auth with Kibana]]></description>
-</item><item>
-    <title>Elasticsearch Provided Name and ILM</title>
-    <link>http://example.org/posts/elasticsearch-provided-name/</link>
-    <pubDate>Thu, 04 Jun 2020 10:43:51 &#43;0100</pubDate>
-    <author>Author</author>
-    <guid>http://example.org/posts/elasticsearch-provided-name/</guid>
-    <description><![CDATA[As I was learning a little about ElasticSearch&rsquo;s ILM (Index Lifecycle Management) feature, I ran across a parameter called provided_name when examining an index.
-A bit of searching turned up the this Github issue, but it doesn&rsquo;t really explain where it comes from.
-A bit more searching led me here.
-So provided_name is a method of templating index names it seems, using date math as explained in the documentation.
-Just make sure to HTML encode the index name, as per the example from the documentation:]]></description>
 </item></channel>
 </rss>

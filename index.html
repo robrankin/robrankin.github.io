@@ -63,6 +63,13 @@
 <main class="main">
                 <div class="container"><div class="page home" posts><div class="home-profile"><div class="links"><a href="https://github.com/robrankin" title="Github" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://twitter.com/mahhyzero" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a><a href="https://www.linkedin.com/in/rob-rankin-7312234" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="mailto:blog@undertow.ca" title="Email" rel=" me"><i class="far fa-envelope fa-fw"></i></a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/posts/packet-capture-tcpdump-kubernetes-pods-azure/">Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-04-21">2022-04-21</time></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class="content">Assuming the target containers can actually install new software (apt install is available) what follows is a quick and very dirty method to run tcpdump on k8s/AKS containers in Azure.
+Install some needed utilities Use whatever pod label is required to target the right pods.
+kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y update kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- apt-get -y install tcpdump screen psmisc rclone Check kubectl get pods -l &lt;LABEL&gt; -o name | xargs -I{} kubectl exec {} -- tcpdump --version Start tcpdump in a screen Use whatever tcpdump &lt;FILTER&gt; here as needed.</div><div class="post-footer">
+        <a href="/posts/packet-capture-tcpdump-kubernetes-pods-azure/">Read More</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">kubernetes</a>,&nbsp;<a href="/tags/aks/">aks</a>,&nbsp;<a href="/tags/azure/">azure</a>,&nbsp;<a href="/tags/k8s/">k8s</a>,&nbsp;<a href="/tags/tcpdump/">tcpdump</a>,&nbsp;<a href="/tags/packet-capture/">packet capture</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/posts/azure-translation-services-elasticsearch-logstash/">Azure Translation Services with Elasticsearch and Logstash</a>
     </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-publish">published on <time datetime="2022-03-31">2022-03-31</time></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class="content">Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds. Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them. One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.
 Since this would be parsing the same RSS feeds repeatedly, I need a predictable Document ID, so I can re-insert / upsert the item, and not create a new document every time the RSS feed is parsed.</div><div class="post-footer">
@@ -132,13 +139,15 @@ Just make sure to HTML encode the index name, as per the example from the docume
  Here at Bede we&rsquo;ve been using FoundationDB for some time, and are basically in love with it. Fully distributed, ACID compliant transactions? Yes please. It&rsquo;s fast, it scales, it&rsquo;s reliable and redundant.</div><div class="post-footer">
         <a href="/posts/puppet-module-for-foundationdb/">Read More</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/foundationdb/">foundationdb</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/">Modelling an nginx Application Proxy using Puppet and Hiera</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-publish">published on <time datetime="2014-11-05">2014-11-05</time></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a></span></div><div class="content">Goal To model nginx configurations in Hiera, extracting those configurations from the Puppet DSL, and create a Puppet Profile to combine that with the nginx module.
-Links Puppet Docs  Puppet Resource Abstraction Layer Puppet create_resources Scoping Namespacing  Puppet Roles/Profiles  Craig Dunn, Designing Puppet Talk End to End Roles and Profiles Example Puppet Workflow Part 1 Puppet Workflow Part 2  Hiera  Puppet Labs Hiera Docs Passing Variables to Hiera  nginx Module  jfryman nginx Puppet Module  nginx  nginx Project Page  Requirements Within nginx we need to define a set of nginx &ldquo;server&rdquo; contexts with the same set of &ldquo;location&rdquo; contexts in each &ldquo;server&rdquo;.</div><div class="post-footer">
-        <a href="/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/">Read More</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/puppet/">puppet</a>,&nbsp;<a href="/tags/nginx/">nginx</a>,&nbsp;<a href="/tags/proxy/">proxy</a></div></div>
-</article></div></div>
+</article><ul class="pagination"><li class="page-item active">
+                    <span class="page-link">
+                        <a href="/">1</a>
+                    </span>
+                </li><li class="page-item ">
+                    <span class="page-link">
+                        <a href="/page/2/">2</a>
+                    </span>
+                </li></ul></div></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.87.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
