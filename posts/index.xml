@@ -10,9 +10,10 @@
     <author>Author</author>
     <guid>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</guid>
     <description><![CDATA[Assuming the target containers can actually install new software (apt install is available) what follows is a quick and very dirty method to run tcpdump on k8s/AKS containers in Azure.
+If you&rsquo;re running Kubernetes 1.23 and up, please read this instead:
+https://downey.io/blog/kubernetes-ephemeral-debug-container-tcpdump/
 Install some needed utilities Use whatever pod label is required to target the right pods.
-kubectl get pods -l &lt;LABEL&gt; -o name | \ xargs -I{} kubectl exec {} -- apt-get -y update Install tcpdump, screen, psmisc, and rclone
-kubectl get pods -l &lt;LABEL&gt; -o name | \ xargs -I{} kubectl exec {} -- \ apt-get -y install tcpdump screen psmisc rclone Check kubectl get pods -l &lt;LABEL&gt; -o name | \ xargs -I{} kubectl exec {} -- tcpdump --version Start tcpdump in a screen Use whatever tcpdump &lt;FILTER&gt; here as needed.]]></description>
+kubectl get pods -l &lt;LABEL&gt; -o name | \ xargs -I{} kubectl exec {} -- apt-get -y update Install tcpdump, screen, psmisc, and rclone]]></description>
 </item><item>
     <title>Azure Translation Services with Elasticsearch and Logstash</title>
     <link>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</link>
