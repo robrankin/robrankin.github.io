@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>modsecurity - Category - </title>
+        <link>http://example.org/categories/modsecurity/</link>
+        <description>modsecurity - Category - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/modsecurity/" rel="self" type="application/rss+xml" /><item>
+    <title>Modsecurity, DetectionOnly and enforcing select rules</title>
+    <link>http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/</link>
+    <pubDate>Tue, 17 Aug 2021 10:21:48 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/modsecurity-detectiononly-and-enforcing-select-rules/</guid>
+    <description><![CDATA[I recently had a reason to want to achieve the following:
+ ModSecurity globally in DetectionOnly mode (not enforcing rules, just logging)  Continue to operate the CRS in DetectionOnly mode.   For a specific ruleset:  Enforcing a default deny on inbound requests to an API. Enforcing allow rules for specific API routes and methods of the API    So I wanted all of our inbound CRS rules to continue to work in DetectionOnly mode, while I had a custom set of rules that would deny all access, with a set of whitelists to specific methods/paths.]]></description>
+</item></channel>
+</rss>

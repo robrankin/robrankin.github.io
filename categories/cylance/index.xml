@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>cylance - Category - </title>
+        <link>http://example.org/categories/cylance/</link>
+        <description>cylance - Category - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 11 Sep 2020 17:32:50 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/cylance/" rel="self" type="application/rss+xml" /><item>
+    <title>Querying Cylance Protect Api From Shell</title>
+    <link>http://example.org/posts/querying-cylance-protect-api-from-shell/</link>
+    <pubDate>Fri, 11 Sep 2020 17:32:50 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/querying-cylance-protect-api-from-shell/</guid>
+    <description><![CDATA[We use Cylance as our AV type protection. They&rsquo;re one of the better solutions I&rsquo;ve seen, but theres some strange gaps in my opinion. There doesn&rsquo;t seem to be a built in method for alerting. One of the things we&rsquo;d like to be able to alert on is when a devices goes &ldquo;offline&rdquo;, and apparently this information is not provided through Cylance&rsquo;s syslog output. It is however available from their API.]]></description>
+</item></channel>
+</rss>

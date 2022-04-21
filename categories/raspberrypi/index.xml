@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>raspberrypi - Category - </title>
+        <link>http://example.org/categories/raspberrypi/</link>
+        <description>raspberrypi - Category - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 23 Mar 2022 08:55:15 &#43;0000</lastBuildDate><atom:link href="http://example.org/categories/raspberrypi/" rel="self" type="application/rss+xml" /><item>
+    <title>Fedora CoreOS 35 USB Boot on Raspberry Pi 4</title>
+    <link>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</link>
+    <pubDate>Wed, 23 Mar 2022 08:55:15 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/fedora-coreos-on-raspberry-pi4/</guid>
+    <description><![CDATA[Note: While the RPI now boots, if I have anything else plugged into USB ports, such as a keyboard, it throws the same TRB related error.
+ For whatever reason, Fedora&rsquo;s support of Raspberry Pi4&rsquo;s seems a bit iffy. The official documentation (here) is quite good, and I managed to easily get the RPI4 booting CoreOS via the EDK2 UEFI firmware approach. The problem was that I wanted to use the U-Boot approach, and that was just not playing ball.]]></description>
+</item></channel>
+</rss>

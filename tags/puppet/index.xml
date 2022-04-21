@@ -3,7 +3,15 @@
         <title>puppet - Tag - </title>
         <link>http://example.org/tags/puppet/</link>
         <description>puppet - Tag - </description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 05 Nov 2014 15:53:08 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/puppet/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 18 Nov 2014 16:30:00 &#43;0000</lastBuildDate><atom:link href="http://example.org/tags/puppet/" rel="self" type="application/rss+xml" /><item>
+    <title>Puppet Module for FoundationDB</title>
+    <link>http://example.org/posts/puppet-module-for-foundationdb/</link>
+    <pubDate>Tue, 18 Nov 2014 16:30:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/puppet-module-for-foundationdb/</guid>
+    <description><![CDATA[FoundationDB has been purchased by Apple, and is no longer a product. Apple will be cancelling all support contracts and apprently not continuing to offer FDB for sale. Therefore this module is of course deprecated and no longer supported (at least by me!).
+ Here at Bede we&rsquo;ve been using FoundationDB for some time, and are basically in love with it. Fully distributed, ACID compliant transactions? Yes please. It&rsquo;s fast, it scales, it&rsquo;s reliable and redundant.]]></description>
+</item><item>
     <title>Modelling an nginx Application Proxy using Puppet and Hiera</title>
     <link>http://example.org/posts/modelling-an-nginx-application-proxy-using-puppet-and-hiera/</link>
     <pubDate>Wed, 05 Nov 2014 15:53:08 &#43;0000</pubDate>

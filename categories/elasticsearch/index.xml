@@ -1,0 +1,40 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>elasticsearch - Category - </title>
+        <link>http://example.org/categories/elasticsearch/</link>
+        <description>elasticsearch - Category - </description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 31 Mar 2022 06:54:40 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/elasticsearch/" rel="self" type="application/rss+xml" /><item>
+    <title>Azure Translation Services with Elasticsearch and Logstash</title>
+    <link>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</link>
+    <pubDate>Thu, 31 Mar 2022 06:54:40 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/azure-translation-services-elasticsearch-logstash/</guid>
+    <description><![CDATA[Recently had a need to parse some XML into Elasticsearch, specifically some CERT RSS feeds. Logstash has an RSS input, but it&rsquo;s a bit basic, and doesn&rsquo;t provide any language indications if the RSS feed includes them. One of the feeds I&rsquo;m using can be various languages per item, and many others are non-english entirely.
+Since this would be parsing the same RSS feeds repeatedly, I need a predictable Document ID, so I can re-insert / upsert the item, and not create a new document every time the RSS feed is parsed.]]></description>
+</item><item>
+    <title>Alerting using SIEM Detections and ElastAlert2</title>
+    <link>http://example.org/posts/alerting-using-siem-detections-and-elastalert/</link>
+    <pubDate>Tue, 17 Aug 2021 08:32:41 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/alerting-using-siem-detections-and-elastalert/</guid>
+    <description><![CDATA[ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall. So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide alerting support.
+Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.
+If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting available for free, you can use tools such as ElastAlert21 to handle the Alerting requirements.]]></description>
+</item><item>
+    <title>Using Elasticsearch Upserts to Combine Multiple Event Lines Into One</title>
+    <link>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</link>
+    <pubDate>Tue, 24 Nov 2020 07:39:19 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/using-elasticsearch-upserts-to-combine-multiple-event-lines-into-one/</guid>
+    <description><![CDATA[Note This approach is probably not appropriate for high volume / high throughput events. It required in my case quite a lot of Logstash parsing, and Elasticsearch doc_as_upsert use, both of which will have a significant performance penalty. For low throughput use it works fine.
+ Sometimes log sources split logically grouped events into separate lines, and sometimes those logically grouped event lines are mixed into the same log file with actual singular line events.]]></description>
+</item><item>
+    <title>Event Threat Enrichment using Logstash and Minemeld</title>
+    <link>http://example.org/posts/event-threat-enrichment-logstash-minemeld/</link>
+    <pubDate>Fri, 25 Sep 2020 09:22:36 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/event-threat-enrichment-logstash-minemeld/</guid>
+    <description><![CDATA[At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &ldquo;official&rdquo; roles is as our SIEM. Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.
+One of the features that the Elastic Stack doesn&rsquo;t really support well (yet) is an enrichment system. They did introduce an elasticsearch side enrichment system in 7.5, but in my opinionn theres a few problems with it:]]></description>
+</item></channel>
+</rss>
