@@ -86,7 +86,14 @@ One of the features that the Elastic Stack doesn&rsquo;t really support well (ye
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#minemeld">Minemeld</a></li>
+    <li><a href="#logstash---part-1">Logstash - Part 1</a></li>
+    <li><a href="#logstash---part-2">Logstash - Part 2</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav></div>
             </div><div class="content" id="content"><p>At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &ldquo;official&rdquo; roles is as our SIEM.  Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.</p>
 <p>One of the features that the Elastic Stack doesn&rsquo;t really support well (yet) is an enrichment system.  They did introduce an elasticsearch side <a href="https://www.elastic.co/blog/introducing-the-enrich-processor-for-elasticsearch-ingest-nodes" target="_blank" rel="noopener noreffer">enrichment system</a> in 7.5, but in my opinionn theres a few problems with it:</p>
 <ul>
@@ -103,7 +110,7 @@ One of the features that the Elastic Stack doesn&rsquo;t really support well (ye
 <li>It&rsquo;s pretty simple to use and setup</li>
 <li>It has support for delivering threat feed data to Logstash</li>
 </ul>
-<h1 id="minemeld">Minemeld</h1>
+<h2 id="minemeld">Minemeld</h2>
 <blockquote>
 <p>Note
 This post only deals with IoCs of &ldquo;IP type&rdquo;.  Minemeld can consume, aggregate, and distribute IoCs of other tyes, such as URLs, domains, etc, but they are not dealt with by this article.</p>
@@ -130,7 +137,7 @@ This post only deals with IoCs of &ldquo;IP type&rdquo;.  Minemeld can consume, 
         alt="/images/465f6543348749ac96240d6db28031b0.png"
         title="465f6543348749ac96240d6db28031b0.png" /></p>
 <p>Hit save, and thats it.  You now have a method of outputting IoCs from various IP threat feeds to Logstash.  I&rsquo;ve done this two times, with different <code>logstash_host:</code> set for each new local prototype.  So I&rsquo;m duplicating my IoCs to two different logstash and elasticsearch clusters.</p>
-<h1 id="logstash---part-1">Logstash - Part 1</h1>
+<h2 id="logstash---part-1">Logstash - Part 1</h2>
 <blockquote>
 <p>Important Note:
 You will need to define an index template/mapping that ensures the start and end IP address fields created by the dissect filter below are actually of IP datatype.  IP Range queries used in Part 2 will not work without this.</p>
@@ -194,7 +201,7 @@ You will need to define an index template/mapping that ensures the start and end
     }
 }
 </code></pre><p>So at this point you should have some Minemeld provided IoCs stored in an Elasticsearch index, which can be used to enrich other events in real time.</p>
-<h1 id="logstash---part-2">Logstash - Part 2</h1>
+<h2 id="logstash---part-2">Logstash - Part 2</h2>
 <p>So now onto how to enrich events.  In my case, certain events come with a <code>source.ip</code> address, and I then do a ES lookup using the Logstash elasticsearch <em>filter</em>.</p>
 <pre><code>filter {
       elasticsearch {
@@ -229,7 +236,7 @@ This is where you need to ensure you&rsquo;ve created these fields as IP datatyp
 <p>All this does is excute the above query against the Minemeld ES index, and looks for a match where the Minemeld <code>minemeld.indicator.ip.start</code> is less than or equal to, and the <code>minemeld.indicator.ip.end</code> is greater than or equal to the source IP in the event that we&rsquo;re attempting to enrich.</p>
 <p>Basically: &ldquo;if the source IP is between the start and end range provided by Minemeld&rdquo;.</p>
 <p>The actual enrichment is performed by the <code>fields</code> parameter of the <code>elasticsearch</code> filter.  In the example above, it sets a field <code>custom.threat.sources</code> to the value of <code>minemeld.sources</code> from the document in the Minemeld index, which is a list of source &ldquo;names&rdquo; provided by minemeld.</p>
-<h1 id="conclusion">Conclusion</h1>
+<h2 id="conclusion">Conclusion</h2>
 <p>That&rsquo;s it.  We now have an indication if a source IP in an event is considered a threat by various threat feeds, which is obviously very useful for informing any decisions around responses.</p>
 <p>Some closing thoughts.</p>
 <p>Performance.  This approach is almost definitely not scalable to extremely high throughput levels, due to the overhead of network connections between logstash and elasticsearch, and the impact of querying elasticsearch for every event.  It would be signficantly better tyo take advantage of Logstashs' translate filter or its memcache filter.</p>

@@ -36,5 +36,15 @@ If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting avai
     <guid>http://example.org/posts/event-threat-enrichment-logstash-minemeld/</guid>
     <description><![CDATA[At my work we use the Elastic Stack for quite a few things, but one of the more recent-ish &ldquo;official&rdquo; roles is as our SIEM. Elastic introduced SIEM specific funcationality to Kibana a few releases ago, around 7.4 if I rembember correctly.
 One of the features that the Elastic Stack doesn&rsquo;t really support well (yet) is an enrichment system. They did introduce an elasticsearch side enrichment system in 7.5, but in my opinionn theres a few problems with it:]]></description>
+</item><item>
+    <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
+    <link>http://example.org/posts/kibaba-oauth-kubernetes/</link>
+    <pubDate>Thu, 06 Aug 2020 12:34:50 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/kibaba-oauth-kubernetes/</guid>
+    <description><![CDATA[NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): https://github.com/elastic/kibana/issues/74828
+ Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana]]></description>
 </item></channel>
 </rss>

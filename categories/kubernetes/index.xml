@@ -14,5 +14,15 @@ If you&rsquo;re running Kubernetes 1.23 and up, please read this instead:
 https://downey.io/blog/kubernetes-ephemeral-debug-container-tcpdump/
 Install some needed utilities Use whatever pod label is required to target the right pods.
 kubectl get pods -l &lt;LABEL&gt; -o name | \ xargs -I{} kubectl exec {} -- apt-get -y update Install tcpdump, screen, psmisc, and rclone]]></description>
+</item><item>
+    <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
+    <link>http://example.org/posts/kibaba-oauth-kubernetes/</link>
+    <pubDate>Thu, 06 Aug 2020 12:34:50 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/kibaba-oauth-kubernetes/</guid>
+    <description><![CDATA[NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): https://github.com/elastic/kibana/issues/74828
+ Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
+After a little bit of research I found this article, from February 2017:
+User Impersonation with X-Pack: Integrating Third Party Auth with Kibana]]></description>
 </item></channel>
 </rss>

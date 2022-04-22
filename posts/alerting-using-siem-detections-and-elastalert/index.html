@@ -90,7 +90,7 @@ If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting avai
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#siem-detections">SIEM Detections</a>
       <ul>
         <li><a href="#notes">Notes</a></li>
       </ul>
@@ -100,7 +100,7 @@ If you can&rsquo;t move off ElasticSearch to OpenSearch, which has Alerting avai
             </div><div class="content" id="content"><p>ElasticSearch SIEM Detections and Alerts and Actions are quite useful features, except for the fact that actual alerting is behind a license paywall.  So while both of these features can run rules, check for conditions, and record the results in an index, neither of them actually provide <em>alerting</em> support.</p>
 <p>Alerting requires a Gold License, which if alerting is the only thing you want, is an excessive cost.</p>
 <p>If you can&rsquo;t move off ElasticSearch to <a href="https://opensearch.org/" target="_blank" rel="noopener noreffer">OpenSearch</a>, which has Alerting available for free, you can use tools such as <a href="https://github.com/jertel/elastalert2" target="_blank" rel="noopener noreffer">ElastAlert2</a><sup><a href="/posts/alerting-using-siem-detections-and-elastalert/#notes" rel="">1</a></sup> to handle the Alerting requirements.</p>
-<h1 id="siem-detections">SIEM Detections</h1>
+<h2 id="siem-detections">SIEM Detections</h2>
 <p>The following example is for SIEM Detections, and alerting with ElastAlert2.</p>
 <p>SIEM Detections record their results in an index called <code>.siem-signals-default</code>.  The <code>-default</code> part is based on the Kibana space, so if you&rsquo;re using a Kibana space called <code>exampleA</code>, the index name would be <code>.siem-signals-examplea</code>.</p>
 <p>Make sure to create a Kibana Index Pattern for this index, so you can explore it fully.</p>
