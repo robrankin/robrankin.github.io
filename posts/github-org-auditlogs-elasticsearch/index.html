@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>Storing Github Org Auditlogs in Elasticsearch - </title><meta name="Description" content=""><meta property="og:title" content="Storing Github Org Auditlogs in Elasticsearch" />
+        <title>Storing GitHub Org Auditlogs in Elasticsearch - </title><meta name="Description" content=""><meta property="og:title" content="Storing GitHub Org Auditlogs in Elasticsearch" />
 <meta property="og:description" content="I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
 Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
 Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes." />
@@ -15,7 +15,7 @@ Once the PR was in place, I wrote a Dockerfile to create a container to deploy o
 <meta property="article:modified_time" content="2022-04-22T06:42:34+01:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Storing Github Org Auditlogs in Elasticsearch"/>
+<meta name="twitter:title" content="Storing GitHub Org Auditlogs in Elasticsearch"/>
 <meta name="twitter:description" content="I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
 Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
 Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes."/>
@@ -26,7 +26,7 @@ Once the PR was in place, I wrote a Dockerfile to create a container to deploy o
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Storing Github Org Auditlogs in Elasticsearch",
+        "headline": "Storing GitHub Org Auditlogs in Elasticsearch",
         "inLanguage": "en",
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -79,7 +79,7 @@ Once the PR was in place, I wrote a Dockerfile to create a container to deploy o
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animated flipInX">Storing Github Org Auditlogs in Elasticsearch</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animated flipInX">Storing GitHub Org Auditlogs in Elasticsearch</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a>&nbsp;<a href="/categories/github/"><i class="far fa-folder fa-fw"></i>github</a>&nbsp;<a href="/categories/elasticsearch/"><i class="far fa-folder fa-fw"></i>elasticsearch</a></span></div>
             <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-04-22">2022-04-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;426 words&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
@@ -159,7 +159,7 @@ Once the PR was in place, I wrote a Dockerfile to create a container to deploy o
     match =&gt; [ &quot;[github][auditlog][@timestamp]&quot;, &quot;UNIX_MS&quot;, &quot;UNIX&quot; ]
   }
 }
-</code></pre><p>The last piece needed was to make sure we didn&rsquo;t end up with loads of duplicate documents in Elasticsearch.  Because I&rsquo;m pulling all the data for the current day repeatedly, I get duplicate events every time, but because they comes with a predictable document id direct from Github, I just re-use that ID as my Elasticsearch Document ID, and take advantage of Logstash <a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">upsert</a> features.</p>
+</code></pre><p>The last piece needed was to make sure we didn&rsquo;t end up with loads of duplicate documents in Elasticsearch.  Because I&rsquo;m pulling all the data for the current day repeatedly, I get duplicate events every time, but because they comes with a predictable document id direct from GitHub, I just re-use that ID as my Elasticsearch Document ID, and take advantage of Logstash <a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">upsert</a> features.</p>
 <pre><code>elasticsearch {
   hosts =&gt; [ &quot;&lt;HOST&gt;&quot; ]
   manage_template =&gt; false
@@ -173,7 +173,7 @@ Once the PR was in place, I wrote a Dockerfile to create a container to deploy o
 </code></pre><p>With the GitHub auditlog now being stored in Elasticsearch, I can create an appropriate ILM to manage the data <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html" target="_blank" rel="noopener noreffer">lifecycle</a> and retain it for as long as I want.</p>
 <h2 id="references">References</h2>
 <ul>
-<li><a href="https://docs.github.com/en/organizations/keeping-your-organization-secure/reviewing-the-audit-log-for-your-organization" target="_blank" rel="noopener noreffer">Github Audit Log</a></li>
+<li><a href="https://docs.github.com/en/organizations/keeping-your-organization-secure/reviewing-the-audit-log-for-your-organization" target="_blank" rel="noopener noreffer">GitHub Audit Log</a></li>
 <li><a href="https://github.com/whiteinge/ok.sh" target="_blank" rel="noopener noreffer">GitHub API Client</a></li>
 <li><a href="https://github.com/roboll/helmfile" target="_blank" rel="noopener noreffer">Helmfile</a></li>
 <li><a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">Logstash doc_as_upsert</a></li>
