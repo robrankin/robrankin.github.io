@@ -3,7 +3,16 @@
         <title>azure - Tag - </title>
         <link>http://example.org/tags/azure/</link>
         <description>azure - Tag - </description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/azure/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 22 Apr 2022 06:42:34 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/azure/" rel="self" type="application/rss+xml" /><item>
+    <title>Storing Github Org Auditlogs in Elasticsearch</title>
+    <link>http://example.org/posts/github-org-auditlogs-elasticsearch/</link>
+    <pubDate>Fri, 22 Apr 2022 06:42:34 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/github-org-auditlogs-elasticsearch/</guid>
+    <description><![CDATA[I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
+Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
+Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes.]]></description>
+</item><item>
     <title>Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</title>
     <link>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</link>
     <pubDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</pubDate>

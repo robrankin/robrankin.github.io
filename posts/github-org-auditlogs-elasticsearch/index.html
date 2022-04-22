@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Storing Github Org Auditlogs in Elasticsearch - </title><meta name="Description" content=""><meta property="og:title" content="Storing Github Org Auditlogs in Elasticsearch" />
+<meta property="og:description" content="I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
+Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
+Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/github-org-auditlogs-elasticsearch/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-22T06:42:34+01:00" />
+<meta property="article:modified_time" content="2022-04-22T06:42:34+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Storing Github Org Auditlogs in Elasticsearch"/>
+<meta name="twitter:description" content="I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
+Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
+Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes."/>
+<meta name="application-name" content="">
+<meta name="apple-mobile-web-app-title" content=""><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://example.org/posts/github-org-auditlogs-elasticsearch/" /><link rel="prev" href="http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Storing Github Org Auditlogs in Elasticsearch",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/example.org\/posts\/github-org-auditlogs-elasticsearch\/"
+        },"genre": "posts","keywords": "azure, cloud, elasticsearch, logstash, alerting","wordcount":  426 ,
+        "url": "http:\/\/example.org\/posts\/github-org-auditlogs-elasticsearch\/","datePublished": "2022-04-22T06:42:34+01:00","dateModified": "2022-04-22T06:42:34+01:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Rob Rankin"},"author": {
+                "@type": "Person",
+                "name": "Rob Rankin"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title=""></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> Home </a><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title=""></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/" title="">Home</a><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Storing Github Org Auditlogs in Elasticsearch</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Rob Rankin</a></span>&nbsp;<span class="post-category">included in <a href="/categories/tech/"><i class="far fa-folder fa-fw"></i>tech</a>&nbsp;<a href="/categories/github/"><i class="far fa-folder fa-fw"></i>github</a>&nbsp;<a href="/categories/elasticsearch/"><i class="far fa-folder fa-fw"></i>elasticsearch</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-04-22">2022-04-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;426 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>I had a need to generate an alert when someone overrode a <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/about-protected-branches" target="_blank" rel="noopener noreffer">Branch Protection setting</a>.  To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.</p>
+<p>Theres a GitHub API client written in <code>sh</code>, called <code>ok.sh</code>, which can be found <a href="https://github.com/whiteinge/ok.sh" target="_blank" rel="noopener noreffer">here</a>.  At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that <a href="https://github.com/whiteinge/ok.sh/pull/110" target="_blank" rel="noopener noreffer">here</a>.</p>
+<p>Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="k">FROM</span><span class="s"> alpine:3.12</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> apk add --no-cache curl jq<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ok.sh/ok.sh /<span class="err">
+</span><span class="err"></span><span class="k">COPY</span> submit.sh /<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;/ok.sh&#34;</span><span class="p">]</span><span class="err">
+</span></code></pre></div><p><code>submit.sh</code> is a small bit of shell to actually submit the results to an Elasticsearch instance via Logstash, and add some ECS style fields (such as event.*) using <code>jq</code>, and nest the original auditlog under the github.* object.  It then use <code>curl</code> to POST each line to Logstash.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="nv">JSONL</span><span class="o">=</span><span class="k">$(</span>cat /auditlog.log <span class="p">|</span> jq <span class="s1">&#39;.[]&#39;</span> <span class="p">|</span> jq -c <span class="s1">&#39;{ &#34;event&#34;: { &#34;kind&#34;:&#34;event&#34;, &#34;category&#34;:&#34;configuration&#34;, &#34;type&#34;:&#34;change&#34;, &#34;module&#34;:&#34;github&#34;, &#34;dataset&#34;:&#34;github.auditlog&#34;, &#34;provider&#34;:&#34;auditlog&#34;  },   &#34;github&#34;: { &#34;auditlog&#34;: . }}&#39;</span><span class="k">)</span>
+
+<span class="nb">printf</span> <span class="s2">&#34;%s&#34;</span> <span class="s2">&#34;</span><span class="nv">$JSONL</span><span class="s2">&#34;</span> <span class="p">|</span>
+<span class="k">while</span> <span class="nv">IFS</span><span class="o">=</span> <span class="nb">read</span> -r line
+<span class="k">do</span>
+  <span class="nb">echo</span> <span class="nv">$line</span> <span class="p">|</span> /usr/bin/curl -H <span class="s2">&#34;Content-type: application/json&#34;</span> <span class="si">${</span><span class="nv">LOGSTASH_ENDPOINT</span><span class="si">}</span> --data-binary @-
+<span class="k">done</span>
+</code></pre></div><blockquote>
+<p>Note: You&rsquo;ll want to create an index template and mappings, but I won&rsquo;t get into that here</p>
+</blockquote>
+<p>I then created a Kubernetes CronJob, to deploy using <a href="https://github.com/roboll/helmfile" target="_blank" rel="noopener noreffer">Helmfile</a></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-YAML" data-lang="YAML"><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1beta1</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">CronJob</span><span class="w">
+</span><span class="w">  </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cron-ghauditlog</span><span class="w">
+</span><span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">schedule</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;5 * * * *&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">failedJobsHistoryLimit</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">    </span><span class="nt">successfulJobsHistoryLimit</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">    </span><span class="nt">jobTemplate</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">cron-ghauditlog</span><span class="w">
+</span><span class="w">          </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">kubernetes.io/os</span><span class="p">:</span><span class="w"> </span><span class="l">linux</span><span class="w">
+</span><span class="w">            </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;SECRET&gt;</span><span class="w">
+</span><span class="w">            </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ghaudit</span><span class="w">
+</span><span class="w">              </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;IMAGE&gt;</span><span class="w">
+</span><span class="w">              </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span>- <span class="s1">&#39;sh&#39;</span><span class="w">
+</span><span class="w">                </span>- <span class="s1">&#39;-c&#39;</span><span class="w">
+</span><span class="w">                </span>- <span class="s1">&#39;/ok.sh -jv org_auditlog &lt;ORGNAME&gt; phrase=&#34;created:&gt;=$(date +%Y-%m-%d)&#34; &gt;&gt; /auditlog.log &amp;&amp; /submit.sh&#39;</span><span class="w">
+</span><span class="w">              </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">GITHUB_TOKEN</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;TOKEN&gt;</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">LOGSTASH_ENDPOINT</span><span class="w">
+</span><span class="w">                </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">&lt;ENDPOINT&gt;</span><span class="w">
+</span><span class="w">            </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">OnFailure</span><span class="w">
+</span></code></pre></div><p>Each time the k8s CronJob runs, it pulls the full days worth of auditlogs, writes it into a file <code>/auditlog.log</code> which is then read by <code>submit.sh</code> and submitted to Logstash.</p>
+<p>Logstash only has one filter, to parse the Auditlog timestamp into the required <code>@timestamp</code> field.</p>
+<p>Logstash filter:</p>
+<pre><code>filter {
+  date {
+    match =&gt; [ &quot;[github][auditlog][@timestamp]&quot;, &quot;UNIX_MS&quot;, &quot;UNIX&quot; ]
+  }
+}
+</code></pre><p>The last piece needed was to make sure we didn&rsquo;t end up with loads of duplicate documents in Elasticsearch.  Because I&rsquo;m pulling all the data for the current day repeatedly, I get duplicate events every time, but because they comes with a predictable document id direct from Github, I just re-use that ID as my Elasticsearch Document ID, and take advantage of Logstash <a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">upsert</a> features.</p>
+<pre><code>elasticsearch {
+  hosts =&gt; [ &quot;&lt;HOST&gt;&quot; ]
+  manage_template =&gt; false
+  index =&gt; &quot;&lt;INDEX&gt;&quot;
+  document_id =&gt; &quot;%{[github][auditlog][_document_id]}&quot;
+  doc_as_upsert =&gt; true
+  action =&gt; &quot;update&quot;
+  user =&gt; &quot;&lt;USER&gt;&quot;
+  password =&gt; &quot;&lt;PASSWORD&gt;&quot;
+}
+</code></pre><p>With the GitHub auditlog now being stored in Elasticsearch, I can create an appropriate ILM to manage the data <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html" target="_blank" rel="noopener noreffer">lifecycle</a> and retain it for as long as I want.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://docs.github.com/en/organizations/keeping-your-organization-secure/reviewing-the-audit-log-for-your-organization" target="_blank" rel="noopener noreffer">Github Audit Log</a></li>
+<li><a href="https://github.com/whiteinge/ok.sh" target="_blank" rel="noopener noreffer">GitHub API Client</a></li>
+<li><a href="https://github.com/roboll/helmfile" target="_blank" rel="noopener noreffer">Helmfile</a></li>
+<li><a href="https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#plugins-outputs-elasticsearch-doc_as_upsert" target="_blank" rel="noopener noreffer">Logstash doc_as_upsert</a></li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-lifecycle-management.html" target="_blank" rel="noopener noreffer">Elasticsearch Index Lifecycle Management</a></li>
+<li><a href="https://stedolan.github.io/jq/" target="_blank" rel="noopener noreffer">jq</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-04-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/azure/">azure</a>,&nbsp;<a href="/tags/cloud/">cloud</a>,&nbsp;<a href="/tags/elasticsearch/">elasticsearch</a>,&nbsp;<a href="/tags/logstash/">logstash</a>,&nbsp;<a href="/tags/alerting/">alerting</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/packet-capture-tcpdump-kubernetes-pods-azure/" class="prev" rel="prev" title="Packet Capture using tcpdump on Kubernetes Pods in Azure AKS"><i class="fas fa-angle-left fa-fw"></i>Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.87.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

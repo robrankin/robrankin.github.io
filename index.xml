@@ -3,9 +3,18 @@
         <title></title>
         <link>http://example.org/</link>
         <description></description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 22 Apr 2022 06:42:34 &#43;0100</lastBuildDate>
             <atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Storing Github Org Auditlogs in Elasticsearch</title>
+    <link>http://example.org/posts/github-org-auditlogs-elasticsearch/</link>
+    <pubDate>Fri, 22 Apr 2022 06:42:34 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>http://example.org/posts/github-org-auditlogs-elasticsearch/</guid>
+    <description><![CDATA[I had a need to generate an alert when someone overrode a Branch Protection setting. To do this I decided to pull some of the GitHub Auditlog into Elasticsearch.
+Theres a GitHub API client written in sh, called ok.sh, which can be found here. At the time it didn&rsquo;t support querying the Org Auditlog, so I PR&rsquo;d that here.
+Once the PR was in place, I wrote a Dockerfile to create a container to deploy on Kubernetes.]]></description>
+</item><item>
     <title>Packet Capture using tcpdump on Kubernetes Pods in Azure AKS</title>
     <link>http://example.org/posts/packet-capture-tcpdump-kubernetes-pods-azure/</link>
     <pubDate>Thu, 21 Apr 2022 14:44:24 &#43;0100</pubDate>
@@ -79,15 +88,5 @@ One of the features that the Elastic Stack doesn&rsquo;t really support well (ye
     <author>Author</author>
     <guid>http://example.org/posts/querying-cylance-protect-api-from-shell/</guid>
     <description><![CDATA[We use Cylance as our AV type protection. They&rsquo;re one of the better solutions I&rsquo;ve seen, but theres some strange gaps in my opinion. There doesn&rsquo;t seem to be a built in method for alerting. One of the things we&rsquo;d like to be able to alert on is when a devices goes &ldquo;offline&rdquo;, and apparently this information is not provided through Cylance&rsquo;s syslog output. It is however available from their API.]]></description>
-</item><item>
-    <title>Kibaba Authentication using OAuth2 Proxy in Kubernetes</title>
-    <link>http://example.org/posts/kibaba-oauth-kubernetes/</link>
-    <pubDate>Thu, 06 Aug 2020 12:34:50 &#43;0100</pubDate>
-    <author>Author</author>
-    <guid>http://example.org/posts/kibaba-oauth-kubernetes/</guid>
-    <description><![CDATA[NOTE: There appears to be a bug with Kibanas impersonation features, and SIEM detection rules (and possibly elswhere): https://github.com/elastic/kibana/issues/74828
- Recently I had reason to want to integrate Kibana with Azure Active Directory for authentication. This might be easily possible if you have a commercial license with Elastic, but this wasn&rsquo;t the case this time.
-After a little bit of research I found this article, from February 2017:
-User Impersonation with X-Pack: Integrating Third Party Auth with Kibana]]></description>
 </item></channel>
 </rss>
